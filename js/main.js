@@ -64,8 +64,12 @@ document.getElementById("char3").innerHTML += tpl;
 });
 
 function convertCountToScore(n) {
-  // 次數: 0,1,2,3,4,5 -> 分數: 0,0,10,30,50,70
-  return [0, 0, 10, 30, 50, 70][n] || 0;
+  const scoreList = [0, 0, 10, 30, 50, 70]; // 每一階的分數
+  let sum = 0;
+  for (let i = 1; i <= n; i++) {
+    sum += scoreList[i];
+  }
+  return sum;
 }
 
 function getIntFrom(root, selector) {
