@@ -1,0 +1,276 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: radial-gradient(
+    circle at top,
+    #27253a 0,
+    #13111a 45%,
+    #05040a 100%
+  );
+  color: #f5f5f5;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  /* 小小加一點遊戲感光暈 */
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(180, 140, 255, 0.8),
+    0 0 18px rgba(40, 180, 255, 0.5);
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #c5bedf;
+  margin-bottom: 1.5rem;
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(16, 14, 26, 0.95);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(143, 130, 255, 0.3);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  margin: 22px 0 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed rgba(150, 140, 255, 0.5);
+  color: #e3ddff;
+}
+
+/* 角色分數標題區：讓標題與「全部重置」左右排版 */
+#charSectionTitle {
+  display: none; /* JS 會改成 flex */
+  justify-content: space-between;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  font-size: 0.88rem;
+  color: #d3cfff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+label span.hint {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* === 保持原本不出問題的 select 樣式 === */
+select {
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(143, 130, 255, 0.6);
+  background: rgba(8, 7, 18, 0.9);
+  color: #f5f5f5;
+  outline: none;
+}
+
+select:focus {
+  border-color: #e0d4ff;
+  box-shadow: 0 0 0 1px rgba(224, 212, 255, 0.6);
+}
+
+/* 不去動 option / color-scheme，讓瀏覽器沿用系統深色 dropdown */
+
+/* 角色操作區與上方卡牌區分隔用虛線 */
+.field-separator {
+  grid-column: 1 / -1;
+  border-top: 1px dashed rgba(150, 140, 255, 0.6);
+  margin: 6px 0 4px;
+}
+
+/* 角色容器區塊：水平排列 + RWD */
+.char-container-wrapper {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* 預設隱藏，由 JS 控制顯示 */
+#charWrapper {
+  display: none;
+}
+
+.char-container {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+  background: rgba(25, 23, 40, 0.9);
+  border: 1px solid rgba(160, 140, 255, 0.35);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.45);
+}
+
+.char-title {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #e6e0ff;
+  font-weight: 600;
+}
+
+/* 角色右上角重置按鈕 */
+.char-reset-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 160, 255, 0.7);
+  background: rgba(15, 12, 35, 0.9);
+  color: #e8e3ff;
+  cursor: pointer;
+}
+
+.char-reset-btn:hover {
+  background: rgba(52, 41, 100, 0.95);
+}
+
+/* 角色分數進度條 */
+.progress-wrapper {
+  margin: 4px 0 14px;
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  color: #cfc6ff;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #7b5cff, #c88bff);
+  transition: width 0.2s ease-in-out;
+}
+
+/* 角色分數標題右側：全部重置 */
+.clear-all-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 180, 255, 0.8);
+  background: rgba(20, 17, 45, 0.95);
+  color: #f2ecff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: none; /* 預設隱藏，JS 控制為 inline-block */
+}
+
+.clear-all-btn:hover {
+  background: rgba(70, 55, 130, 0.95);
+}
+
+/* === 新增：存檔操作區 / 按鈕樣式 === */
+.save-load-bar {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  gap: 14px;
+
+  width: fit-content;
+  margin: 20px auto;
+
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at left,
+    rgba(60, 40, 120, 0.35),
+    rgba(10, 8, 30, 0.9)
+  );
+  border: 1px solid rgba(140, 120, 255, 0.7);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.55);
+}
+
+.save-btn,
+.load-btn,
+.clear-save-btn {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(210, 195, 255, 0.9);
+  background: rgba(40, 30, 90, 0.95);
+  color: #f4eeff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.65);
+}
+
+.save-btn:hover,
+.load-btn:hover,
+.clear-save-btn:hover {
+  background: rgba(70, 55, 130, 0.98);
+}
+
+.clear-save-btn {
+  border-style: dashed;
+}
+
+.save-status {
+  font-size: 0.8rem;
+  color: #9fe7ff;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.save-status.show {
+  opacity: 1;
+}
+
+/* RWD 調整 */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+
+  .main-container {
+    padding: 16px 14px 20px;
+  }
+
+  .save-load-bar {
+    border-radius: 12px;
+  }
+}

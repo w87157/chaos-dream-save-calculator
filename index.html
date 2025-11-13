@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>卡厄斯夢境 存檔分數計算器</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <h1>卡厄斯夢境 存檔分數計算器</h1>
+    <div class="subtitle">
+      依照卡牌配置與操作次數，快速評估你的卡厄斯夢境存檔 TIER 與角色價值。
+    </div>
+
+    <div class="main-container">
+      <!-- TIER 區塊（下拉選單） -->
+      <div class="section-title">📌 存檔資料價值</div>
+      <div class="grid" style="max-width: 320px">
+        <div class="field">
+          <label for="tier">
+            存檔 TIER
+            <span class="hint">請先選擇存檔價值再設定角色</span>
+          </label>
+          <!-- 選項由 JS 動態產生 -->
+          <select id="tier"></select>
+        </div>
+      </div>
+
+      <!-- 角色分數標題：一開始隱藏，選到 TIER 才顯示 -->
+      <div class="section-title" id="charSectionTitle">
+        <span>🧩 角色分數</span>
+        <button type="button" class="clear-all-btn" id="clearAllBtn">
+          清除全部角色設定
+        </button>
+      </div>
+
+      <!-- 角色分數（水平排列，每個角色一個 container） -->
+      <!-- 一開始隱藏，選到 TIER 才顯示 -->
+      <div class="char-container-wrapper" id="charWrapper">
+        <div class="char-container" id="char1">
+          <button type="button" class="char-reset-btn" data-target="char1">
+            重置角色
+          </button>
+          <div class="char-title">角色 1</div>
+        </div>
+
+        <div class="char-container" id="char2">
+          <button type="button" class="char-reset-btn" data-target="char2">
+            重置角色
+          </button>
+          <div class="char-title">角色 2</div>
+        </div>
+
+        <div class="char-container" id="char3">
+          <button type="button" class="char-reset-btn" data-target="char3">
+            重置角色
+          </button>
+          <div class="char-title">角色 3</div>
+        </div>
+      </div>
+
+            <!-- 存檔操作區 -->
+      <div class="save-load-bar">
+        <button type="button" id="saveBtn" class="save-btn">
+          💾 儲存目前配置
+        </button>
+        <button type="button" id="loadBtn" class="load-btn">📂 載入存檔</button>
+        <button type="button" id="clearSaveBtn" class="clear-save-btn">
+          🧹 清除存檔
+        </button>
+        <span id="saveStatus" class="save-status"></span>
+      </div>
+    </div>
+
+    
+
+    <!-- 角色區塊模板：所有欄位皆為下拉選單（option 由 JS 動態產生） -->
+    <script type="text/template" id="character-template">
+      <div class="progress-wrapper">
+        <div class="progress-label">角色分數：0 / 0 pt</div>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label>刪除角色卡<span class="hint">每張 20pt</span></label>
+          <select class="deleteCharExtra" data-max-type="card" data-unit="張"></select>
+        </div>
+
+        <div class="field">
+          <label>神之靈光一閃 <span class="hint">每次 20pt</span></label>
+          <select class="godFlash" data-max-type="card" data-unit="次"></select>
+        </div>
+
+        <div class="field">
+          <label>中立卡 <span class="hint">每張 20pt</span></label>
+          <select class="neutralCard" data-max-type="card" data-unit="張"></select>
+        </div>
+
+        <div class="field">
+          <label>中立卡靈光一閃 <span class="hint">每次 10pt</span></label>
+          <select class="neutralFlash" data-max-type="card" data-unit="次"></select>
+        </div>
+
+        <div class="field">
+          <label>轉化卡 <span class="hint">每張 10pt</span></label>
+          <select class="transformCard" data-max-type="card" data-unit="張"></select>
+        </div>
+
+        <div class="field">
+          <label>怪物卡 <span class="hint">每張 80pt</span></label>
+          <select class="monsterCard" data-max-type="card" data-unit="張"></select>
+        </div>
+
+        <div class="field">
+          <label>禁忌卡 <span class="hint">每張 20pt</span></label>
+          <select class="forbiddenCard" data-max-type="card" data-unit="張"></select>
+        </div>
+
+        <div class="field-separator"></div>
+
+        <div class="field">
+          <label>卡牌複製次數</label>
+          <select class="copyCount" data-max-type="copydel" data-unit="次"></select>
+        </div>
+
+        <div class="field">
+          <label>卡牌刪除次數</label>
+          <select class="deleteCount" data-max-type="copydel" data-unit="次"></select>
+        </div>
+      </div>
+    </script>
+
+    <!-- 主程式（ES Module） -->
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
