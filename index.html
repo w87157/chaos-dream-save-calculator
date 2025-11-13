@@ -38,28 +38,34 @@
       <!-- 一開始隱藏，選到 TIER 才顯示 -->
       <div class="char-container-wrapper" id="charWrapper">
         <div class="char-container" id="char1">
-          <button type="button" class="char-reset-btn" data-target="char1">
-            重置角色
-          </button>
+          <button
+            type="button"
+            class="char-reset-btn"
+            data-target="char1"
+          ></button>
           <div class="char-title">角色 1</div>
         </div>
 
         <div class="char-container" id="char2">
-          <button type="button" class="char-reset-btn" data-target="char2">
-            重置角色
-          </button>
+          <button
+            type="button"
+            class="char-reset-btn"
+            data-target="char2"
+          ></button>
           <div class="char-title">角色 2</div>
         </div>
 
         <div class="char-container" id="char3">
-          <button type="button" class="char-reset-btn" data-target="char3">
-            重置角色
-          </button>
+          <button
+            type="button"
+            class="char-reset-btn"
+            data-target="char3"
+          ></button>
           <div class="char-title">角色 3</div>
         </div>
       </div>
 
-            <!-- 存檔操作區 -->
+      <!-- 存檔操作區 -->
       <div class="save-load-bar">
         <button type="button" id="saveBtn" class="save-btn">
           💾 儲存目前配置
@@ -71,8 +77,6 @@
         <span id="saveStatus" class="save-status"></span>
       </div>
     </div>
-
-    
 
     <!-- 角色區塊模板：所有欄位皆為下拉選單（option 由 JS 動態產生） -->
     <script type="text/template" id="character-template">
