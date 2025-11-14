@@ -11,24 +11,25 @@ import {
 
 // ===== 全域狀態 =====
 const state = {
-  limit: 0, // TIER 上限 (單角色)
-  total: 0, // 三角色總分
-  logs: [],
-  roleScore: {
-    char1: 0,
-    char2: 0,
-    char3: 0,
-  },
+  logs: [], // 所有角色的事件紀錄
   currentRole: "char1", // 目前選取角色
+  // 各角色事件統計：會由 recalcEventStatsAllRoles() 自動重算
+  eventStats: {
+    char1: null,
+    char2: null,
+    char3: null,
+  },
 };
 
-// ===== TIER 選單與上限計算 =====
+const CARD_TYPES = ["character", "neutral", "monster", "forbidden"];
+const FOIL_TYPES = ["normal", "foil", "godfoil", "removed"];
+
+// ===== TIER 選單（目前只當備註用） =====
 
 function initTierSelect() {
   const tierSelect = document.getElementById("tier");
   tierSelect.innerHTML = "";
 
-  // 0 = 請選擇，1~15 有效 Tier
   const opt0 = document.createElement("option");
   opt0.value = 0;
   opt0.textContent = "請選擇";
@@ -42,41 +43,33 @@ function initTierSelect() {
   }
 
   tierSelect.addEventListener("change", () => {
-    updateTierLimit();
-    updateCharacterProgressAll();
-    updateSummary();
+    // 目前只是備註，不影響計算
   });
 }
 
-// ⭐ 1 Tier = 30pt，每提升 1 Tier +10pt
-function updateTierLimit() {
-  const tier = parseInt(document.getElementById("tier").value, 10);
+// ===== 角色進度條：顯示「事件數」 =====
 
-  if (!tier || tier < 1) {
-    state.limit = 0;
-  } else {
-    state.limit = 30 + (tier - 1) * 10;
-  }
+function getRoleEventCount(roleKey) {
+  return state.logs.filter((log) => log.targetRole === roleKey).length;
 }
-
-// ===== 角色進度條 =====
 
 function updateCharacterProgressAll() {
-  ["char1", "char2", "char3"].forEach((role) => {
-    updateCharacterProgress(role);
+  const roles = ["char1", "char2", "char3"];
+  const counts = roles.map(getRoleEventCount);
+  const max = Math.max(1, ...counts); // 避免除以 0
+
+  roles.forEach((role, idx) => {
+    updateCharacterProgress(role, counts[idx], max);
   });
 }
 
-function updateCharacterProgress(roleKey) {
-  const score = state.roleScore[roleKey];
-  const limit = state.limit;
+function updateCharacterProgress(roleKey, count, max) {
   const label = document.getElementById(roleKey + "Label");
   const fill = document.getElementById(roleKey + "Fill");
-
   if (!label || !fill) return;
 
-  const pct = limit ? Math.min((score / limit) * 100, 100) : 0;
-  label.textContent = `角色分數：${score} / ${limit} pt`;
+  label.textContent = `事件數：${count} 筆`;
+  const pct = max ? Math.min((count / max) * 100, 100) : 0;
   fill.style.width = pct + "%";
 }
 
@@ -129,41 +122,79 @@ function buildPillGroup(groupName, options) {
   });
 }
 
-// 根據目前事件類型，限制可選的閃卡按鈕
+function updateTransformVisibility() {
+  const eventType = getActiveValue("eventType");
+  const block = document.querySelector(".card-block.transform-block");
+  if (!block) return;
+
+  if (eventType === "transform") {
+    // 轉化時顯示「原卡片」這塊（上下排）
+    block.style.display = "block";
+  } else {
+    block.style.display = "none";
+  }
+}
+
+// 根據目前事件類型，限制「目標卡牌狀態」的可選項目
 function updateFoilAvailability() {
   const eventType = getActiveValue("eventType");
-  const foilGroup = document.querySelector(
+
+  const destFoilGroup = document.querySelector(
     '.pill-group[data-group="foilType"]'
   );
-  if (!foilGroup) return;
+  const srcFoilGroup = document.querySelector(
+    '.pill-group[data-group="srcFoilType"]'
+  );
 
-  foilGroup.querySelectorAll(".pill-btn").forEach((btn) => {
-    const val = btn.dataset.value;
-    let shouldDisable = false;
+  // 目標卡片狀態：依事件限制
+  if (destFoilGroup) {
+    destFoilGroup.querySelectorAll(".pill-btn").forEach((btn) => {
+      const val = btn.dataset.value;
+      let shouldDisable = false;
 
-    // 事件 = 獲得：禁止 普閃/神閃，只能選 一般
-    if (eventType === "gain") {
-      if (val === "foil" || val === "godfoil") {
-        shouldDisable = true;
+      if (eventType === "gain") {
+        // 獲得：NN → BY
+        // 允許：一般 / 移除； 禁用：普閃 / 神閃
+        if (val === "foil" || val === "godfoil") {
+          shouldDisable = true;
+        }
+      } else if (eventType === "flash") {
+        // 靈光一閃：AW → AX，只允許變成普閃 / 神閃
+        if (val === "normal" || val === "removed") {
+          shouldDisable = true;
+        }
+      } else if (eventType === "transform") {
+        // 轉化：AX → BY
+        // 目標狀態不允許直接選普閃 / 神閃，只能選 一般 / 移除
+        if (val === "foil" || val === "godfoil") {
+          shouldDisable = true;
+        }
+      } else {
+        // 刪除 / 複製 或尚未選事件：全部開放
+        shouldDisable = false;
       }
-    }
 
-    // 事件 = 靈光一閃：禁止 一般，只能選 普閃/神閃
-    if (eventType === "flash") {
-      if (val === "normal") {
-        shouldDisable = true;
+      if (shouldDisable) {
+        btn.classList.add("pill-disabled");
+        btn.dataset.disabled = "true";
+        btn.classList.remove("active");
+      } else {
+        btn.classList.remove("pill-disabled");
+        btn.removeAttribute("data-disabled");
       }
-    }
+    });
+  }
 
-    if (shouldDisable) {
-      btn.classList.add("pill-disabled");
-      btn.dataset.disabled = "true";
-      btn.classList.remove("active");
-    } else {
+  // 原卡片狀態：只是描述現有卡，全部都可以選
+  if (srcFoilGroup) {
+    srcFoilGroup.querySelectorAll(".pill-btn").forEach((btn) => {
       btn.classList.remove("pill-disabled");
       btn.removeAttribute("data-disabled");
-    }
-  });
+    });
+  }
+
+  // 控制「原卡片」區塊顯示 / 隱藏
+  updateTransformVisibility();
 }
 
 function setupPillGroups() {
@@ -180,7 +211,7 @@ function setupPillGroups() {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
-      // 切換事件類型時，更新閃卡可選狀態
+      // 切換事件類型時，更新卡牌狀態可選狀態 & 轉化區塊顯示
       if (group.dataset.group === "eventType") {
         updateFoilAvailability();
       }
@@ -200,143 +231,231 @@ function getActiveValue(groupName) {
   return active ? active.dataset.value : "";
 }
 
-// ===== 計分輔助函式 =====
+// ===== 卡牌統計（每角色一份） =====
 
-// 各卡片「獲得」的基本分（不含閃卡）
-function getBaseGainByCardType(cardType) {
-  switch (cardType) {
-    case "neutral":
-      return 20;
-    case "monster":
-      return 80;
-    case "forbidden":
-      return 20;
-    case "character":
-    default:
-      return 0;
-  }
+function createBaseStatsForRole() {
+  const stats = {};
+  CARD_TYPES.forEach((ct) => {
+    stats[ct] = { normal: 0, foil: 0, godfoil: 0, removed: 0 };
+  });
+  // 初始角色卡 4 張（一般）
+  stats.character.normal = 4;
+  return stats;
 }
 
-// 閃卡加成（基本版：普閃 10，神閃 20）
-function getFoilBonus(foilType) {
-  if (foilType === "foil") return 10;
-  if (foilType === "godfoil") return 20;
-  return 0;
-}
+// 檢查一組 logs 套用後，卡片數量會不會變成負值
+function validateLogs(logs) {
+  const statsByRole = {
+    char1: createBaseStatsForRole(),
+    char2: createBaseStatsForRole(),
+    char3: createBaseStatsForRole(),
+  };
 
-// 刪除 / 複製用的階梯分數
-// n = 第幾次（同一角色）
-function getStepScore(n) {
-  if (n <= 1) return 0;
-  if (n === 2) return 10;
-  if (n === 3) return 30;
-  if (n === 4) return 50;
-  if (n === 5) return 70;
-  // 第 6 次起，每次 +20
-  return 70 + (n - 5) * 20;
-}
+  const applyDelta = (role, cardType, foilType, delta) => {
+    const roleStats = statsByRole[role];
+    if (!roleStats) return true;
+    const typeStat = roleStats[cardType];
+    if (!typeStat || !(foilType in typeStat)) return true;
 
-// ===== 事件分數計算 =====
+    const current = typeStat[foilType] ?? 0;
+    const next = current + delta;
 
-function calcEventScore(sel) {
-  const { targetRole, cardType, eventType, foilType } = sel;
-
-  // 方便取得：該角色目前已有多少次某事件
-  const countForEvent = (type) =>
-    state.logs.filter(
-      (log) => log.targetRole === targetRole && log.eventType === type
-    ).length;
-
-  let score = 0;
-
-  switch (eventType) {
-    // --- 獲得 ---
-    case "gain": {
-      // UI 限制：gain 只能選 一般，所以忽略閃卡
-      score = getBaseGainByCardType(cardType);
-      break;
+    // 如果會變成負數，直接判定失敗
+    if (next < 0) {
+      return false;
     }
 
-    // --- 轉化 ---
-    case "transform": {
-      // 目前全部一律 10pt
-      score = 10;
-      break;
+    typeStat[foilType] = next;
+    return true;
+  };
+
+  for (const log of logs) {
+    const {
+      targetRole,
+      cardType, // 目標卡片種類（B）
+      foilType, // 目標卡片狀態（Y）
+      srcCardType, // 原卡片種類（A）-- 只在 transform 有
+      srcFoilType, // 原卡片狀態（X）
+      eventType,
+    } = log;
+
+    if (!targetRole || !cardType || !foilType || !eventType) {
+      continue;
     }
 
-    // --- 靈光一閃 ---
-    case "flash": {
-      const foilBonus = getFoilBonus(foilType); // 普閃 10 / 神閃 20
+    let ok = true;
 
-      // 特例：角色卡 + 普閃 → 0pt
-      if (cardType === "character" && foilType === "foil") {
-        score = 0;
-      } else {
-        score = foilBonus;
-      }
-      break;
-    }
-
-    // --- 刪除 ---
-    case "delete": {
-      const nth = countForEvent("delete") + 1;
-      const base = getStepScore(nth); // 0,10,30,50,70,90...
-
-      // 額外 +20：角色卡 or 普閃 or 神閃（第一次也會加）
-      const isCharacterCard = cardType === "character";
-      const isFlashCard = foilType === "foil" || foilType === "godfoil";
-      const bonus = isCharacterCard || isFlashCard ? 20 : 0;
-
-      // 額外扣分
-      let penalty = 0;
-      if (cardType === "neutral") penalty = -20;
-      if (cardType === "forbidden") penalty = -20;
-      if (cardType === "monster") penalty = -80;
-
-      score = base + bonus + penalty;
-      break;
-    }
-
-    // --- 複製 ---
-    case "copy": {
-      const nth = countForEvent("copy") + 1;
-      const base = getStepScore(nth); // 0,10,30,50,70,90...
-
-      // 卡片種類額外加分
-      let typeBonus = 0;
-      switch (cardType) {
-        case "neutral":
-          typeBonus = 20;
-          break;
-        case "forbidden":
-          typeBonus = 20;
-          break;
-        case "monster":
-          typeBonus = 80;
-          break;
-        case "character":
-          typeBonus = 0;
-          break;
+    switch (eventType) {
+      // 獲得：NN → BY
+      case "gain": {
+        ok = applyDelta(targetRole, cardType, foilType, +1);
+        break;
       }
 
-      // 閃卡加分
-      let foilBonus = 0;
-      if (foilType === "foil") {
-        // 角色卡 + 普閃 = 0，其餘 +10
-        foilBonus = cardType === "character" ? 0 : 10;
-      } else if (foilType === "godfoil") {
-        foilBonus = 20;
+      // 靈光一閃：AW → AX（同種類，狀態變化）
+      case "flash": {
+        ok =
+          applyDelta(targetRole, cardType, "normal", -1) &&
+          applyDelta(targetRole, cardType, foilType, +1);
+        break;
       }
 
-      score = base + typeBonus + foilBonus;
-      break;
+      // 轉化：AX → BY
+      case "transform": {
+        const fromType = srcCardType || "character"; // 舊存檔 fallback
+        const fromFoil = srcFoilType || foilType; // 舊存檔 fallback
+        ok =
+          applyDelta(targetRole, fromType, fromFoil, -1) &&
+          applyDelta(targetRole, cardType, foilType, +1);
+        break;
+      }
+
+      // 刪除：AW → NN
+      case "delete": {
+        ok = applyDelta(targetRole, cardType, foilType, -1);
+        break;
+      }
+
+      // 複製：AW → AW
+      case "copy": {
+        ok = applyDelta(targetRole, cardType, foilType, +1);
+        break;
+      }
+
+      default:
+        ok = true;
+        break;
     }
 
-    default:
-      score = 0;
+    if (!ok) {
+      return false;
+    }
   }
 
-  return score;
+  return true;
+}
+
+// 真正用來重算畫面統計（正常情況不會有負值，這裡只是保險 clamp 一次）
+function recalcCardStatsAllRoles() {
+  const statsByRole = {
+    char1: createBaseStatsForRole(),
+    char2: createBaseStatsForRole(),
+    char3: createBaseStatsForRole(),
+  };
+
+  const clamp = (n) => (n < 0 ? 0 : n);
+
+  const applyDelta = (role, cardType, foilType, delta) => {
+    const roleStats = statsByRole[role];
+    if (!roleStats) return;
+    const typeStat = roleStats[cardType];
+    if (!typeStat || !(foilType in typeStat)) return;
+
+    const current = typeStat[foilType] ?? 0;
+    const next = current + delta;
+    typeStat[foilType] = clamp(next);
+  };
+
+  state.logs.forEach((log) => {
+    const {
+      targetRole,
+      cardType,
+      foilType,
+      srcCardType,
+      srcFoilType,
+      eventType,
+    } = log;
+
+    if (!targetRole || !cardType || !foilType || !eventType) return;
+
+    switch (eventType) {
+      case "gain": {
+        applyDelta(targetRole, cardType, foilType, +1);
+        break;
+      }
+
+      case "flash": {
+        applyDelta(targetRole, cardType, "normal", -1);
+        applyDelta(targetRole, cardType, foilType, +1);
+        break;
+      }
+
+      case "transform": {
+        const fromType = srcCardType || "character";
+        const fromFoil = srcFoilType || foilType;
+        applyDelta(targetRole, fromType, fromFoil, -1);
+        applyDelta(targetRole, cardType, foilType, +1);
+        break;
+      }
+
+      case "delete": {
+        applyDelta(targetRole, cardType, foilType, -1);
+        break;
+      }
+
+      case "copy": {
+        applyDelta(targetRole, cardType, foilType, +1);
+        break;
+      }
+
+      default:
+        break;
+    }
+  });
+
+  updateCardStatsUI(statsByRole);
+}
+
+function updateCardStatsUI(statsByRole) {
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+
+  ["char1", "char2", "char3"].forEach((role) => {
+    CARD_TYPES.forEach((cardType) => {
+      FOIL_TYPES.forEach((foilType) => {
+        const val = statsByRole[role][cardType][foilType] ?? 0;
+        setText(`${role}_cardCount_${cardType}_${foilType}`, val);
+      });
+    });
+  });
+}
+
+// ===== 事件統計（各事件次數 / 刪除角色卡次數） =====
+
+function recalcEventStatsAllRoles() {
+  const roles = ["char1", "char2", "char3"];
+
+  const base = () => ({
+    gain: 0,
+    flash: 0,
+    transform: 0,
+    delete: 0,
+    copy: 0,
+    deleteCharacter: 0, // 另外統計「刪除角色卡」次數
+  });
+
+  const stats = {
+    char1: base(),
+    char2: base(),
+    char3: base(),
+  };
+
+  state.logs.forEach((log) => {
+    const role = log.targetRole;
+    const s = stats[role];
+    if (!s) return;
+
+    if (s.hasOwnProperty(log.eventType)) {
+      s[log.eventType]++;
+    }
+    if (log.eventType === "delete" && log.cardType === "character") {
+      s.deleteCharacter++;
+    }
+  });
+
+  state.eventStats = stats;
 }
 
 // ===== 事件操作：新增 / 還原 / 清空 =====
@@ -353,63 +472,88 @@ function addEvent() {
     return;
   }
 
-  const sel = {
-    targetRole: state.currentRole,
-    cardType: getActiveValue("cardType"),
-    eventType: getActiveValue("eventType"),
-    foilType: getActiveValue("foilType"),
-  };
-
-  if (!sel.eventType || !sel.cardType || !sel.foilType) {
-    alert("請完成三項選擇：事件 / 卡片種類 / 閃卡狀態");
+  const eventType = getActiveValue("eventType");
+  if (!eventType) {
+    alert("請先選擇事件類型");
     return;
   }
 
-  const score = calcEventScore(sel);
+  // 目標卡片（所有事件都需要）
+  const dstCardType = getActiveValue("cardType");
+  const dstFoilType = getActiveValue("foilType");
+
+  if (!dstCardType || !dstFoilType) {
+    alert("請完成：卡片種類 / 卡牌狀態 的選擇");
+    return;
+  }
 
   const log = {
     id: Date.now(),
-    ...sel,
-    score,
+    targetRole: state.currentRole,
+    eventType,
+    cardType: dstCardType,
+    foilType: dstFoilType,
   };
 
-  state.logs.push(log);
-  state.roleScore[sel.targetRole] += score;
+  // 若是轉化事件，再要求「原卡片種類 / 狀態」
+  if (eventType === "transform") {
+    const srcCardType = getActiveValue("srcCardType");
+    const srcFoilType = getActiveValue("srcFoilType");
 
+    if (!srcCardType || !srcFoilType) {
+      alert("轉化事件需要選擇：原卡片種類 / 原卡牌狀態");
+      return;
+    }
+
+    log.srcCardType = srcCardType;
+    log.srcFoilType = srcFoilType;
+  }
+
+  // 先模擬：如果加入這筆 log 後會讓某一種卡變成負數，就擋下來
+  const hypotheticalLogs = [...state.logs, log];
+  const ok = validateLogs(hypotheticalLogs);
+
+  if (!ok) {
+    alert(
+      "此操作會讓某種卡片的數量變成負數，請檢查事件類型或原卡片 / 目標卡片的選擇是否正確。"
+    );
+    return;
+  }
+
+  // ✅ 驗證通過才正式寫入
+  state.logs.push(log);
   updateAfterEventChange();
 }
 
 function undoEvent() {
   if (state.logs.length === 0) return;
-  const last = state.logs.pop();
-  state.roleScore[last.targetRole] -= last.score;
+  state.logs.pop();
   updateAfterEventChange();
 }
 
 function clearEvents() {
   if (!confirm("確定要清空所有事件紀錄？")) return;
   state.logs = [];
-  state.roleScore = { char1: 0, char2: 0, char3: 0 };
   updateAfterEventChange();
 }
 
 function updateAfterEventChange() {
   updateCharacterProgressAll();
+  recalcCardStatsAllRoles();
+  recalcEventStatsAllRoles(); // 每次變動都順便重算事件統計
   renderLogs();
-  updateSummary();
 }
 
-// ===== 右側紀錄列表（只顯示目前角色） =====
+// ===== 右側紀錄列表（只顯示目前角色，轉化顯示 AX→BY） =====
+
 function renderLogs() {
   const list = document.getElementById("logList");
   list.innerHTML = "";
 
-  // 預設移除 empty 狀態（避免干擾）
   list.classList.remove("empty");
 
   const activeRole = state.currentRole;
 
-  // 尚未選角色
   if (!activeRole) {
     list.classList.add("empty");
     const empty = document.createElement("div");
@@ -421,9 +565,8 @@ function renderLogs() {
 
   const logsForRole = state.logs.filter((log) => log.targetRole === activeRole);
 
-  // ★★ 無紀錄 → 垂直 + 水平置中 ★★
   if (logsForRole.length === 0) {
-    list.classList.add("empty"); // <── 新增：啟用 flex 置中
+    list.classList.add("empty");
     const empty = document.createElement("div");
     empty.className = "log-empty";
     empty.textContent = "此角色尚無記錄。";
@@ -431,47 +574,52 @@ function renderLogs() {
     return;
   }
 
-  // 有內容 → 回復正常表格模式
   list.classList.remove("empty");
 
+  // 表頭：# / 角色 / 事件 / 種類 / 卡牌狀態
   const header = document.createElement("div");
   header.className = "log-item log-item-header";
   header.innerHTML = `
+    <div class="log-col-center">#</div>
     <div class="log-col-center">角色</div>
     <div class="log-col-center">事件</div>
     <div class="log-col-center">種類</div>
-    <div class="log-col-center">閃卡</div>
-    <div class="log-score">分數</div>
+    <div class="log-col-center">卡牌狀態</div>
   `;
   list.appendChild(header);
 
-  logsForRole.forEach((log) => {
+  // 每一筆記錄
+  logsForRole.forEach((log, idx) => {
+    // 轉化事件：種類、狀態顯示「A → B」
+    const isTransform = log.eventType === "transform";
+
+    const typeText = isTransform && log.srcCardType
+      ? `${CARD_TYPE_LABEL_MAP[log.srcCardType]} → ${
+          CARD_TYPE_LABEL_MAP[log.cardType]
+        }`
+      : CARD_TYPE_LABEL_MAP[log.cardType];
+
+    const foilText = isTransform && log.srcFoilType
+      ? `${FOIL_TYPE_LABEL_MAP[log.srcFoilType]} → ${
+          FOIL_TYPE_LABEL_MAP[log.foilType]
+        }`
+      : FOIL_TYPE_LABEL_MAP[log.foilType];
+
     const row = document.createElement("div");
     row.className = "log-item";
     row.innerHTML = `
+      <div class="log-col-center">${idx + 1}</div>
       <div class="log-col-center">${ROLE_LABEL_MAP[log.targetRole]}</div>
       <div class="log-col-center">${EVENT_TYPE_LABEL_MAP[log.eventType]}</div>
-      <div class="log-col-center">${CARD_TYPE_LABEL_MAP[log.cardType]}</div>
-      <div class="log-col-center">${FOIL_TYPE_LABEL_MAP[log.foilType]}</div>
-      <div class="log-score">${log.score} pt</div>
+      <div class="log-col-center">${typeText}</div>
+      <div class="log-col-center">${foilText}</div>
     `;
+
     list.appendChild(row);
   });
 }
 
-// ===== Summary =====
-
-function updateSummary() {
-  state.total =
-    state.roleScore.char1 + state.roleScore.char2 + state.roleScore.char3;
-
-  document.getElementById("limitPt").textContent = state.limit;
-  document.getElementById("totalPt").textContent = state.total;
-  const remain = state.limit - state.total;
-  document.getElementById("remainPt").textContent = remain >= 0 ? remain : 0;
-}
-
-// ===== 存檔 / 載入 =====
+// ===== 存檔 / 載入（只存事件 / 角色 / tier）=====
 
 function setupSaveLoad() {
   const saveBtn = document.getElementById("saveBtn");
@@ -481,41 +629,68 @@ function setupSaveLoad() {
 
   saveBtn.addEventListener("click", () => {
     const data = {
-      state,
+      logs: state.logs,
+      currentRole: state.currentRole,
       tier: document.getElementById("tier").value,
     };
-    localStorage.setItem("chaosSave_v2", JSON.stringify(data));
+    localStorage.setItem("chaosSave_v3", JSON.stringify(data));
     saveStatus.textContent = "已儲存";
     setTimeout(() => (saveStatus.textContent = ""), 1500);
   });
 
   loadBtn.addEventListener("click", () => {
-    const raw = localStorage.getItem("chaosSave_v2");
+    const raw =
+      localStorage.getItem("chaosSave_v3") ||
+      localStorage.getItem("chaosSave_v2");
     if (!raw) return;
     const data = JSON.parse(raw);
 
     document.getElementById("tier").value = data.tier || 0;
-    updateTierLimit();
 
-    state.limit = data.state.limit ?? 0;
-    state.total = data.state.total ?? 0;
-    state.logs = data.state.logs || [];
-    state.roleScore = data.state.roleScore || { char1: 0, char2: 0, char3: 0 };
-    state.currentRole = data.state.currentRole || "char1";
+    state.logs = data.logs || data.state?.logs || [];
+    state.currentRole = data.currentRole || data.state?.currentRole || "char1";
 
     updateCharacterProgressAll();
     updateRoleSelectionHighlight();
+    recalcCardStatsAllRoles();
+    recalcEventStatsAllRoles();
     renderLogs();
-    updateSummary();
 
     saveStatus.textContent = "已載入";
     setTimeout(() => (saveStatus.textContent = ""), 1500);
   });
 
   clearBtn.addEventListener("click", () => {
+    localStorage.removeItem("chaosSave_v3");
     localStorage.removeItem("chaosSave_v2");
     saveStatus.textContent = "已清除";
     setTimeout(() => (saveStatus.textContent = ""), 1500);
+  });
+}
+
+// ===== 統一收合 / 展開卡牌統計 =====
+
+function setupCardStatsToggleAll() {
+  const btn = document.getElementById("cardStatsToggleAll");
+  if (!btn) return;
+
+  let collapsed = true; // 預設收起
+  btn.textContent = "▶ 卡牌數量統計";
+
+  const applyToSections = () => {
+    const sections = document.querySelectorAll(".card-stats-section");
+    sections.forEach((sec) => {
+      if (collapsed) sec.classList.add("collapsed");
+      else sec.classList.remove("collapsed");
+    });
+  };
+
+  applyToSections();
+
+  btn.addEventListener("click", () => {
+    collapsed = !collapsed;
+    applyToSections();
+    btn.textContent = collapsed ? "▶ 卡牌數量統計" : "▼ 卡牌數量統計";
   });
 }
 
@@ -523,10 +698,13 @@ function setupSaveLoad() {
 
 function init() {
   initTierSelect();
-  updateTierLimit();
 
   // 左側事件選項
   buildPillGroup("eventType", EVENT_TYPE_OPTIONS);
+  // 原卡片（轉化用）
+  buildPillGroup("srcCardType", CARD_TYPE_OPTIONS);
+  buildPillGroup("srcFoilType", FOIL_TYPE_OPTIONS);
+  // 目標卡片
   buildPillGroup("cardType", CARD_TYPE_OPTIONS);
   buildPillGroup("foilType", FOIL_TYPE_OPTIONS);
 
@@ -534,11 +712,13 @@ function init() {
   setupEventActions();
   setupSaveLoad();
 
-  setupRoleSelection(); // 上方角色點選
+  setupRoleSelection();
+  setupCardStatsToggleAll();
 
   updateCharacterProgressAll();
+  recalcCardStatsAllRoles();
+  recalcEventStatsAllRoles();
   renderLogs();
-  updateSummary();
 }
 
 init();

@@ -1,4 +1,4 @@
-// 角色清單（目前只用在 label / 儲存）
+// 角色清單
 export const ROLE_OPTIONS = [
   { id: "char1", label: "角色 1" },
   { id: "char2", label: "角色 2" },
@@ -22,11 +22,12 @@ export const EVENT_TYPE_OPTIONS = [
   { id: "copy", label: "複製" },
 ];
 
-// 閃卡狀態
+// 卡牌狀態（含移除）
 export const FOIL_TYPE_OPTIONS = [
   { id: "normal", label: "一般" },
   { id: "foil", label: "普閃" },
   { id: "godfoil", label: "神閃" },
+  { id: "removed", label: "移除" },
 ];
 
 // ---- 顯示用 label map ----
