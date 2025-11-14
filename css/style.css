@@ -1,15 +1,16 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 事件紀錄表欄位寬度（方便調整） */
 :root {
   --log-col-width-index: 8%;
   --log-col-width-role: 23%;
   --log-col-width-event: 23%;
   --log-col-width-type: 23%;
   --log-col-width-foil: 23%;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
 }
 
 body {
@@ -70,52 +71,71 @@ h1 {
   vertical-align: middle;
 }
 
-/* ------------------ 存檔 TIER 區 ------------------ */
-.top-panel {
+/* ------------------ 合併後大 Panel（角色狀態） ------------------ */
+.merged-panel {
   background: rgba(16, 14, 26, 0.96);
   border-radius: 16px;
-  padding: 16px 18px 18px;
+  padding: 18px 20px 22px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(143, 130, 255, 0.3);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
 }
 
-.grid {
-  display: grid;
+.section-title-row.merged {
+  display: flex;
+  flex-direction: column;   /* 改成上下布局 */
+  align-items: flex-start;  /* 全部靠左 */
+  gap: 6px;                 /* 增加上下距離 */
+  margin-bottom: 10px;
+}
+
+/* ------------------ TIER 輸入框（標題下方，水平排列） ------------------ */
+.tier-input-wrapper {
+  margin: 6px 0 18px;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 4px;
+}
+
+.tier-input-wrapper .field {
+  width: 200px;
+}
+
+.tier-input-row {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
-.field label {
-  display: inline-flex;
-  align-items: baseline;
+.tier-input-row label {
   font-size: 14px;
-  margin-bottom: 4px;
-  gap: 6px;
+  color: #eae5ff;
+  white-space: nowrap;
 }
 
-.field .hint {
-  font-size: 11px;
-  color: #9d92ff;
-}
-
-select {
-  width: 100%;
+#tierInput {
+  width: 90px;
   padding: 6px 10px;
   border-radius: 8px;
   background: #111021;
   border: 1px solid #6e63ff;
   color: #f1ecff;
   outline: none;
+  font-size: 14px;
 }
 
-/* ------------------ 角色區塊（中排三格） ------------------ */
-.role-section {
-  background: rgba(16, 14, 26, 0.96);
-  border-radius: 16px;
-  padding: 16px 18px 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(143, 130, 255, 0.3);
+.tier-input-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #c8c0ff;
+  margin-top: 4px;
 }
 
+.tier-input-wrapper .hint {
+  display: block;
+  margin-top: 3px;
+}
+
+/* ------------------ 角色區塊 ------------------ */
 .role-progress-panel {
   display: flex;
   gap: 16px;
@@ -184,6 +204,25 @@ select {
   width: 0%;
   border-radius: 999px;
   background: linear-gradient(90deg, #b37cff, #ffd5ff);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.progress-fill.progress-over {
+  background: linear-gradient(90deg, #ff7d7d, #ffd0d0);
+  box-shadow: 0 0 8px rgba(255, 100, 100, 0.9);
+}
+
+.score-label {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #f3e9ff;
+}
+
+/* 分數超出總分時的顏色變化 */
+.score-label.score-over {
+  color: #ff7d7d;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(255, 80, 80, 0.9);
 }
 
 /* 全角色統一收合按鈕 */
@@ -204,11 +243,15 @@ select {
   box-shadow: 0 0 6px rgba(170, 160, 255, 0.9);
 }
 
-/* 各角色卡牌統計總表（用虛線區隔） */
+/* 各角色卡牌統計總表 */
 .card-stats-section {
   margin-top: 10px;
   padding-top: 8px;
   border-top: 1px dashed rgba(143, 130, 255, 0.45);
+}
+
+.card-stats-section.collapsed .card-stats-table {
+  display: none;
 }
 
 .card-stats-title {
@@ -254,12 +297,7 @@ select {
   justify-content: flex-start;
 }
 
-/* 收起狀態：隱藏表格 */
-.card-stats-section.collapsed .card-stats-table {
-  display: none;
-}
-
-/* ------------------ 下排左右兩大區塊 ------------------ */
+/* ------------------ 下排左右兩區 ------------------ */
 .app-layout {
   max-width: 1200px;
   margin: 0 auto 24px;
@@ -295,7 +333,6 @@ select {
   margin-bottom: 6px;
 }
 
-/* 事件區塊：跟下面卡片區塊用虛線分隔 */
 .event-block {
   padding-bottom: 10px;
   margin-bottom: 10px;
@@ -325,7 +362,6 @@ select {
   margin-top: 6px;
 }
 
-/* 每一塊卡片區 */
 .card-block {
   flex: 1 1 0;
   display: flex;
@@ -341,12 +377,10 @@ select {
   box-shadow: inset 0 0 8px rgba(45, 38, 90, 0.7);
 }
 
-/* 原卡片區預設隱藏（事件為轉化時由 JS 改成 flex） */
 .card-block.transform-block {
   display: none;
 }
 
-/* 卡片區標題（② 原卡片 / ③ 目標卡片） */
 .card-block-title {
   font-size: 13px;
   font-weight: 600;
@@ -366,32 +400,27 @@ select {
   box-shadow: 0 0 6px rgba(124, 228, 255, 0.9);
 }
 
-/* 每一列：小標＋ pills */
 .card-block-row {
   margin-top: 6px;
 }
 
-/* 小標文字：「卡片種類」「卡牌狀態」 */
 .card-block-label {
   font-size: 12px;
   color: #c9c1ff;
   margin-bottom: 4px;
 }
 
-/* 讓卡片區內的 pill-group 不再有外面那條虛線 */
 .card-block .pill-group {
   border: none;
   padding: 0;
 }
 
-/* pill 按鈕群組 */
 .pill-group {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-/* 事件選項：第一排 3 顆，第二排 2 顆 */
 .pill-group[data-group="eventType"] .pill-btn {
   flex: 0 0 calc(33.333% - 8px);
   text-align: center;
@@ -422,7 +451,6 @@ select {
   color: #1b1028;
 }
 
-/* 不可選的卡牌狀態選項（只對目標卡牌狀態用） */
 .pill-btn.pill-disabled {
   opacity: 0.35;
   cursor: not-allowed;
@@ -512,6 +540,7 @@ select {
   font-size: 13px;
   padding: 6px 14px;
   align-items: center;
+  position: relative;
 }
 
 .log-item:nth-child(odd):not(.log-item-header) {
@@ -522,7 +551,6 @@ select {
   background: rgba(9, 7, 20, 0.95);
 }
 
-/* 表頭固定在上方 */
 .log-item-header {
   position: sticky;
   top: 0;
@@ -532,7 +560,6 @@ select {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
 }
 
-/* 滑過每列微亮 */
 .log-item:not(.log-item-header):hover {
   background: rgba(60, 52, 110, 0.95);
 }
@@ -550,7 +577,47 @@ select {
   text-align: center;
 }
 
-/* ------------------ 浮動儲存區塊 ------------------ */
+/* hover 分數差 tooltip */
+.log-tooltip {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  transform: translateY(115%);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(10, 10, 24, 0.95);
+  border: 1px solid rgba(160, 150, 255, 0.8);
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  z-index: 5;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.log-item:hover .log-tooltip {
+  opacity: 1;
+  transform: translateY(105%);
+}
+
+.delta {
+  font-weight: 600;
+}
+
+.delta-positive {
+  color: #8df7aa;
+}
+
+.delta-negative {
+  color: #ff8787;
+}
+
+.delta-zero {
+  color: #cccccc;
+}
+
+/* ------------------ 浮動儲存區 ------------------ */
 .save-load-bar {
   position: fixed;
   right: 24px;

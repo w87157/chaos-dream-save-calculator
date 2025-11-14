@@ -8,26 +8,15 @@
 
   <body>
     <h1>卡厄斯夢境 存檔事件追蹤器</h1>
-    <div class="subtitle">依照 TIER 與事件紀錄追蹤角色與卡牌變化</div>
+    <div class="subtitle">依照 TIER 與事件紀錄追蹤角色與卡牌變化與分數</div>
 
-    <!-- 存檔資料 TIER：暫時只做紀錄，不參與計算 -->
-    <div class="top-panel">
-      <div class="section-title">📌 存檔資料</div>
-      <div class="grid" style="max-width: 320px">
-        <div class="field">
-          <label for="tier">
-            存檔 TIER
-            <span class="hint">目前僅作為備註使用</span>
-          </label>
-          <select id="tier"></select>
-        </div>
-      </div>
-    </div>
-
-    <!-- 角色進度條 + 各角色卡牌統計 -->
-    <div class="role-section">
-      <div class="section-title-row">
+    <!-- 🔥 合併後的單一大 Panel（含 TIER + 角色狀態） -->
+    <div class="role-section merged-panel">
+      <div class="section-title-row merged">
+        <!-- 單一大標題 -->
         <div class="section-title">🎭 角色狀態</div>
+
+        <!-- 卡牌統計收合按鈕 -->
         <button
           type="button"
           id="cardStatsToggleAll"
@@ -37,19 +26,35 @@
         </button>
       </div>
 
+      <!-- TIER 輸入框 -->
+      <div class="tier-input-wrapper">
+        <div>
+          <div class="tier-input-row">
+            <label for="tierInput">存檔 TIER</label>
+            <input id="tierInput" type="number" min="1" max="15" />
+          </div>
+          <div class="tier-input-hint">影響總分上限：30 + 10 × (TIER - 1)</div>
+        </div>
+      </div>
+
+      <!-- 三角色橫排 -->
       <div class="role-progress-panel">
         <!-- 角色 1 -->
         <div class="role-progress-item" data-role="char1">
           <div class="role-progress-title">角色 1</div>
+
           <div class="progress-wrapper">
-            <div class="progress-label" id="char1Label">事件數：0 筆</div>
+            <div class="progress-label" id="char1Label"></div>
             <div class="progress-bar">
               <div class="progress-fill" id="char1Fill"></div>
             </div>
           </div>
 
+          <div class="score-label" id="char1Score">分數：0</div>
+
           <div class="card-stats-section collapsed" data-role="char1">
             <div class="card-stats-title">卡牌數量（角色 1）</div>
+
             <div class="card-stats-table">
               <div class="card-stats-header">
                 <div class="card-stats-cell type">卡片種類</div>
@@ -129,15 +134,19 @@
         <!-- 角色 2 -->
         <div class="role-progress-item" data-role="char2">
           <div class="role-progress-title">角色 2</div>
+
           <div class="progress-wrapper">
-            <div class="progress-label" id="char2Label">事件數：0 筆</div>
+            <div class="progress-label" id="char2Label"></div>
             <div class="progress-bar">
               <div class="progress-fill" id="char2Fill"></div>
             </div>
           </div>
 
+          <div class="score-label" id="char2Score">分數：0</div>
+
           <div class="card-stats-section collapsed" data-role="char2">
             <div class="card-stats-title">卡牌數量（角色 2）</div>
+
             <div class="card-stats-table">
               <div class="card-stats-header">
                 <div class="card-stats-cell type">卡片種類</div>
@@ -217,15 +226,19 @@
         <!-- 角色 3 -->
         <div class="role-progress-item" data-role="char3">
           <div class="role-progress-title">角色 3</div>
+
           <div class="progress-wrapper">
-            <div class="progress-label" id="char3Label">事件數：0 筆</div>
+            <div class="progress-label" id="char3Label"></div>
             <div class="progress-bar">
               <div class="progress-fill" id="char3Fill"></div>
             </div>
           </div>
 
+          <div class="score-label" id="char3Score">分數：0</div>
+
           <div class="card-stats-section collapsed" data-role="char3">
             <div class="card-stats-title">卡牌數量（角色 3）</div>
+
             <div class="card-stats-table">
               <div class="card-stats-header">
                 <div class="card-stats-cell type">卡片種類</div>
@@ -304,9 +317,8 @@
       </div>
     </div>
 
-    <!-- 下排：左小右大 -->
+    <!-- 你的事件輸入、紀錄、按鈕區塊（原樣保留） -->
     <div class="app-layout">
-      <!-- 左：事件選擇 -->
       <div class="left-panel">
         <div class="panel-section event-panel">
           <div class="section-title">📘 事件輸入</div>
@@ -317,11 +329,10 @@
             <div class="pill-group" data-group="eventType"></div>
           </div>
 
-          <!-- ② / ③ 卡片區塊：左＝原卡片（轉化用），右＝目標卡片 -->
+          <!-- ② / ③ 卡片區塊 -->
           <div class="card-block-wrapper">
-            <!-- ② 原卡片（只在轉化時顯示） -->
             <div class="card-block transform-block">
-              <div class="card-block-title">② 原卡片</div>
+              <div class="card-block-title">② 原卡片（轉化用）</div>
 
               <div class="card-block-row">
                 <div class="card-block-label">卡片種類</div>
@@ -334,9 +345,8 @@
               </div>
             </div>
 
-            <!-- ③ 目標卡片 -->
             <div class="card-block target-block">
-              <div class="card-block-title">③ 新卡片</div>
+              <div class="card-block-title">③ 目標卡片</div>
 
               <div class="card-block-row">
                 <div class="card-block-label">卡片種類</div>
@@ -350,7 +360,6 @@
             </div>
           </div>
 
-          <!-- 操作按鈕 -->
           <div class="action-row">
             <button id="confirmBtn" class="primary-btn">確定</button>
             <button id="undoBtn" class="secondary-btn">還原</button>
@@ -359,7 +368,6 @@
         </div>
       </div>
 
-      <!-- 右：事件紀錄 -->
       <div class="right-panel">
         <div class="right-header">
           <div class="right-title">事件紀錄（僅顯示目前選取角色）</div>
@@ -371,7 +379,7 @@
       </div>
     </div>
 
-    <!-- 浮動儲存區塊 -->
+    <!-- 浮動儲存區 -->
     <div class="save-load-bar">
       <button type="button" id="saveBtn" class="save-btn">💾</button>
       <button type="button" id="loadBtn" class="load-btn">📂</button>
@@ -379,6 +387,7 @@
       <span id="saveStatus" class="save-status"></span>
     </div>
 
+    <script type="module" src="js/config.js"></script>
     <script type="module" src="js/main.js"></script>
   </body>
 </html>
