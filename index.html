@@ -8,136 +8,113 @@
 
   <body>
     <h1>卡厄斯夢境 存檔分數計算器</h1>
-    <div class="subtitle">
-      依照卡牌配置與操作次數，快速評估你的卡厄斯夢境存檔 TIER 與角色價值。
-    </div>
+    <div class="subtitle">依照 TIER 與事件紀錄計算角色分數與總分</div>
 
-    <div class="main-container">
-      <!-- TIER 區塊（下拉選單） -->
+    <!-- 存檔資料價值：最上方獨立區塊 -->
+    <div class="top-panel">
       <div class="section-title">📌 存檔資料價值</div>
       <div class="grid" style="max-width: 320px">
         <div class="field">
           <label for="tier">
             存檔 TIER
-            <span class="hint">請先選擇存檔價值再設定角色</span>
+            <span class="hint">請先選擇存檔價值再記錄事件</span>
           </label>
-          <!-- 選項由 JS 動態產生 -->
           <select id="tier"></select>
         </div>
       </div>
+    </div>
 
-      <!-- 角色分數標題：一開始隱藏，選到 TIER 才顯示 -->
-      <div class="section-title" id="charSectionTitle">
-        <span>🧩 角色分數</span>
-        <button type="button" class="clear-all-btn" id="clearAllBtn">
-          清除全部角色設定
-        </button>
-      </div>
+    <div class="app-layout">
+      <!-- 左：事件選擇 -->
+      <div class="left-panel">
+        <div class="panel-section event-panel">
+          <div class="section-title">📘 事件輸入</div>
 
-      <!-- 角色分數（水平排列，每個角色一個 container） -->
-      <!-- 一開始隱藏，選到 TIER 才顯示 -->
-      <div class="char-container-wrapper" id="charWrapper">
-        <div class="char-container" id="char1">
-          <button
-            type="button"
-            class="char-reset-btn"
-            data-target="char1"
-          ></button>
-          <div class="char-title">角色 1</div>
-        </div>
+          <!-- ① 事件 -->
+          <div class="sub-title">① 事件</div>
+          <div class="pill-group" data-group="eventType"></div>
 
-        <div class="char-container" id="char2">
-          <button
-            type="button"
-            class="char-reset-btn"
-            data-target="char2"
-          ></button>
-          <div class="char-title">角色 2</div>
-        </div>
+          <!-- ② 卡片種類 -->
+          <div class="sub-title">② 卡片種類</div>
+          <div class="pill-group" data-group="cardType"></div>
 
-        <div class="char-container" id="char3">
-          <button
-            type="button"
-            class="char-reset-btn"
-            data-target="char3"
-          ></button>
-          <div class="char-title">角色 3</div>
+          <!-- ③ 閃卡狀態 -->
+          <div class="sub-title">③ 閃卡狀態</div>
+          <div class="pill-group" data-group="foilType"></div>
+
+          <!-- 操作按鈕 -->
+          <div class="action-row">
+            <button id="confirmBtn" class="primary-btn">確定</button>
+            <button id="undoBtn" class="secondary-btn">還原</button>
+            <button id="clearBtn" class="danger-btn">清空</button>
+          </div>
         </div>
       </div>
 
-      <!-- 存檔操作區 -->
-      <div class="save-load-bar">
-        <button type="button" id="saveBtn" class="save-btn">
-          💾 儲存目前配置
-        </button>
-        <button type="button" id="loadBtn" class="load-btn">📂 載入存檔</button>
-        <button type="button" id="clearSaveBtn" class="clear-save-btn">
-          🧹 清除存檔
-        </button>
-        <span id="saveStatus" class="save-status"></span>
+      <!-- 右：角色進度條 + 事件紀錄 -->
+      <div class="right-panel">
+        <!-- 角色分數區塊（只保留進度條） -->
+        <div class="role-progress-panel">
+          <div class="role-progress-item" data-role="char1">
+            <div class="role-progress-title">角色 1</div>
+            <div class="progress-wrapper">
+              <div class="progress-label" id="char1Label">
+                角色分數：0 / 0 pt
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="char1Fill"></div>
+              </div>
+            </div>
+          </div>
+          <div class="role-progress-item" data-role="char2">
+            <div class="role-progress-title">角色 2</div>
+            <div class="progress-wrapper">
+              <div class="progress-label" id="char2Label">
+                角色分數：0 / 0 pt
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="char2Fill"></div>
+              </div>
+            </div>
+          </div>
+          <div class="role-progress-item" data-role="char3">
+            <div class="role-progress-title">角色 3</div>
+            <div class="progress-wrapper">
+              <div class="progress-label" id="char3Label">
+                角色分數：0 / 0 pt
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="char3Fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="right-header">
+          <div class="right-title">事件紀錄（僅顯示目前選取角色）</div>
+          <div class="summary">
+            <div>上限 <span id="limitPt">0</span> pt</div>
+            <div>累計 <span id="totalPt">0</span> pt</div>
+            <div>剩餘 <span id="remainPt">0</span> pt</div>
+          </div>
+        </div>
+
+        <!-- 紀錄列表 -->
+        <div id="logList" class="log-list">
+          <div class="log-empty">尚無記錄。</div>
+        </div>
       </div>
     </div>
 
-    <!-- 角色區塊模板：所有欄位皆為下拉選單（option 由 JS 動態產生） -->
-    <script type="text/template" id="character-template">
-      <div class="progress-wrapper">
-        <div class="progress-label">角色分數：0 / 0 pt</div>
-        <div class="progress-bar">
-          <div class="progress-fill"></div>
-        </div>
-      </div>
+    <!-- 浮動儲存區塊 -->
+    <div class="save-load-bar">
+      <button type="button" id="saveBtn" class="save-btn">💾</button>
+      <button type="button" id="loadBtn" class="load-btn">📂</button>
+      <button type="button" id="clearSaveBtn" class="clear-save-btn">🧹</button>
+      <span id="saveStatus" class="save-status"></span>
+    </div>
 
-      <div class="grid">
-        <div class="field">
-          <label>刪除角色卡<span class="hint">每張 20pt</span></label>
-          <select class="deleteCharExtra" data-max-type="card" data-unit="張"></select>
-        </div>
-
-        <div class="field">
-          <label>神之靈光一閃 <span class="hint">每次 20pt</span></label>
-          <select class="godFlash" data-max-type="card" data-unit="次"></select>
-        </div>
-
-        <div class="field">
-          <label>中立卡 <span class="hint">每張 20pt</span></label>
-          <select class="neutralCard" data-max-type="card" data-unit="張"></select>
-        </div>
-
-        <div class="field">
-          <label>中立卡靈光一閃 <span class="hint">每次 10pt</span></label>
-          <select class="neutralFlash" data-max-type="card" data-unit="次"></select>
-        </div>
-
-        <div class="field">
-          <label>轉化卡 <span class="hint">每張 10pt</span></label>
-          <select class="transformCard" data-max-type="card" data-unit="張"></select>
-        </div>
-
-        <div class="field">
-          <label>怪物卡 <span class="hint">每張 80pt</span></label>
-          <select class="monsterCard" data-max-type="card" data-unit="張"></select>
-        </div>
-
-        <div class="field">
-          <label>禁忌卡 <span class="hint">每張 20pt</span></label>
-          <select class="forbiddenCard" data-max-type="card" data-unit="張"></select>
-        </div>
-
-        <div class="field-separator"></div>
-
-        <div class="field">
-          <label>卡牌複製次數</label>
-          <select class="copyCount" data-max-type="copydel" data-unit="次"></select>
-        </div>
-
-        <div class="field">
-          <label>卡牌刪除次數</label>
-          <select class="deleteCount" data-max-type="copydel" data-unit="次"></select>
-        </div>
-      </div>
-    </script>
-
-    <!-- 主程式（ES Module） -->
     <script type="module" src="js/main.js"></script>
   </body>
 </html>
