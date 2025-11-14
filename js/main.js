@@ -400,13 +400,18 @@ function updateAfterEventChange() {
 }
 
 // ===== 右側紀錄列表（只顯示目前角色） =====
-
 function renderLogs() {
   const list = document.getElementById("logList");
   list.innerHTML = "";
 
+  // 預設移除 empty 狀態（避免干擾）
+  list.classList.remove("empty");
+
   const activeRole = state.currentRole;
+
+  // 尚未選角色
   if (!activeRole) {
+    list.classList.add("empty");
     const empty = document.createElement("div");
     empty.className = "log-empty";
     empty.textContent = "請先在上方選擇角色。";
@@ -416,13 +421,18 @@ function renderLogs() {
 
   const logsForRole = state.logs.filter((log) => log.targetRole === activeRole);
 
+  // ★★ 無紀錄 → 垂直 + 水平置中 ★★
   if (logsForRole.length === 0) {
+    list.classList.add("empty"); // <── 新增：啟用 flex 置中
     const empty = document.createElement("div");
     empty.className = "log-empty";
     empty.textContent = "此角色尚無記錄。";
     list.appendChild(empty);
     return;
   }
+
+  // 有內容 → 回復正常表格模式
+  list.classList.remove("empty");
 
   const header = document.createElement("div");
   header.className = "log-item log-item-header";

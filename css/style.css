@@ -185,11 +185,28 @@ select {
   color: #c9c1ff;
 }
 
+/* 事件輸入區：每個大項用虛線區隔 */
+.panel-section .sub-title + .pill-group {
+  padding: 6px 0 10px;
+  border-bottom: 1px dashed rgba(143, 130, 255, 0.45);
+}
+
+.panel-section .sub-title:last-of-type + .pill-group {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 /* pill 按鈕群組 */
 .pill-group {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* 事件選項：第一排 3 顆，第二排 2 顆 */
+.pill-group[data-group="eventType"] .pill-btn {
+  flex: 0 0 calc(33.333% - 8px);
+  text-align: center;
 }
 
 .pill-btn {
@@ -287,7 +304,17 @@ select {
   margin-top: 8px;
   border-radius: 12px;
   border: 1px solid rgba(143, 130, 255, 0.25);
-  overflow: hidden;
+  height: 340px;
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.log-list.empty {
+  justify-content: center;   /* 垂直置中 */
+  align-items: center;       /* 水平置中 */
 }
 
 .log-item {
@@ -324,9 +351,10 @@ select {
 }
 
 .log-empty {
-  padding: 16px 12px;
   font-size: 13px;
   color: #b0a7ff;
+  padding: 12px;
+  text-align: center;
 }
 
 /* 浮動儲存區塊 */

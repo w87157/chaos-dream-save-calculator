@@ -13,13 +13,13 @@ export const CARD_TYPE_OPTIONS = [
   { id: "forbidden", label: "禁忌卡" },
 ];
 
-// 事件種類（順序：刪除 → 靈光一閃 → 轉化 → 複製 → 獲得）
+// 事件種類（順序：獲得 → 靈光一閃 → 轉化 → 刪除 → 複製）
 export const EVENT_TYPE_OPTIONS = [
   { id: "gain", label: "獲得" },
   { id: "flash", label: "靈光一閃" },
   { id: "transform", label: "轉化" },
-  { id: "copy", label: "複製" },
   { id: "delete", label: "刪除" },
+  { id: "copy", label: "複製" },
 ];
 
 // 閃卡狀態
