@@ -11,7 +11,7 @@ import {
 
 // ===== 全域狀態 =====
 const state = {
-  limit: 0, // TIER 上限
+  limit: 0, // TIER 上限 (單角色)
   total: 0, // 三角色總分
   logs: [],
   roleScore: {
@@ -19,7 +19,7 @@ const state = {
     char2: 0,
     char3: 0,
   },
-  currentRole: "char1", // 目前選取角色（預設角色 1）
+  currentRole: "char1", // 目前選取角色
 };
 
 // ===== TIER 選單與上限計算 =====
@@ -252,7 +252,7 @@ function calcEventScore(sel) {
   switch (eventType) {
     // --- 獲得 ---
     case "gain": {
-      // 目前 UI 限制：gain 只能選 一般，所以忽略閃卡
+      // UI 限制：gain 只能選 一般，所以忽略閃卡
       score = getBaseGainByCardType(cardType);
       break;
     }
@@ -280,7 +280,7 @@ function calcEventScore(sel) {
     // --- 刪除 ---
     case "delete": {
       const nth = countForEvent("delete") + 1;
-      let base = getStepScore(nth); // 0,10,30,50,70,90...
+      const base = getStepScore(nth); // 0,10,30,50,70,90...
 
       // 額外 +20：角色卡 or 普閃 or 神閃（第一次也會加）
       const isCharacterCard = cardType === "character";
@@ -300,7 +300,7 @@ function calcEventScore(sel) {
     // --- 複製 ---
     case "copy": {
       const nth = countForEvent("copy") + 1;
-      let base = getStepScore(nth); // 0,10,30,50,70,90...
+      const base = getStepScore(nth); // 0,10,30,50,70,90...
 
       // 卡片種類額外加分
       let typeBonus = 0;
@@ -349,7 +349,7 @@ function setupEventActions() {
 
 function addEvent() {
   if (!state.currentRole) {
-    alert("請先點擊右側的角色，再輸入事件");
+    alert("請先點擊上方的角色，再輸入事件");
     return;
   }
 
@@ -409,7 +409,7 @@ function renderLogs() {
   if (!activeRole) {
     const empty = document.createElement("div");
     empty.className = "log-empty";
-    empty.textContent = "請先在右上選擇角色。";
+    empty.textContent = "請先在上方選擇角色。";
     list.appendChild(empty);
     return;
   }
@@ -524,7 +524,7 @@ function init() {
   setupEventActions();
   setupSaveLoad();
 
-  setupRoleSelection(); // 右側角色點選
+  setupRoleSelection(); // 上方角色點選
 
   updateCharacterProgressAll();
   renderLogs();

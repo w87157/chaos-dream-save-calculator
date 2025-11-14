@@ -1,4 +1,4 @@
-// 角色清單
+// 角色清單（目前只用在 label / 儲存）
 export const ROLE_OPTIONS = [
   { id: "char1", label: "角色 1" },
   { id: "char2", label: "角色 2" },
@@ -13,13 +13,13 @@ export const CARD_TYPE_OPTIONS = [
   { id: "forbidden", label: "禁忌卡" },
 ];
 
-// 事件種類
+// 事件種類（順序：刪除 → 靈光一閃 → 轉化 → 複製 → 獲得）
 export const EVENT_TYPE_OPTIONS = [
   { id: "gain", label: "獲得" },
   { id: "flash", label: "靈光一閃" },
-  { id: "delete", label: "刪除" },
   { id: "transform", label: "轉化" },
   { id: "copy", label: "複製" },
+  { id: "delete", label: "刪除" },
 ];
 
 // 閃卡狀態
@@ -29,7 +29,7 @@ export const FOIL_TYPE_OPTIONS = [
   { id: "godfoil", label: "神閃" },
 ];
 
-// 顯示用 label map（右側紀錄用）
+// ---- 顯示用 label map ----
 export const ROLE_LABEL_MAP = Object.fromEntries(
   ROLE_OPTIONS.map((o) => [o.id, o.label])
 );

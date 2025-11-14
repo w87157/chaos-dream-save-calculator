@@ -1,141 +1,191 @@
-/* 全域 */
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
 }
 
 body {
   margin: 0;
-  padding: 20px;
-  background: radial-gradient(
-    circle at top,
-    #27253a 0,
-    #13111a 45%,
-    #05040a 100%
-  );
-  color: #f5f5f5;
+  padding: 24px 0 80px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans TC", sans-serif;
+  background: radial-gradient(circle at top, #272447 0, #05040b 55%, #020109);
+  color: #f5f3ff;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.08em;
+  margin: 0 0 4px;
   font-weight: 700;
-  text-shadow: 0 0 8px rgba(180, 140, 255, 0.8),
-    0 0 18px rgba(40, 180, 255, 0.5);
+  letter-spacing: 0.08em;
 }
 
 .subtitle {
   text-align: center;
-  font-size: 0.9rem;
-  color: #c5bedf;
-  margin-bottom: 1.4rem;
+  font-size: 14px;
+  color: #cbc5ff;
+  margin-bottom: 16px;
 }
 
-/* 存檔資料價值區塊（最上方） */
-.top-panel {
-  max-width: 1280px;
-  margin: 0 auto 14px auto;
-  padding: 14px 18px 16px;
-  background: rgba(16, 14, 26, 0.96);
-  border-radius: 16px;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(143, 130, 255, 0.3);
-}
-
-/* 兩欄佈局 */
+/* 共用 panel 樣式 */
+.top-panel,
+.role-section,
 .app-layout {
-  max-width: 1280px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr);
-  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto 16px;
 }
 
-.left-panel,
-.right-panel {
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #f3e9ff;
+  letter-spacing: 0.08em;
+}
+
+/* 存檔 TIER 區 */
+.top-panel {
   background: rgba(16, 14, 26, 0.96);
   border-radius: 16px;
-  padding: 16px 18px;
+  padding: 16px 18px 18px;
+  border: 1px solid rgba(143, 130, 255, 0.3);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+}
+
+.field label {
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.field .hint {
+  font-size: 11px;
+  color: #9d92ff;
+  margin-left: 8px;
+}
+
+select {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #111021;
+  border: 1px solid #6e63ff;
+  color: #f1ecff;
+  outline: none;
+}
+
+/* 角色區塊（中間那排三格） */
+.role-section {
+  background: rgba(16, 14, 26, 0.96);
+  border-radius: 16px;
+  padding: 16px 18px 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
   border: 1px solid rgba(143, 130, 255, 0.3);
 }
 
-.left-panel {
+.role-progress-panel {
   display: flex;
-  flex-direction: column;
-}
-
-.event-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.panel-section + .panel-section {
-  margin-top: 22px;
-}
-
-.section-title {
-  font-size: 1.05rem;
-  margin-bottom: 10px;
-  color: #e3ddff;
-  font-weight: 600;
-}
-
-.sub-title {
-  font-size: 0.9rem;
-  margin-top: 12px;
-  margin-bottom: 6px;
-  color: #d6d0ff;
-}
-
-/* Grid & label */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
 }
 
-.field label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
+.role-progress-item {
+  flex: 1 1 0;
+  background: rgba(28, 26, 46, 0.92);
+  border-radius: 12px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(150, 140, 255, 0.35);
+  box-shadow: inset 0 0 8px rgba(60, 50, 120, 0.25);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.role-progress-item:hover {
+  border-color: rgba(200, 190, 255, 0.7);
+  box-shadow: 0 0 10px rgba(150, 140, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.role-progress-item.role-selected {
+  border-color: rgba(255, 240, 180, 0.95);
+  box-shadow: 0 0 14px rgba(255, 220, 160, 0.85),
+    inset 0 0 10px rgba(255, 255, 255, 0.08);
+}
+
+.role-progress-title {
+  font-size: 14px;
   margin-bottom: 4px;
-  color: #e1dbff;
 }
 
-.hint {
-  font-size: 0.75rem;
-  color: #b8b1d9;
+.progress-wrapper {
+  margin-top: 6px;
 }
 
-/* 下拉式選單樣式（深色） */
-select {
+.progress-label {
+  font-size: 12px;
+  color: #d3ccff;
+  margin-bottom: 4px;
+}
+
+.progress-bar {
   width: 100%;
-  padding: 6px 32px 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #5f5a7d;
-  background-color: #141323;
-  color: #f3f0ff;
-  font-size: 0.9rem;
-  outline: none;
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #c9c3ff 50%),
-    linear-gradient(135deg, #c9c3ff 50%, transparent 50%);
-  background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(11, 9, 25, 0.9);
+  overflow: hidden;
 }
 
-select:focus {
-  border-color: #d2c8ff;
-  box-shadow: 0 0 0 1px rgba(210, 200, 255, 0.6);
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #b37cff, #ffd5ff);
 }
 
-/* pill 群組 */
+/* 下排左右兩大區塊 */
+.app-layout {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.left-panel {
+  flex: 0 0 32%;
+}
+
+.right-panel {
+  flex: 1 1 auto;
+  background: rgba(16, 14, 26, 0.96);
+  border-radius: 16px;
+  padding: 16px 18px;
+  border: 1px solid rgba(143, 130, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* 左側事件 panel */
+.panel-section {
+  background: rgba(16, 14, 26, 0.96);
+  border-radius: 16px;
+  padding: 16px 18px 18px;
+  border: 1px solid rgba(143, 130, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  height: 100%;
+}
+
+.sub-title {
+  font-size: 13px;
+  margin: 10px 0 6px;
+  color: #c9c1ff;
+}
+
+/* pill 按鈕群組 */
 .pill-group {
   display: flex;
   flex-wrap: wrap;
@@ -143,37 +193,31 @@ select:focus {
 }
 
 .pill-btn {
-  padding: 10px 22px;
-  border-radius: 14px;
-  border: 2px solid rgba(160, 150, 255, 0.45);
-  background: rgba(22, 20, 40, 0.92);
-  color: #e8e4ff;
-  font-size: 0.95rem;
-  font-weight: 500;
+  min-width: 70px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 140, 255, 0.7);
+  background: rgba(12, 10, 26, 0.96);
+  color: #f5f3ff;
+  font-size: 13px;
   cursor: pointer;
+  box-shadow: 0 0 8px rgba(80, 70, 160, 0.55);
   transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease,
     border-color 0.15s ease;
-
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* hover 效果：微亮、稍微浮起 */
 .pill-btn:hover {
-  background: rgba(60, 55, 110, 0.95);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(120, 110, 255, 0.45);
-}
-
-/* active 效果：亮光、漸層卡片、邊框加強 */
-.pill-btn.active {
-  background: linear-gradient(135deg, #8b6cff, #d7a4ff);
-  border-color: rgba(255, 255, 255, 0.85);
-  color: #fff;
-  box-shadow: 0 0 12px rgba(190, 150, 255, 0.9), 0 6px 14px rgba(0, 0, 0, 0.55);
   transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(168, 149, 255, 0.9);
 }
 
-/* 不能選的 pill（例如獲得事件下的普閃 / 神閃） */
+.pill-btn.active {
+  background: radial-gradient(circle at 20% 0%, #ffb2ff, #986bff);
+  border-color: rgba(255, 255, 255, 0.9);
+  color: #1b1028;
+}
+
+/* 不可選的閃卡 */
 .pill-btn.pill-disabled {
   opacity: 0.35;
   cursor: not-allowed;
@@ -185,257 +229,136 @@ select:focus {
   transform: none;
 }
 
-/* 左下操作按鈕列 */
+/* 操作按鈕列 */
 .action-row {
+  margin-top: 16px;
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 16px;
+  gap: 10px;
 }
 
-.action-row button {
-  min-width: 70px;
-  padding: 6px 14px;
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+  flex: 0 0 auto;
+  padding: 6px 18px;
   border-radius: 999px;
-  border: 1px solid transparent;
-  font-size: 0.85rem;
+  font-size: 13px;
+  border: none;
   cursor: pointer;
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, #7b5cff, #c88bff);
-  border-color: rgba(229, 221, 255, 0.9);
-  color: #fff;
-}
-
-.primary-btn:hover {
-  filter: brightness(1.07);
+  background: linear-gradient(135deg, #c983ff, #7d5dff);
+  color: white;
 }
 
 .secondary-btn {
-  background: rgba(35, 30, 70, 0.95);
-  border-color: rgba(190, 180, 255, 0.8);
-  color: #f2ecff;
-}
-
-.secondary-btn:hover {
-  background: rgba(70, 60, 120, 0.98);
+  background: #22203a;
+  color: #f5f3ff;
 }
 
 .danger-btn {
-  background: rgba(70, 24, 40, 0.96);
-  border-color: rgba(255, 150, 180, 0.9);
-  color: #ffdbe6;
+  background: #5b1820;
+  color: #ffcdcd;
 }
 
-.danger-btn:hover {
-  background: rgba(115, 36, 60, 0.98);
-}
-
-/* 右側：角色進度條 */
-.role-progress-item {
-  background: rgba(28, 26, 46, 0.92);
-  border-radius: 12px;
-  padding: 14px 16px 16px;
-  border: 1px solid rgba(150, 140, 255, 0.35);
-  box-shadow: inset 0 0 8px rgba(60, 50, 120, 0.25);
-  cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
-}
-
-.role-progress-item:hover {
-  border-color: rgba(200, 190, 255, 0.7);
-  box-shadow: 0 0 10px rgba(150, 140, 255, 0.6);
-  transform: translateY(-1px);
-}
-
-.role-progress-item.role-selected {
-  border-color: rgba(255, 240, 180, 0.95);
-  box-shadow:
-    0 0 14px rgba(255, 220, 160, 0.85),
-    inset 0 0 10px rgba(255, 255, 255, 0.08);
-}
-
-.role-progress-title {
-  font-size: 0.92rem;
-  margin-bottom: 6px; /* ← 增加距離 */
-  color: #f1ecff;
-}
-
-.progress-label {
-  font-size: 0.82rem;
-  margin-bottom: 8px; /* ← 增加與進度條距離 */
-  color: #d7d2ff;
-}
-
-.role-progress-title {
-  font-size: 0.9rem;
-  margin-bottom: 4px;
-  color: #e7e1ff;
-}
-
-.progress-wrapper {
-}
-
-.progress-label {
-  font-size: 0.8rem;
-  margin-bottom: 4px;
-  color: #dcd6ff;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background: rgba(55, 50, 95, 0.55);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #9a7bff, #d6a6ff);
-  transition: width 0.22s ease;
-}
-
-/* 右側紀錄區 */
+/* 右側 header + summary */
 .right-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
 .right-title {
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: 600;
-  color: #f1ecff;
 }
 
 .summary {
-  font-size: 0.84rem;
-  color: #dcd6ff;
-  text-align: right;
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #d0c8ff;
 }
 
-.summary div + div {
-  margin-top: 2px;
-}
-
+/* 紀錄列表 */
 .log-list {
-  margin-top: 10px;
-  background: rgba(10, 9, 20, 0.96);
+  margin-top: 8px;
   border-radius: 12px;
-  padding: 12px 12px;
-  min-height: 260px;
-  border: 1px solid rgba(120, 110, 210, 0.4);
-}
-
-.log-empty {
-  font-size: 0.86rem;
-  color: #a49dc7;
+  border: 1px solid rgba(143, 130, 255, 0.25);
+  overflow: hidden;
 }
 
 .log-item {
   display: grid;
-  grid-template-columns: 60px 1fr 1fr 1fr 60px;
-  gap: 6px;
-  padding: 6px 4px;
-  border-bottom: 1px solid rgba(70, 65, 130, 0.4);
-  font-size: 0.84rem;
+  grid-template-columns: 80px 90px 90px 90px 1fr;
+  font-size: 13px;
+  padding: 6px 12px;
 }
 
-.log-item:last-child {
-  border-bottom: none;
+.log-item:nth-child(odd) {
+  background: rgba(16, 14, 30, 0.9);
+}
+
+.log-item:nth-child(even) {
+  background: rgba(9, 7, 20, 0.95);
+}
+
+.log-item-header {
+  background: rgba(63, 56, 120, 0.95);
+  font-weight: 600;
 }
 
 .log-col-center {
-  text-align: center;
-}
-
-.log-score {
-  text-align: right;
-  color: #ffe7ff;
-}
-
-/* 儲存區塊：固定浮動在畫面右側中間 */
-.save-load-bar {
-  position: fixed;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle at left,
-    rgba(60, 40, 120, 0.35),
-    rgba(10, 8, 30, 0.9)
-  );
-  border: 1px solid rgba(140, 120, 255, 0.7);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.55);
-  z-index: 50;
-}
-
-.save-btn,
-.load-btn,
-.clear-save-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(210, 195, 255, 0.9);
-  background: rgba(40, 30, 90, 0.95);
-  color: #f4eeff;
-  font-size: 18px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.save-btn:hover,
-.load-btn:hover,
-.clear-save-btn:hover {
-  background: rgba(70, 55, 130, 0.98);
+.log-score {
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
+.log-empty {
+  padding: 16px 12px;
+  font-size: 13px;
+  color: #b0a7ff;
+}
+
+/* 浮動儲存區塊 */
+.save-load-bar {
+  position: fixed;
+  right: 24px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(10, 8, 22, 0.96);
+  border-radius: 999px;
+  border: 1px solid rgba(143, 130, 255, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+  z-index: 20;
+}
+
+.save-btn,
+.load-btn,
 .clear-save-btn {
-  border-style: dashed;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  background: #19162f;
+  color: #f5f3ff;
 }
 
 .save-status {
-  margin-top: 4px;
-  font-size: 0.7rem;
-  color: #9fe7ff;
-  text-align: center;
-}
-
-/* 手機：儲存區塊移到底部置中 */
-@media (max-width: 900px) {
-  .app-layout {
-    grid-template-columns: 1fr;
-  }
-  .save-load-bar {
-    right: auto;
-    left: 50%;
-    top: auto;
-    bottom: 16px;
-    transform: translateX(-50%);
-    flex-direction: row;
-  }
-}
-
-@media (max-width: 600px) {
-  body {
-    padding: 12px;
-  }
-  .top-panel,
-  .left-panel,
-  .right-panel {
-    padding: 14px;
-  }
-  .role-progress-panel {
-    grid-template-columns: 1fr;
-  }
+  font-size: 12px;
+  color: #e7ddff;
 }

@@ -8,7 +8,9 @@
 
   <body>
     <h1>卡厄斯夢境 存檔分數計算器</h1>
-    <div class="subtitle">依照 TIER 與事件紀錄計算角色分數與總分</div>
+    <div class="subtitle">
+      依照 TIER 與事件紀錄計算角色分數與總分
+    </div>
 
     <!-- 存檔資料價值：最上方獨立區塊 -->
     <div class="top-panel">
@@ -24,6 +26,47 @@
       </div>
     </div>
 
+    <!-- 角色進度條獨立大區塊 -->
+    <div class="role-section">
+      <div class="section-title">🎭 角色狀態</div>
+      <div class="role-progress-panel">
+        <div class="role-progress-item" data-role="char1">
+          <div class="role-progress-title">角色 1</div>
+          <div class="progress-wrapper">
+            <div class="progress-label" id="char1Label">
+              角色分數：0 / 0 pt
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="char1Fill"></div>
+            </div>
+          </div>
+        </div>
+        <div class="role-progress-item" data-role="char2">
+          <div class="role-progress-title">角色 2</div>
+          <div class="progress-wrapper">
+            <div class="progress-label" id="char2Label">
+              角色分數：0 / 0 pt
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="char2Fill"></div>
+            </div>
+          </div>
+        </div>
+        <div class="role-progress-item" data-role="char3">
+          <div class="role-progress-title">角色 3</div>
+          <div class="progress-wrapper">
+            <div class="progress-label" id="char3Label">
+              角色分數：0 / 0 pt
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="char3Fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 下排：左小右大 -->
     <div class="app-layout">
       <!-- 左：事件選擇 -->
       <div class="left-panel">
@@ -51,46 +94,8 @@
         </div>
       </div>
 
-      <!-- 右：角色進度條 + 事件紀錄 -->
+      <!-- 右：事件紀錄 -->
       <div class="right-panel">
-        <!-- 角色分數區塊（只保留進度條） -->
-        <div class="role-progress-panel">
-          <div class="role-progress-item" data-role="char1">
-            <div class="role-progress-title">角色 1</div>
-            <div class="progress-wrapper">
-              <div class="progress-label" id="char1Label">
-                角色分數：0 / 0 pt
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" id="char1Fill"></div>
-              </div>
-            </div>
-          </div>
-          <div class="role-progress-item" data-role="char2">
-            <div class="role-progress-title">角色 2</div>
-            <div class="progress-wrapper">
-              <div class="progress-label" id="char2Label">
-                角色分數：0 / 0 pt
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" id="char2Fill"></div>
-              </div>
-            </div>
-          </div>
-          <div class="role-progress-item" data-role="char3">
-            <div class="role-progress-title">角色 3</div>
-            <div class="progress-wrapper">
-              <div class="progress-label" id="char3Label">
-                角色分數：0 / 0 pt
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" id="char3Fill"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Summary -->
         <div class="right-header">
           <div class="right-title">事件紀錄（僅顯示目前選取角色）</div>
           <div class="summary">
@@ -100,7 +105,6 @@
           </div>
         </div>
 
-        <!-- 紀錄列表 -->
         <div id="logList" class="log-list">
           <div class="log-empty">尚無記錄。</div>
         </div>
