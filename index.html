@@ -13,10 +13,17 @@
     <!-- 🔥 合併後的單一大 Panel（含 TIER + 角色狀態） -->
     <div class="role-section merged-panel">
       <div class="section-title-row merged">
-        <!-- 單一大標題 -->
         <div class="section-title">🎭 角色狀態</div>
+      </div>
 
-        <!-- 卡牌統計收合按鈕 -->
+      <!-- TIER + 卡牌統計按鈕（同一行） -->
+      <div class="tier-and-card-row">
+        <div class="tier-input-row-wrapper">
+          <label for="tierInput">存檔 TIER</label>
+          <input id="tierInput" type="number" min="1" max="15" />
+          <span class="tier-hint">影響總分上限：30 + 10 × (TIER - 1)</span>
+        </div>
+
         <button
           type="button"
           id="cardStatsToggleAll"
@@ -24,17 +31,6 @@
         >
           ▶ 卡牌數量統計
         </button>
-      </div>
-
-      <!-- TIER 輸入框 -->
-      <div class="tier-input-wrapper">
-        <div>
-          <div class="tier-input-row">
-            <label for="tierInput">存檔 TIER</label>
-            <input id="tierInput" type="number" min="1" max="15" />
-          </div>
-          <div class="tier-input-hint">影響總分上限：30 + 10 × (TIER - 1)</div>
-        </div>
       </div>
 
       <!-- 三角色橫排 -->

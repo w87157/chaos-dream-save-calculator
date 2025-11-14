@@ -82,38 +82,45 @@ h1 {
 
 .section-title-row.merged {
   display: flex;
-  flex-direction: column;   /* 改成上下布局 */
-  align-items: flex-start;  /* 全部靠左 */
-  gap: 6px;                 /* 增加上下距離 */
-  margin-bottom: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
-/* ------------------ TIER 輸入框（標題下方，水平排列） ------------------ */
-.tier-input-wrapper {
-  margin: 6px 0 18px;
+/* ------------------ TIER 輸入框 ------------------ */
+.tier-and-card-row {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
   padding-left: 4px;
+  padding-right: 4px;
 }
 
-.tier-input-wrapper .field {
-  width: 200px;
-}
-
-.tier-input-row {
+.tier-input-row-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 4px;
+  padding-left: 4px;
 }
 
-.tier-input-row label {
+.tier-input-row-wrapper label {
   font-size: 14px;
   color: #eae5ff;
   white-space: nowrap;
 }
 
+/* ------------------ 卡牌統計按鈕 ------------------ */
+.card-stats-toggle-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2px;
+  padding-left: 4px;
+}
+
 #tierInput {
-  width: 90px;
+  width: 80px;
   padding: 6px 10px;
   border-radius: 8px;
   background: #111021;
@@ -123,16 +130,10 @@ h1 {
   font-size: 14px;
 }
 
-.tier-input-hint {
-  text-align: center;
+.tier-hint {
   font-size: 12px;
   color: #c8c0ff;
-  margin-top: 4px;
-}
-
-.tier-input-wrapper .hint {
-  display: block;
-  margin-top: 3px;
+  white-space: nowrap;
 }
 
 /* ------------------ 角色區塊 ------------------ */
@@ -145,44 +146,46 @@ h1 {
   flex: 1 1 0;
   background: radial-gradient(
     circle at top left,
-    #262347 0,
-    #19162f 40%,
-    #120f26 100%
+    #1a1833 0,
+    #12101f 60%,
+    #0d0b18 100%
   );
   border-radius: 12px;
-  padding: 14px 16px 14px;
-  border: 1px solid rgba(150, 140, 255, 0.35);
-  box-shadow: inset 0 0 8px rgba(60, 50, 120, 0.25);
+  padding: 16px 18px;
+  border: 1px solid rgba(100, 90, 180, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
     transform 0.1s ease, background 0.15s ease;
 }
 
 .role-progress-item:hover {
-  border-color: rgba(200, 190, 255, 0.7);
-  box-shadow: 0 0 10px rgba(150, 140, 255, 0.6);
-  transform: translateY(-1px);
+  border-color: rgba(150, 130, 220, 0.6);
+  box-shadow: 0 4px 12px rgba(100, 80, 180, 0.5);
+  transform: translateY(-2px);
 }
 
 .role-progress-item.role-selected {
-  border-color: rgba(255, 240, 180, 0.95);
-  box-shadow: 0 0 14px rgba(255, 220, 160, 0.85),
-    inset 0 0 10px rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 200, 100, 0.8);
+  box-shadow: 0 0 16px rgba(255, 180, 80, 0.6);
   background: radial-gradient(
     circle at top left,
-    #3a2f6a 0,
-    #19162f 45%,
-    #120f26 100%
+    #2a1f50 0,
+    #12101f 60%,
+    #0d0b18 100%
   );
 }
 
 .role-progress-title {
-  font-size: 13px;
-  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #e5dfff;
 }
 
 .progress-wrapper {
-  margin-top: 4px;
+  margin-top: 8px;
+  margin-bottom: 4px;
 }
 
 .progress-label {
@@ -193,10 +196,12 @@ h1 {
 
 .progress-bar {
   width: 100%;
-  height: 6px;
+  height: 12px;
   border-radius: 999px;
   background: rgba(11, 9, 25, 0.9);
+  border: 1px solid rgba(120, 110, 200, 0.5);
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .progress-fill {
@@ -213,9 +218,10 @@ h1 {
 }
 
 .score-label {
-  margin-top: 4px;
-  font-size: 12px;
+  margin-top: 0;
+  font-size: 14px;
   color: #f3e9ff;
+  margin-bottom: 12px;
 }
 
 /* 分數超出總分時的顏色變化 */

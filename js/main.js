@@ -508,7 +508,7 @@ function addEvent() {
     const srcFoil = getActiveValue("srcFoilType");
 
     if (!srcType || !srcFoil) {
-      alert("轉化需要：原卡種類 / 原卡狀態");
+      alert("轉化需要:原卡種類 / 原卡狀態");
       return;
     }
 
@@ -518,7 +518,7 @@ function addEvent() {
 
   const newLogs = [...state.logs, log];
   if (!validateLogs(newLogs)) {
-    alert("此操作會使某種卡片數量變成負數，請確認選項。");
+    alert("此操作會使某種卡片數量變成負數,請確認選項。");
     return;
   }
 
@@ -532,7 +532,7 @@ function undoEvent() {
 }
 
 function clearEvents() {
-  if (confirm("確定要清空所有事件？")) {
+  if (confirm("確定要清空所有事件?")) {
     state.logs = [];
     reprocessAll();
   }
