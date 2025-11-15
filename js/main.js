@@ -516,7 +516,7 @@ function addEvent() {
     return;
   }
 
-  // 這段要獨立放在外面
+  // 複製時先檢查有沒有卡可複製
   if (eventType === "copy") {
     const stats = recalcCardStatsAllRoles();
     const count = stats[state.currentRole][dstType][dstFoil];
@@ -578,7 +578,7 @@ function reprocessAll() {
   renderLogs();
 }
 
-// ===== 右側紀錄 =====
+// ===== 右側紀錄（倒序＋彩色 tag） =====
 function renderLogs() {
   const box = document.getElementById("logList");
   box.innerHTML = "";
@@ -600,10 +600,10 @@ function renderLogs() {
     return;
   }
 
-  // 原本就有的 delta，順序同 logs（正序）
+  // 正序的分數差
   const deltas = computeRoleScoreDeltas(role);
 
-  // 🔥 顯示用資料：全部倒序
+  // 顯示用資料：全部倒序（最新在最上）
   const logsToShow = logs.slice().reverse();
   const deltasToShow = deltas.slice().reverse();
 
@@ -621,11 +621,17 @@ function renderLogs() {
   logsToShow.forEach((log, i) => {
     const isTrans = log.eventType === "transform";
 
-    const typeText = isTrans
-      ? `${CARD_TYPE_LABEL_MAP[log.srcCardType]} → ${
+    const typeHtml = isTrans
+      ? `<span class="tag tag-type-${log.srcCardType}">${
+          CARD_TYPE_LABEL_MAP[log.srcCardType]
+        }</span>
+         <span class="type-arrow">→</span>
+         <span class="tag tag-type-${log.cardType}">${
           CARD_TYPE_LABEL_MAP[log.cardType]
-        }`
-      : CARD_TYPE_LABEL_MAP[log.cardType];
+        }</span>`
+      : `<span class="tag tag-type-${log.cardType}">${
+          CARD_TYPE_LABEL_MAP[log.cardType]
+        }</span>`;
 
     const foilText = isTrans
       ? `${FOIL_TYPE_LABEL_MAP[log.srcFoilType]} → ${
@@ -636,10 +642,8 @@ function renderLogs() {
     const row = document.createElement("div");
     row.className = "log-item";
 
-    // 🔥 序號：最大的在最上面（完全倒敘）
     const rowNumber = logsToShow.length - i;
 
-    // 🔥 delta：跟著一起反轉後用同一個 index，保證對得上
     const d = deltasToShow[i]?.deltaTotal ?? 0;
     const dText = d > 0 ? `+${d}` : `${d}`;
     const dClass =
@@ -648,8 +652,14 @@ function renderLogs() {
     row.innerHTML = `
       <div class="log-col-center">${rowNumber}</div>
       <div class="log-col-center">${ROLE_LABEL_MAP[log.targetRole]}</div>
-      <div class="log-col-center">${EVENT_TYPE_LABEL_MAP[log.eventType]}</div>
-      <div class="log-col-center">${typeText}</div>
+      <div class="log-col-center">
+        <span class="tag tag-${log.eventType}">
+          ${EVENT_TYPE_LABEL_MAP[log.eventType]}
+        </span>
+      </div>
+      <div class="log-col-center">
+        ${typeHtml}
+      </div>
       <div class="log-col-center">${foilText}</div>
       <div class="log-tooltip"><span class="delta ${dClass}">${dText}</span></div>
     `;
@@ -703,9 +713,10 @@ function setupSaveLoad() {
   });
 }
 
-// ===== 卡牌統計全展開 / 收合 =====
+// ===== 卡牌統計全展開 / 收合（含動畫箭頭） =====
 function setupCardStatsToggleAll() {
   const btn = document.getElementById("cardStatsToggleAll");
+  const arrow = document.getElementById("statsArrow");
   let collapsed = true;
 
   const apply = () => {
@@ -713,7 +724,10 @@ function setupCardStatsToggleAll() {
       if (collapsed) sec.classList.add("collapsed");
       else sec.classList.remove("collapsed");
     });
-    btn.textContent = collapsed ? "▶ 卡牌數量統計" : "▼ 卡牌數量統計";
+
+    if (!arrow) return;
+    if (collapsed) arrow.classList.remove("rotated");
+    else arrow.classList.add("rotated");
   };
 
   apply();

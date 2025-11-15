@@ -165,6 +165,16 @@ h1 {
   color: #ffffff;
 }
 
+/* 展開按鈕箭頭 */
+.card-stats-toggle-all-icon {
+  display: inline-block;
+  transition: transform 0.35s ease;
+}
+
+.card-stats-toggle-all-icon.rotated {
+  transform: rotate(90deg);
+}
+
 /* ===============================
    三個角色卡片
 ================================= */
@@ -248,7 +258,7 @@ h1 {
 }
 
 /* ===============================
-   卡牌統計折疊區
+   卡牌統計折疊區（含動畫）
 ================================= */
 .card-stats-section {
   margin-top: 10px;
@@ -256,10 +266,21 @@ h1 {
   border-radius: 10px;
   background: rgba(9, 9, 25, 0.9);
   border: 1px dashed rgba(140, 128, 220, 0.6);
+
+  overflow: hidden;
+  max-height: 800px;
+  opacity: 1;
+  transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s ease,
+    padding-top 0.35s ease, padding-bottom 0.35s ease, border-width 0.35s ease;
 }
 
 .card-stats-section.collapsed {
-  display: none;
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
 }
 
 .card-stats-title {
@@ -471,9 +492,8 @@ h1 {
 .log-list {
   border-radius: 12px;
   border: 1px solid rgba(120, 110, 210, 0.7);
-  background: #141126;
-  height: 90%;
-  max-height: 320px;
+  background: #141126; /* 單色 */
+  height: 280px; /* 固定高度 */
   overflow-y: auto;
 }
 
@@ -517,11 +537,18 @@ h1 {
   justify-content: center;
 }
 
+.log-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .log-empty {
   font-size: 13px;
   color: #b0a7ff;
-  padding: 12px;
   text-align: center;
+  font-style: italic;
+  padding: 0;
 }
 
 /* 右下分數差 tooltip */
@@ -562,6 +589,77 @@ h1 {
 
 .delta-zero {
   color: #cccccc;
+}
+
+/* ===============================
+   彩色 Tag（柔和版）
+================================= */
+.tag {
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  display: inline-block;
+  min-width: 36px;
+  text-align: center;
+  white-space: nowrap;
+
+  background: rgba(10, 9, 25, 0.9);
+  border: 1px solid rgba(160, 150, 255, 0.35);
+  color: #e7e3ff;
+}
+
+/* 事件類型 tag */
+.tag-gain {
+  border-color: #4ac58a;
+  color: #b6f0d3;
+}
+
+.tag-flash {
+  border-color: #c08dff;
+  color: #e2d1ff;
+}
+
+.tag-transform {
+  border-color: #f2b46a;
+  color: #ffe0b8;
+}
+
+.tag-delete {
+  border-color: #ff7c7c;
+  color: #ffcccc;
+}
+
+.tag-copy {
+  border-color: #71bfff;
+  color: #c8e3ff;
+}
+
+/* 卡牌種類 tag */
+.tag-type-character {
+  border-color: #e3c86a;
+  color: #f7ebbc;
+}
+
+.tag-type-neutral {
+  border-color: #6caee6;
+  color: #d1e6ff;
+}
+
+.tag-type-monster {
+  border-color: #e78686;
+  color: #ffd0d0;
+}
+
+.tag-type-forbidden {
+  border-color: #b28cff;
+  color: #e5d7ff;
+}
+
+/* 轉化箭頭 */
+.type-arrow {
+  margin: 0 4px;
+  color: #cfcaf8;
+  font-size: 12px;
 }
 
 /* ===============================
