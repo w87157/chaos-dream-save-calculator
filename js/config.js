@@ -30,15 +30,6 @@ export const FOIL_TYPE_OPTIONS = [
   { id: "removed", label: "移除" },
 ];
 
-export const ROLE_PRESET_NAMES = [
-  "路克",
-  "卡莉佩",
-  "麥格納",
-  "琳",
-  "奧爾萊亞",
-  "梅鈴",
-];
-
 // ---- 顯示用 label map ----
 export const ROLE_LABEL_MAP = Object.fromEntries(
   ROLE_OPTIONS.map((o) => [o.id, o.label])
@@ -55,3 +46,24 @@ export const EVENT_TYPE_LABEL_MAP = Object.fromEntries(
 export const FOIL_TYPE_LABEL_MAP = Object.fromEntries(
   FOIL_TYPE_OPTIONS.map((o) => [o.id, o.label])
 );
+
+// =======================================
+// 預設角色名稱：依屬性顏色分組
+// =======================================
+
+export const ROLE_PRESET_GROUPS = {
+  red: ["梅鈴", "維若妮卡", "席琳娜", "盧卡斯", "瑪莉貝爾", "歐文"],
+  purple: ["琳", "蕾歐娜", "凱隆", "德蕾莎", "蕾伊"],
+  orange: ["卡莉佩", "奧爾萊亞", "妮雅", "凱西烏斯"],
+  green: ["路克", "雨果", "友紀", "艾美"],
+  blue: ["麥格納", "小春", "米卡", "百麗兒"],
+};
+
+// 每個顏色在 modal 裡顯示的組名
+export const ROLE_ELEMENT_LABEL_MAP = {
+  red: "熱情(火)",
+  purple: "虛無(暗)",
+  orange: "本能(光)",
+  green: "秩序(風)",
+  blue: "正義(水)",
+};

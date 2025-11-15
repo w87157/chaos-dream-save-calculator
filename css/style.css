@@ -7,7 +7,6 @@
   box-sizing: border-box;
 }
 
-/* 右側紀錄欄寬度 */
 :root {
   --log-col-width-index: 8%;
   --log-col-width-role: 23%;
@@ -89,7 +88,7 @@ h1 {
   color: #c7c0ff;
 }
 
-/* 角色命名提示（置於角色卡片下方） */
+/* 角色命名提示（置於角色卡片下方，靠左） */
 .role-rename-hint-container {
   margin-top: 6px;
   padding: 0 4px;
@@ -160,7 +159,7 @@ h1 {
   white-space: nowrap;
 }
 
-/* 卡牌統計總開關（透明按鈕風格） */
+/* 卡牌統計總開關 */
 .card-stats-toggle-all {
   border-radius: 999px;
   padding: 6px 14px;
@@ -180,7 +179,6 @@ h1 {
   color: #ffffff;
 }
 
-/* 展開按鈕箭頭 */
 .card-stats-toggle-all-icon {
   display: inline-block;
   transition: transform 0.35s ease;
@@ -215,7 +213,6 @@ h1 {
     background 0.15s ease;
 }
 
-/* hover 不浮起，只換邊框 */
 .role-progress-item:hover {
   border-color: rgba(150, 130, 220, 0.9);
 }
@@ -273,7 +270,7 @@ h1 {
 }
 
 /* ===============================
-   卡牌統計折疊區（含動畫）
+   卡牌統計折疊區
 ================================= */
 .card-stats-section {
   margin-top: 10px;
@@ -377,9 +374,7 @@ h1 {
   gap: 8px;
 }
 
-/* ===============================
-   透明按鈕（事件 / 卡片種類 / 狀態）
-================================= */
+/* 透明 pill 按鈕 */
 .pill-btn {
   border-radius: 999px;
   padding: 6px 14px;
@@ -412,12 +407,10 @@ h1 {
   border-color: rgba(140, 130, 210, 0.2);
 }
 
-/* ===============================
-   事件 / 原卡 / 新卡：共用卡片樣式
-================================= */
+/* 卡片區塊 */
 .card-block-wrapper {
   display: flex;
-  flex-direction: column; /* 垂直排列：原卡在上，新卡在下 */
+  flex-direction: column;
   gap: 14px;
   margin-bottom: 16px;
 }
@@ -425,11 +418,10 @@ h1 {
 .card-block {
   border-radius: 14px;
   padding: 10px 12px;
-  background: #141126; /* 單色、無漸層、無光暈 */
+  background: #141126;
   border: 1px solid rgba(116, 104, 210, 0.7);
 }
 
-/* 事件卡片額外下邊距 */
 .event-block {
   margin-bottom: 16px;
 }
@@ -450,14 +442,8 @@ h1 {
   margin-bottom: 3px;
 }
 
-/* 保留舊 class 名稱（若 JS 有用到） */
-.transform-block {
-}
-.target-block {
-}
-
 /* ===============================
-   下方三個動作按鈕（置右＆不同色邊框）
+   下方三個動作按鈕
 ================================= */
 .action-row {
   display: flex;
@@ -479,17 +465,14 @@ h1 {
   transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-/* 確定：橘色邊框 */
 .primary-btn {
   border: 1px solid rgba(255, 164, 94, 0.95);
 }
 
-/* 還原：紫色邊框 */
 .secondary-btn {
   border: 1px solid rgba(160, 150, 255, 0.8);
 }
 
-/* 清空：紅色邊框 */
 .danger-btn {
   border: 1px solid rgba(255, 107, 122, 0.95);
 }
@@ -507,12 +490,11 @@ h1 {
 .log-list {
   border-radius: 12px;
   border: 1px solid rgba(120, 110, 210, 0.7);
-  background: #141126; /* 單色 */
-  height: 280px; /* 固定高度 */
+  background: #141126;
+  height: 280px;
   overflow-y: auto;
 }
 
-/* 每一列 */
 .log-item {
   display: grid;
   grid-template-columns:
@@ -566,7 +548,7 @@ h1 {
   padding: 0;
 }
 
-/* 右下分數差 tooltip */
+/* 分數差 tooltip */
 .log-tooltip {
   position: absolute;
   right: 10px;
@@ -607,7 +589,7 @@ h1 {
 }
 
 /* ===============================
-   彩色 Tag（柔和版）
+   彩色 Tag（柔和）
 ================================= */
 .tag {
   padding: 3px 8px;
@@ -617,7 +599,6 @@ h1 {
   min-width: 36px;
   text-align: center;
   white-space: nowrap;
-
   background: rgba(10, 9, 25, 0.9);
   border: 1px solid rgba(160, 150, 255, 0.35);
   color: #e7e3ff;
@@ -628,22 +609,18 @@ h1 {
   border-color: #4ac58a;
   color: #b6f0d3;
 }
-
 .tag-flash {
   border-color: #c08dff;
   color: #e2d1ff;
 }
-
 .tag-transform {
   border-color: #f2b46a;
   color: #ffe0b8;
 }
-
 .tag-delete {
   border-color: #ff7c7c;
   color: #ffcccc;
 }
-
 .tag-copy {
   border-color: #71bfff;
   color: #c8e3ff;
@@ -654,17 +631,14 @@ h1 {
   border-color: #e3c86a;
   color: #f7ebbc;
 }
-
 .tag-type-neutral {
   border-color: #6caee6;
   color: #d1e6ff;
 }
-
 .tag-type-monster {
   border-color: #e78686;
   color: #ffd0d0;
 }
-
 .tag-type-forbidden {
   border-color: #b28cff;
   color: #e5d7ff;
@@ -678,7 +652,7 @@ h1 {
 }
 
 /* ===============================
-   右下角：浮動儲存區
+   浮動儲存區
 ================================= */
 .save-load-bar {
   position: fixed;
@@ -723,15 +697,13 @@ h1 {
 }
 
 /* ===============================
-   角色命名 modal
+   角色命名 Modal
 ================================= */
-
-/* 共用 hidden */
 .hidden {
   display: none !important;
 }
 
-/* 角色命名 modal 背景 */
+/* 背景 */
 .role-name-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -742,7 +714,7 @@ h1 {
   z-index: 50;
 }
 
-/* 角色命名 modal 本體 */
+/* 本體 */
 .role-name-modal {
   background: #141126;
   border-radius: 14px;
@@ -751,23 +723,52 @@ h1 {
   padding: 14px 16px 12px;
   min-width: 260px;
   max-width: 320px;
+  display: flex;
+  flex-direction: column;
 }
 
 .role-name-modal-title {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: #efe7ff;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .role-name-options {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
   margin-bottom: 10px;
 }
 
-/* 選項按鈕 */
+/* 分組區塊：沒有彩色外框 */
+.role-name-group {
+  padding: 6px 0;
+  border-radius: 0;
+}
+
+/* 分組之間用虛線分隔 */
+.role-name-group + .role-name-group {
+  border-top: 1px dashed rgba(160, 150, 255, 0.4);
+  margin-top: 8px;
+  padding-top: 10px;
+}
+
+/* 小標題顏色統一 */
+.role-name-group-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+  color: #cfc7ff;
+}
+
+.role-name-group-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* 預設名按鈕（基礎） */
 .role-name-option-btn {
   border-radius: 999px;
   padding: 5px 10px;
@@ -779,11 +780,12 @@ h1 {
   white-space: nowrap;
 }
 
+/* hover 不再洗掉外框顏色，只加底色 */
 .role-name-option-btn:hover {
-  border-color: #ffffff;
+  background: #221f3a;
 }
 
-/* 取消按鈕 */
+/* 取消按鈕靠右 + 紅色外框 */
 .role-name-cancel-btn {
   margin-top: 2px;
   margin-left: auto;
@@ -792,18 +794,41 @@ h1 {
   padding: 6px 14px;
   font-size: 13px;
   cursor: pointer;
-  border: 1px solid rgba(255, 80, 80, 0.7);
-  background: transparent;
-  color: #ff9c9c;
+  background: #141126;
+  border: 1px solid rgba(160, 150, 255, 0.8);
+  color: rgba(200, 190, 255, 0.9);
 }
 
 .role-name-cancel-btn:hover {
-  border-color: #ff4d4d;
-  color: #ff4d4d;
+  background: #1a1531;
+  border-color: rgba(185, 175, 255, 1);
+  color: #ffffff;
+}
+
+/* 成員按鈕依屬性顏色：外框 = 文字 */
+.role-name-option-btn.element-green {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+.role-name-option-btn.element-orange {
+  border-color: #f97316;
+  color: #f97316;
+}
+.role-name-option-btn.element-blue {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+.role-name-option-btn.element-purple {
+  border-color: #a855f7;
+  color: #a855f7;
+}
+.role-name-option-btn.element-red {
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 /* ===============================
-   RWD 簡單調整
+   RWD
 ================================= */
 @media (max-width: 1024px) {
   .app-layout {

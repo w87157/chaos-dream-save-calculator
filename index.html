@@ -348,9 +348,9 @@
         </div>
       </div>
 
-      <!-- 🔔 提示移到角色卡下方 -->
+      <!-- 雙擊提示 -->
       <div class="role-rename-hint-container">
-        <div class="role-rename-hint">※ 雙擊角色卡片可重新命名</div>
+        <div class="role-rename-hint">提示：雙擊角色卡片可重新命名</div>
       </div>
     </div>
 
@@ -358,7 +358,7 @@
     <div class="app-layout">
       <div class="left-panel">
         <div class="panel-section event-panel">
-          <!-- 標題：與上方角色狀態一致 -->
+          <!-- 標題 -->
           <div class="section-title-row merged">
             <div class="section-title-with-icon">
               <svg
@@ -401,7 +401,7 @@
             </div>
           </div>
 
-          <!-- ① 事件：共用 card-block 樣式 -->
+          <!-- 事件 -->
           <div class="card-block event-block">
             <div class="card-block-title">事件</div>
             <div class="card-block-row">
@@ -409,7 +409,7 @@
             </div>
           </div>
 
-          <!-- ② / ③ 卡片區塊：原卡在上，新卡在下 -->
+          <!-- 卡片區塊：原卡在上，新卡在下 -->
           <div class="card-block-wrapper">
             <!-- 原卡片 -->
             <div class="card-block original-block transform-block">
@@ -452,7 +452,6 @@
 
       <!-- 右側：事件紀錄 -->
       <div class="right-panel">
-        <!-- 標題使用同一套 section-title 樣式 + icon -->
         <div class="section-title-row merged">
           <div class="section-title-with-icon">
             <svg
@@ -505,8 +504,8 @@
           <div class="right-title-note">（僅顯示目前選取角色）</div>
         </div>
 
-        <div id="logList" class="log-list">
-          <div class="log-empty">此角色尚無紀錄。</div>
+        <div id="logList" class="log-list empty">
+          <div class="log-empty">此角色尚無記錄。</div>
         </div>
       </div>
     </div>
@@ -519,7 +518,7 @@
       <span id="saveStatus" class="save-status"></span>
     </div>
 
-    <!-- 🔔 角色命名選擇視窗 -->
+    <!-- 角色命名選擇視窗 -->
     <div id="roleNameModal" class="role-name-modal-backdrop hidden">
       <div class="role-name-modal">
         <div class="role-name-modal-title">選擇此角色名稱</div>

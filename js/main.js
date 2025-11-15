@@ -7,7 +7,8 @@ import {
   CARD_TYPE_LABEL_MAP,
   EVENT_TYPE_LABEL_MAP,
   FOIL_TYPE_LABEL_MAP,
-  ROLE_PRESET_NAMES, // 從 config.js 載入預設角色名稱清單
+  ROLE_PRESET_GROUPS,
+  ROLE_ELEMENT_LABEL_MAP,
 } from "./config.js";
 
 // ===== 全域狀態 =====
@@ -24,7 +25,6 @@ const state = {
     char2: { cardScore: 0, eventScore: 0, total: 0 },
     char3: { cardScore: 0, eventScore: 0, total: 0 },
   },
-  // 角色名稱（可被自訂，會跟著存檔）
   roleNames: {
     char1: "角色 1",
     char2: "角色 2",
@@ -35,13 +35,12 @@ const state = {
 const CARD_TYPES = ["character", "neutral", "monster", "forbidden"];
 const FOIL_TYPES = ["normal", "foil", "godfoil", "removed"];
 
-// 正在改名的角色 id（給 modal 用）
+// 正在改名的角色 id
 let renameTargetRole = null;
 
-// ===== TIER「輸入框」初始化 =====
+// ===== TIER 輸入 =====
 function initTierInput() {
   const tierInput = document.getElementById("tierInput");
-
   tierInput.addEventListener("input", () => {
     const val = Number(tierInput.value) || 0;
     if (val < 0) tierInput.value = 0;
@@ -57,25 +56,21 @@ function getTierCap() {
   return 30 + 10 * (tier - 1);
 }
 
-// ===== 更新畫面上顯示的角色名稱 =====
+// ===== 角色名稱 UI =====
 function updateRoleNameUI() {
   const roles = ["char1", "char2", "char3"];
-
   roles.forEach((roleId, idx) => {
     const fallback = ROLE_LABEL_MAP[roleId] || `角色 ${idx + 1}`;
     const name = (state.roleNames && state.roleNames[roleId]) || fallback;
 
-    // 上方卡片標題
     const titleEl = document.getElementById(roleId + "Name");
     if (titleEl) titleEl.textContent = name;
 
-    // 卡牌數量標題括號內名稱
     const statsEl = document.getElementById(roleId + "NameStats");
     if (statsEl) statsEl.textContent = name;
   });
 }
 
-// ===== 單一角色重新命名（由 modal 呼叫） =====
 function renameRole(roleId, name) {
   const trimmed = (name || "").trim();
   if (!trimmed) return;
@@ -84,10 +79,10 @@ function renameRole(roleId, name) {
   state.roleNames[roleId] = trimmed;
 
   updateRoleNameUI();
-  renderLogs(); // 右側紀錄的「角色」欄位也更新
+  renderLogs();
 }
 
-// ===== 角色命名 modal =====
+// ===== 角色命名 Modal =====
 function openRoleNameModal(roleId) {
   renameTargetRole = roleId;
   const modal = document.getElementById("roleNameModal");
@@ -107,30 +102,47 @@ function setupRoleNameModal() {
   const cancelBtn = document.getElementById("roleNameCancel");
   if (!modal || !optionsContainer || !cancelBtn) return;
 
-  // 產生預設名稱按鈕
-  ROLE_PRESET_NAMES.forEach((name) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "role-name-option-btn";
-    btn.textContent = name;
-    btn.addEventListener("click", () => {
-      if (!renameTargetRole) return;
-      renameRole(renameTargetRole, name);
-      closeRoleNameModal();
+  optionsContainer.innerHTML = "";
+
+  // 依顏色分組建立按鈕
+  Object.entries(ROLE_PRESET_GROUPS).forEach(([elementKey, names]) => {
+    const group = document.createElement("div");
+    group.className = `role-name-group element-${elementKey}`;
+
+    const title = document.createElement("div");
+    title.className = "role-name-group-title";
+    title.textContent =
+      ROLE_ELEMENT_LABEL_MAP[elementKey] || elementKey.toUpperCase();
+    group.appendChild(title);
+
+    const body = document.createElement("div");
+    body.className = "role-name-group-body";
+
+    names.forEach((name) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `role-name-option-btn element-${elementKey}`;
+      btn.textContent = name;
+      btn.addEventListener("click", () => {
+        if (!renameTargetRole) return;
+        renameRole(renameTargetRole, name);
+        closeRoleNameModal();
+      });
+      body.appendChild(btn);
     });
-    optionsContainer.appendChild(btn);
+
+    group.appendChild(body);
+    optionsContainer.appendChild(group);
   });
 
-  // 取消按鈕
+  // 取消
   cancelBtn.addEventListener("click", () => {
     closeRoleNameModal();
   });
 
   // 點背景關閉
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      closeRoleNameModal();
-    }
+    if (e.target === modal) closeRoleNameModal();
   });
 }
 
@@ -157,9 +169,7 @@ function updateCharacterProgressAll() {
 function updateCharacterProgress(role, pct, isOverCap) {
   const fill = document.getElementById(role + "Fill");
   if (!fill) return;
-
   fill.style.width = pct + "%";
-
   if (isOverCap) fill.classList.add("progress-over");
   else fill.classList.remove("progress-over");
 }
@@ -169,14 +179,12 @@ function setupRoleSelection() {
   document.querySelectorAll(".role-progress-item").forEach((item) => {
     const roleId = item.dataset.role;
 
-    // 點一下：選取該角色
     item.addEventListener("click", () => {
       state.currentRole = roleId;
       updateRoleSelectionHighlight();
       renderLogs();
     });
 
-    // 雙擊：打開命名視窗，選擇預設名稱
     item.addEventListener("dblclick", () => {
       openRoleNameModal(roleId);
     });
@@ -214,7 +222,6 @@ function updateTransformVisibility() {
   const eventType = getActiveValue("eventType");
   const block = document.querySelector(".transform-block");
   if (!block) return;
-
   block.style.display = eventType === "transform" ? "block" : "none";
 }
 
@@ -280,7 +287,7 @@ function createBaseStatsForRole() {
   CARD_TYPES.forEach((ct) => {
     stats[ct] = { normal: 0, foil: 0, godfoil: 0, removed: 0 };
   });
-  stats.character.normal = 4; // 初始 4 張角色卡
+  stats.character.normal = 4;
   return stats;
 }
 
@@ -307,13 +314,11 @@ function validateLogs(logs) {
       case "gain":
         ok = apply(targetRole, cardType, foilType, +1);
         break;
-
       case "flash":
         ok =
           apply(targetRole, cardType, "normal", -1) &&
           apply(targetRole, cardType, foilType, +1);
         break;
-
       case "transform": {
         const fromType = log.srcCardType || "character";
         const fromFoil = log.srcFoilType || foilType;
@@ -322,11 +327,9 @@ function validateLogs(logs) {
           apply(targetRole, cardType, foilType, +1);
         break;
       }
-
       case "delete":
         ok = apply(targetRole, cardType, foilType, -1);
         break;
-
       case "copy":
         ok = apply(targetRole, cardType, foilType, +1);
         break;
@@ -358,12 +361,10 @@ function recalcCardStatsAllRoles() {
       case "gain":
         apply(targetRole, cardType, foilType, +1);
         break;
-
       case "flash":
         apply(targetRole, cardType, "normal", -1);
         apply(targetRole, cardType, foilType, +1);
         break;
-
       case "transform": {
         const fromType = log.srcCardType || "character";
         const fromFoil = log.srcFoilType || foilType;
@@ -371,11 +372,9 @@ function recalcCardStatsAllRoles() {
         apply(targetRole, cardType, foilType, +1);
         break;
       }
-
       case "delete":
         apply(targetRole, cardType, foilType, -1);
         break;
-
       case "copy":
         apply(targetRole, cardType, foilType, +1);
         break;
@@ -428,14 +427,11 @@ function recalcEventStatsAllRoles() {
   state.eventStats = result;
 }
 
-// ===== 計算分數 =====
+// ===== 分數計算 =====
 function calcCardScoreForRole(s) {
   let score = 0;
-
-  // 角色卡：只有神閃計分
   score += (s.character.godfoil || 0) * 20;
 
-  // 中立 / 禁忌
   ["neutral", "forbidden"].forEach((t) => {
     const v = s[t];
     score += (v.normal || 0) * 20;
@@ -443,7 +439,6 @@ function calcCardScoreForRole(s) {
     score += (v.godfoil || 0) * 50;
   });
 
-  // 怪物卡
   const m = s.monster;
   score += (m.normal || 0) * 80;
   score += (m.foil || 0) * 90;
@@ -453,34 +448,29 @@ function calcCardScoreForRole(s) {
 }
 
 function calcComboScore(n) {
-  if (n <= 1) return 0; // 第一次：0 分
-  if (n === 2) return 10; // 第二次：10 分
-  if (n === 3) return 30; // 第三次：30 分
-  if (n === 4) return 50; // 第四次：50 分
-  return 70; // 第五次起：70 分
+  if (n <= 1) return 0;
+  if (n === 2) return 10;
+  if (n === 3) return 30;
+  if (n === 4) return 50;
+  return 70;
 }
 
 function calcEventScoreForRole(ev) {
   let t = 0;
 
-  // 轉化：10n
   t += (ev.transform || 0) * 10;
 
-  // 複製：0,10,30,50,70,70 ...
   let copyScore = 0;
   for (let i = 1; i <= (ev.copy || 0); i++) {
     copyScore += calcComboScore(i);
   }
 
-  // 刪除：0,10,30,50,70,70 ...
   let deleteScore = 0;
   for (let i = 1; i <= (ev.delete || 0); i++) {
     deleteScore += calcComboScore(i);
   }
 
   t += copyScore + deleteScore;
-
-  // 刪除角色卡額外 +20
   t += (ev.deleteCharacter || 0) * 20;
 
   return t;
@@ -515,7 +505,7 @@ function updateScoresUI(scores) {
   });
 }
 
-// ===== 單步計算 hover 差分 =====
+// ===== 單步分數差 =====
 function computeRoleScoreDeltas(role) {
   const baseCard = createBaseStatsForRole();
   const baseEv = {
@@ -560,12 +550,10 @@ function applyEventToCardStatsSingle(stats, log) {
     case "gain":
       apply(cardType, foilType, +1);
       break;
-
     case "flash":
       apply(cardType, "normal", -1);
       apply(cardType, foilType, +1);
       break;
-
     case "transform": {
       const fromType = log.srcCardType || "character";
       const fromFoil = log.srcFoilType || foilType;
@@ -573,11 +561,9 @@ function applyEventToCardStatsSingle(stats, log) {
       apply(cardType, foilType, +1);
       break;
     }
-
     case "delete":
       apply(cardType, foilType, -1);
       break;
-
     case "copy":
       apply(cardType, foilType, +1);
       break;
@@ -611,17 +597,15 @@ function addEvent() {
 
   const dstType = getActiveValue("cardType");
   const dstFoil = getActiveValue("foilType");
-
   if (!dstType || !dstFoil) {
     alert("請選擇卡片種類 / 狀態");
     return;
   }
 
-  // 複製時先檢查有沒有卡可複製
+  // 複製時先確認是否有卡可以複製
   if (eventType === "copy") {
     const stats = recalcCardStatsAllRoles();
     const count = stats[state.currentRole][dstType][dstFoil];
-
     if (count <= 0) {
       alert("無法複製：目前選擇的卡牌數量為 0。");
       return;
@@ -639,19 +623,17 @@ function addEvent() {
   if (eventType === "transform") {
     const srcType = getActiveValue("srcCardType");
     const srcFoil = getActiveValue("srcFoilType");
-
     if (!srcType || !srcFoil) {
-      alert("轉化需要:原卡種類 / 原卡狀態");
+      alert("轉化需要：原卡種類 / 原卡狀態");
       return;
     }
-
     log.srcCardType = srcType;
     log.srcFoilType = srcFoil;
   }
 
   const newLogs = [...state.logs, log];
   if (!validateLogs(newLogs)) {
-    alert("此操作會使某種卡片數量變成負數,請確認選項。");
+    alert("此操作會使某種卡片數量變成負數，請確認選項。");
     return;
   }
 
@@ -679,7 +661,7 @@ function reprocessAll() {
   renderLogs();
 }
 
-// ===== 右側紀錄（倒序＋彩色 tag） =====
+// ===== 右側紀錄 =====
 function renderLogs() {
   const box = document.getElementById("logList");
   box.innerHTML = "";
@@ -692,7 +674,6 @@ function renderLogs() {
     return;
   }
 
-  // 原始（正序）同角色事件
   const logs = state.logs.filter((l) => l.targetRole === role);
 
   if (logs.length === 0) {
@@ -701,10 +682,8 @@ function renderLogs() {
     return;
   }
 
-  // 正序的分數差
   const deltas = computeRoleScoreDeltas(role);
 
-  // 顯示用資料：全部倒序（最新在最上）
   const logsToShow = logs.slice().reverse();
   const deltasToShow = deltas.slice().reverse();
 
@@ -785,7 +764,7 @@ function setupSaveLoad() {
       logs: state.logs,
       currentRole: state.currentRole,
       tier: document.getElementById("tierInput").value,
-      roleNames: state.roleNames, // 把自訂角色名稱一起存起來
+      roleNames: state.roleNames,
     };
     localStorage.setItem("chaosSave_v3", JSON.stringify(data));
     status.textContent = "已儲存";
@@ -804,9 +783,7 @@ function setupSaveLoad() {
     state.logs = data.logs || [];
     state.currentRole = data.currentRole || "char1";
 
-    if (data.roleNames) {
-      state.roleNames = data.roleNames;
-    }
+    if (data.roleNames) state.roleNames = data.roleNames;
 
     reprocessAll();
     updateRoleSelectionHighlight();
@@ -824,7 +801,7 @@ function setupSaveLoad() {
   });
 }
 
-// ===== 卡牌統計全展開 / 收合（含動畫箭頭） =====
+// ===== 卡牌統計全展開 / 收合 =====
 function setupCardStatsToggleAll() {
   const btn = document.getElementById("cardStatsToggleAll");
   const arrow = document.getElementById("statsArrow");
@@ -851,7 +828,6 @@ function setupCardStatsToggleAll() {
 
 // ===== 初始化 =====
 function init() {
-  // 依照 config 初始化角色名稱（之後若有存檔會覆蓋）
   state.roleNames = Object.fromEntries(
     ROLE_OPTIONS.map((o) => [o.id, o.label])
   );
@@ -871,7 +847,7 @@ function init() {
 
   setupRoleSelection();
   setupCardStatsToggleAll();
-  setupRoleNameModal(); // 初始化命名視窗
+  setupRoleNameModal();
 
   reprocessAll();
 }
