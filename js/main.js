@@ -352,14 +352,35 @@ function calcCardScoreForRole(s) {
   return score;
 }
 
+function calcComboScore(n) {
+  if (n <= 1) return 0; // 第一次：0 分
+  if (n === 2) return 10; // 第二次：10 分
+  if (n === 3) return 30; // 第三次：30 分
+  if (n === 4) return 50; // 第四次：50 分
+  return 70; // 第五次起：70 分
+}
+
 function calcEventScoreForRole(ev) {
   let t = 0;
 
+  // 轉化：10n
   t += (ev.transform || 0) * 10;
 
-  const x = (ev.copy || 0) + (ev.delete || 0);
-  t += (10 * x * (x - 1)) / 2;
+  // 複製：0,10,30,50,70,70 ...
+  let copyScore = 0;
+  for (let i = 1; i <= (ev.copy || 0); i++) {
+    copyScore += calcComboScore(i);
+  }
 
+  // 刪除：0,10,30,50,70,70 ...
+  let deleteScore = 0;
+  for (let i = 1; i <= (ev.delete || 0); i++) {
+    deleteScore += calcComboScore(i);
+  }
+
+  t += copyScore + deleteScore;
+
+  // 刪除角色卡額外 +20
   t += (ev.deleteCharacter || 0) * 20;
 
   return t;
@@ -495,6 +516,17 @@ function addEvent() {
     return;
   }
 
+  // 這段要獨立放在外面
+  if (eventType === "copy") {
+    const stats = recalcCardStatsAllRoles();
+    const count = stats[state.currentRole][dstType][dstFoil];
+
+    if (count <= 0) {
+      alert("無法複製：目前選擇的卡牌數量為 0。");
+      return;
+    }
+  }
+
   const log = {
     id: Date.now(),
     targetRole: state.currentRole,
@@ -559,19 +591,26 @@ function renderLogs() {
     return;
   }
 
+  // 原始（正序）同角色事件
   const logs = state.logs.filter((l) => l.targetRole === role);
+
   if (logs.length === 0) {
     box.classList.add("empty");
     box.innerHTML = `<div class="log-empty">此角色尚無記錄。</div>`;
     return;
   }
 
+  // 原本就有的 delta，順序同 logs（正序）
   const deltas = computeRoleScoreDeltas(role);
+
+  // 🔥 顯示用資料：全部倒序
+  const logsToShow = logs.slice().reverse();
+  const deltasToShow = deltas.slice().reverse();
 
   const header = document.createElement("div");
   header.className = "log-item log-item-header";
   header.innerHTML = `
-    <div class="log-col-center">#</div>
+    <div class="log-col-center"></div>
     <div class="log-col-center">角色</div>
     <div class="log-col-center">事件</div>
     <div class="log-col-center">種類</div>
@@ -579,7 +618,7 @@ function renderLogs() {
   `;
   box.appendChild(header);
 
-  logs.forEach((log, i) => {
+  logsToShow.forEach((log, i) => {
     const isTrans = log.eventType === "transform";
 
     const typeText = isTrans
@@ -597,13 +636,17 @@ function renderLogs() {
     const row = document.createElement("div");
     row.className = "log-item";
 
-    const d = deltas[i]?.deltaTotal ?? 0;
+    // 🔥 序號：最大的在最上面（完全倒敘）
+    const rowNumber = logsToShow.length - i;
+
+    // 🔥 delta：跟著一起反轉後用同一個 index，保證對得上
+    const d = deltasToShow[i]?.deltaTotal ?? 0;
     const dText = d > 0 ? `+${d}` : `${d}`;
     const dClass =
       d > 0 ? "delta-positive" : d < 0 ? "delta-negative" : "delta-zero";
 
     row.innerHTML = `
-      <div class="log-col-center">${i + 1}</div>
+      <div class="log-col-center">${rowNumber}</div>
       <div class="log-col-center">${ROLE_LABEL_MAP[log.targetRole]}</div>
       <div class="log-col-center">${EVENT_TYPE_LABEL_MAP[log.eventType]}</div>
       <div class="log-col-center">${typeText}</div>

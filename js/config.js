@@ -7,16 +7,16 @@ export const ROLE_OPTIONS = [
 
 // 卡片種類
 export const CARD_TYPE_OPTIONS = [
-  { id: "character", label: "角色卡" },
-  { id: "neutral", label: "中立卡" },
-  { id: "monster", label: "怪物卡" },
-  { id: "forbidden", label: "禁忌卡" },
+  { id: "character", label: "角色" },
+  { id: "neutral", label: "中立" },
+  { id: "monster", label: "怪物" },
+  { id: "forbidden", label: "禁忌" },
 ];
 
 // 事件種類（順序：獲得 → 靈光一閃 → 轉化 → 刪除 → 複製）
 export const EVENT_TYPE_OPTIONS = [
   { id: "gain", label: "獲得" },
-  { id: "flash", label: "靈光一閃" },
+  { id: "flash", label: "靈閃" },
   { id: "transform", label: "轉化" },
   { id: "delete", label: "刪除" },
   { id: "copy", label: "複製" },

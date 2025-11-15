@@ -1,10 +1,13 @@
+/* ===============================
+   Reset & 基本設定
+================================= */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* 事件紀錄表欄位寬度（方便調整） */
+/* 右側紀錄欄寬度 */
 :root {
   --log-col-width-index: 8%;
   --log-col-width-role: 23%;
@@ -13,6 +16,9 @@
   --log-col-width-foil: 23%;
 }
 
+/* ===============================
+   全局背景 / 字體
+================================= */
 body {
   margin: 0;
   padding: 24px 0 80px;
@@ -36,7 +42,7 @@ h1 {
   margin-bottom: 16px;
 }
 
-/* ------------------ 共用 panel 樣式 ------------------ */
+/* 版心寬度 */
 .top-panel,
 .role-section,
 .app-layout {
@@ -44,34 +50,48 @@ h1 {
   margin: 0 auto 16px;
 }
 
+/* ===============================
+   標題 + Icon
+================================= */
 .section-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+.section-title-row.merged {
+  margin-bottom: 12px;
+}
+
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 10px;
   color: #f3e9ff;
   letter-spacing: 0.08em;
 }
 
-/* 標題左邊彩色小方塊 */
-.section-title::before {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  margin-right: 8px;
-  background: linear-gradient(135deg, #63e9ff, #9a8bff);
-  box-shadow: 0 0 6px rgba(124, 228, 255, 0.8);
-  vertical-align: middle;
+.section-title-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* ------------------ 合併後大 Panel（角色狀態） ------------------ */
+.section-icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0.96;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
+}
+
+/* 右側標題備註文字 */
+.right-title-note {
+  font-size: 13px;
+  color: #c7c0ff;
+}
+
+/* ===============================
+   上半部「角色狀態」大 Panel
+================================= */
 .merged-panel {
   background: rgba(16, 14, 26, 0.96);
   border-radius: 16px;
@@ -80,21 +100,14 @@ h1 {
   border: 1px solid rgba(143, 130, 255, 0.3);
 }
 
-.section-title-row.merged {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-/* ------------------ TIER 輸入框 ------------------ */
+/* TIER 行 */
 .tier-and-card-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding: 0 4px;
+  gap: 12px;
 }
 
 .tier-input-row-wrapper {
@@ -111,14 +124,6 @@ h1 {
   white-space: nowrap;
 }
 
-/* ------------------ 卡牌統計按鈕 ------------------ */
-.card-stats-toggle-row {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 2px;
-  padding-left: 4px;
-}
-
 #tierInput {
   width: 80px;
   padding: 6px 10px;
@@ -130,13 +135,39 @@ h1 {
   font-size: 14px;
 }
 
+#tierInput:focus {
+  box-shadow: 0 0 0 2px rgba(174, 156, 255, 0.6);
+}
+
 .tier-hint {
   font-size: 12px;
   color: #c8c0ff;
   white-space: nowrap;
 }
 
-/* ------------------ 角色區塊 ------------------ */
+/* 卡牌統計總開關（透明按鈕風格） */
+.card-stats-toggle-all {
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: 1px solid rgba(160, 150, 255, 0.45);
+  background: transparent;
+  color: #e7e1ff;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.card-stats-toggle-all:hover {
+  border-color: rgba(190, 180, 255, 0.85);
+  color: #ffffff;
+}
+
+/* ===============================
+   三個角色卡片
+================================= */
 .role-progress-panel {
   display: flex;
   gap: 16px;
@@ -156,141 +187,106 @@ h1 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease,
-    transform 0.1s ease, background 0.15s ease;
+    background 0.15s ease;
 }
 
+/* hover 不浮起，只換邊框 */
 .role-progress-item:hover {
-  border-color: rgba(150, 130, 220, 0.6);
-  box-shadow: 0 4px 12px rgba(100, 80, 180, 0.5);
-  transform: translateY(-2px);
+  border-color: rgba(150, 130, 220, 0.9);
 }
 
 .role-progress-item.role-selected {
-  border-color: rgba(255, 200, 100, 0.8);
-  box-shadow: 0 0 16px rgba(255, 180, 80, 0.6);
-  background: radial-gradient(
-    circle at top left,
-    #2a1f50 0,
-    #12101f 60%,
-    #0d0b18 100%
-  );
+  border-color: rgba(171, 143, 255, 1);
+  box-shadow: 0 0 10px rgba(186, 162, 255, 0.9);
 }
 
 .role-progress-title {
   font-size: 14px;
-  font-weight: 600;
   margin-bottom: 8px;
-  color: #e5dfff;
+  color: #f0e7ff;
 }
 
+/* 進度條 */
 .progress-wrapper {
-  margin-top: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .progress-label {
   font-size: 12px;
-  color: #d3ccff;
+  color: #b9b0ff;
   margin-bottom: 4px;
 }
 
 .progress-bar {
   width: 100%;
-  height: 12px;
+  height: 8px;
   border-radius: 999px;
-  background: rgba(11, 9, 25, 0.9);
-  border: 1px solid rgba(120, 110, 200, 0.5);
+  background: #25213f;
   overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .progress-fill {
   height: 100%;
   width: 0%;
+  background: linear-gradient(to right, #ffcf7f, #ff8f5a);
   border-radius: 999px;
-  background: linear-gradient(90deg, #b37cff, #ffd5ff);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.progress-fill.progress-over {
-  background: linear-gradient(90deg, #ff7d7d, #ffd0d0);
-  box-shadow: 0 0 8px rgba(255, 100, 100, 0.9);
+  transition: width 0.25s ease-out;
 }
 
 .score-label {
-  margin-top: 0;
-  font-size: 14px;
-  color: #f3e9ff;
-  margin-bottom: 12px;
+  font-size: 13px;
+  color: #d6ceff;
 }
 
-/* 分數超出總分時的顏色變化 */
-.score-label.score-over {
-  color: #ff7d7d;
+.progress-over {
+  background: linear-gradient(to right, #ff8080, #ff3c5a) !important;
+}
+
+.score-over {
+  color: #ff8e9c;
   font-weight: 600;
-  text-shadow: 0 0 6px rgba(255, 80, 80, 0.9);
 }
 
-/* 全角色統一收合按鈕 */
-.card-stats-toggle-all {
-  border: 1px solid rgba(160, 150, 255, 0.7);
-  background: rgba(18, 16, 40, 0.95);
-  color: #f5f3ff;
-  border-radius: 999px;
-  font-size: 11px;
-  padding: 3px 10px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.card-stats-toggle-all:hover {
-  box-shadow: 0 0 6px rgba(170, 160, 255, 0.9);
-}
-
-/* 各角色卡牌統計總表 */
+/* ===============================
+   卡牌統計折疊區
+================================= */
 .card-stats-section {
   margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px dashed rgba(143, 130, 255, 0.45);
+  padding: 10px 10px 8px;
+  border-radius: 10px;
+  background: rgba(9, 9, 25, 0.9);
+  border: 1px dashed rgba(140, 128, 220, 0.6);
 }
 
-.card-stats-section.collapsed .card-stats-table {
+.card-stats-section.collapsed {
   display: none;
 }
 
 .card-stats-title {
-  font-size: 12px;
-  color: #d9d2ff;
-  margin-bottom: 4px;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #e2daff;
 }
 
 .card-stats-table {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 11px;
+  width: 100%;
 }
 
 .card-stats-header,
 .card-stats-row {
   display: grid;
-  grid-template-columns: 90px repeat(4, 1fr);
-  align-items: center;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(70, 60, 125, 0.8);
 }
 
 .card-stats-header {
-  background: rgba(52, 47, 92, 0.95);
-  border-radius: 8px;
-  padding: 3px 8px;
-  font-weight: 600;
+  color: #b3a8ff;
 }
 
-.card-stats-row {
-  background: rgba(22, 20, 42, 0.9);
-  border-radius: 8px;
-  padding: 3px 8px;
+.card-stats-row:last-child {
+  border-bottom: none;
 }
 
 .card-stats-cell {
@@ -301,248 +297,193 @@ h1 {
 
 .card-stats-cell.type {
   justify-content: flex-start;
+  color: #ffd48a;
 }
 
-/* ------------------ 下排左右兩區 ------------------ */
+/* ===============================
+   下半部 Layout
+================================= */
 .app-layout {
-  max-width: 1200px;
-  margin: 0 auto 24px;
   display: flex;
-  gap: 18px;
-  align-items: stretch;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .left-panel {
-  flex: 0 0 34%;
+  flex: 1.2;
 }
 
 .right-panel {
-  flex: 1 1 auto;
-  background: rgba(16, 14, 26, 0.98);
+  flex: 1;
+  background: rgba(16, 14, 28, 0.96);
   border-radius: 16px;
-  padding: 16px 18px;
-  border: 1px solid rgba(143, 130, 255, 0.35);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  padding: 14px 16px 18px;
+  border: 1px solid rgba(120, 110, 210, 0.6);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.75);
 }
 
-/* ------------------ 左側事件 panel ------------------ */
-.panel-section {
-  background: rgba(16, 14, 26, 0.98);
+/* ===============================
+   事件輸入 Panel
+================================= */
+.panel-section.event-panel {
+  background: rgba(16, 14, 28, 0.96);
   border-radius: 16px;
-  padding: 16px 18px 18px;
-  border: 1px solid rgba(143, 130, 255, 0.35);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  height: 100%;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(120, 110, 210, 0.6);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.75);
 }
 
-.panel-section .section-title {
-  margin-bottom: 6px;
-}
-
-.event-block {
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px dashed rgba(143, 130, 255, 0.4);
-}
-
-.sub-title {
-  font-size: 13px;
-  margin: 6px 0 4px;
-  color: #c9c1ff;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.sub-title::before {
-  content: "·";
-  color: #8fe0ff;
-  font-size: 18px;
-  line-height: 1;
-}
-
-.card-block-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 6px;
-}
-
-.card-block {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 10px 8px;
-  border-radius: 12px;
-  background: radial-gradient(
-    circle at top left,
-    rgba(60, 52, 120, 0.38) 0,
-    rgba(21, 18, 40, 0.96) 60%
-  );
-  border: 1px solid rgba(147, 136, 255, 0.6);
-  box-shadow: inset 0 0 8px rgba(45, 38, 90, 0.7);
-}
-
-.card-block.transform-block {
-  display: none;
-}
-
-.card-block-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #e3dcff;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.card-block-title::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #63e9ff, #b091ff);
-  box-shadow: 0 0 6px rgba(124, 228, 255, 0.9);
-}
-
-.card-block-row {
-  margin-top: 6px;
-}
-
-.card-block-label {
-  font-size: 12px;
-  color: #c9c1ff;
-  margin-bottom: 4px;
-}
-
-.card-block .pill-group {
-  border: none;
-  padding: 0;
-}
-
+/* pill 群組 */
 .pill-group {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.pill-group[data-group="eventType"] .pill-btn {
-  flex: 0 0 calc(33.333% - 8px);
-  text-align: center;
-}
-
+/* ===============================
+   透明按鈕（事件 / 卡片種類 / 狀態）
+================================= */
 .pill-btn {
-  min-width: 72px;
-  padding: 7px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(150, 140, 255, 0.7);
-  background: radial-gradient(circle at top, #181428 0, #0f0d1e 70%);
-  color: #f5f3ff;
+  padding: 6px 14px;
   font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(80, 70, 160, 0.55);
-  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease,
-    border-color 0.15s ease, color 0.15s ease;
+  min-width: 64px;
+  text-align: center;
+
+  background: transparent;
+  border: 1px solid rgba(160, 150, 255, 0.45);
+  color: #e7e1ff;
+
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .pill-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 12px rgba(168, 149, 255, 0.9);
+  border-color: rgba(190, 180, 255, 0.85);
+  color: #ffffff;
 }
 
 .pill-btn.active {
-  background: radial-gradient(circle at 20% 0%, #ffb2ff, #986bff);
-  border-color: rgba(255, 255, 255, 0.9);
-  color: #1b1028;
+  color: #ffe8d2;
+  border-color: rgba(255, 164, 94, 0.95);
 }
 
-.pill-btn.pill-disabled {
+.pill-btn.pill-disabled,
+.pill-btn[data-disabled="true"] {
   opacity: 0.35;
-  cursor: not-allowed;
-  box-shadow: none;
-  border-style: dashed;
+  cursor: default;
+  border-color: rgba(140, 130, 210, 0.2);
 }
 
-.pill-btn.pill-disabled:hover {
-  transform: none;
+/* ===============================
+   事件 / 原卡 / 新卡：共用卡片樣式
+================================= */
+.card-block-wrapper {
+  display: flex;
+  flex-direction: column; /* 垂直排列：原卡在上，新卡在下 */
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
-/* 操作按鈕列 */
+.card-block {
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: #141126; /* 單色、無漸層、無光暈 */
+  border: 1px solid rgba(116, 104, 210, 0.7);
+}
+
+/* 事件卡片額外下邊距 */
+.event-block {
+  margin-bottom: 16px;
+}
+
+.card-block-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #efe7ff;
+}
+
+.card-block-row {
+  margin-bottom: 8px;
+}
+
+.card-block-label {
+  font-size: 12px;
+  color: #c2b9ff;
+  margin-bottom: 3px;
+}
+
+/* 保留舊 class 名稱（若 JS 有用到） */
+.transform-block {
+}
+.target-block {
+}
+
+/* ===============================
+   下方三個動作按鈕（置右＆不同色邊框）
+================================= */
 .action-row {
-  margin-top: 16px;
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: flex-end; /* 右對齊 */
 }
 
 .primary-btn,
 .secondary-btn,
 .danger-btn {
-  flex: 0 0 auto;
-  padding: 7px 18px;
   border-radius: 999px;
-  font-size: 13px;
-  border: none;
-  cursor: pointer;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, #c983ff, #7d5dff);
-  color: white;
-  box-shadow: 0 0 10px rgba(163, 112, 255, 0.8);
-}
-
-.secondary-btn {
-  background: #22203a;
-  color: #f5f3ff;
-}
-
-.danger-btn {
-  background: #5b1820;
-  color: #ffcdcd;
-}
-
-/* ------------------ 右側 header ------------------ */
-.right-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.right-title {
-  font-size: 15px;
+  padding: 8px 18px;
+  font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: #e7e1ff;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-/* ------------------ 紀錄列表 ------------------ */
+/* 確定：橘色邊框 */
+.primary-btn {
+  border: 1px solid rgba(255, 164, 94, 0.95);
+}
+
+/* 還原：紫色邊框 */
+.secondary-btn {
+  border: 1px solid rgba(160, 150, 255, 0.8);
+}
+
+/* 清空：紅色邊框 */
+.danger-btn {
+  border: 1px solid rgba(255, 107, 122, 0.95);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.danger-btn:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* ===============================
+   右側事件紀錄
+================================= */
 .log-list {
-  margin-top: 8px;
   border-radius: 12px;
-  border: 1px solid rgba(143, 130, 255, 0.25);
-  height: 340px;
-  max-height: 340px;
+  border: 1px solid rgba(120, 110, 210, 0.7);
+  background: #141126;
+  height: 90%;
+  max-height: 320px;
   overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  background: radial-gradient(circle at top, #19162c 0, #0a0916 70%);
 }
 
-.log-list.empty {
-  justify-content: center;
-  align-items: center;
-}
-
+/* 每一列 */
 .log-item {
   display: grid;
   grid-template-columns:
     var(--log-col-width-index)
-    var(--log-col-width-role)
-    var(--log-col-width-event)
-    var(--log-col-width-type)
-    var(--log-col-width-foil);
+    var(--log-col-width-role) var(--log-col-width-event)
+    var(--log-col-width-type) var(--log-col-width-foil);
   font-size: 13px;
   padding: 6px 14px;
   align-items: center;
@@ -583,7 +524,7 @@ h1 {
   text-align: center;
 }
 
-/* hover 分數差 tooltip */
+/* 右下分數差 tooltip */
 .log-tooltip {
   position: absolute;
   right: 10px;
@@ -623,7 +564,9 @@ h1 {
   color: #cccccc;
 }
 
-/* ------------------ 浮動儲存區 ------------------ */
+/* ===============================
+   右下角：浮動儲存區
+================================= */
 .save-load-bar {
   position: fixed;
   right: 24px;
@@ -664,4 +607,27 @@ h1 {
 .save-status {
   font-size: 12px;
   color: #e7ddff;
+}
+
+/* ===============================
+   RWD 簡單調整
+================================= */
+@media (max-width: 1024px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .right-panel {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 720px) {
+  .role-progress-panel {
+    flex-direction: column;
+  }
+
+  .card-block-wrapper {
+    flex-direction: column;
+  }
 }

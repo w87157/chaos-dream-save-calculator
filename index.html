@@ -2,21 +2,44 @@
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <title>卡厄斯夢境 存檔事件追蹤器</title>
+    <title>卡厄思夢境 存檔事件追蹤器</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
 
   <body>
-    <h1>卡厄斯夢境 存檔事件追蹤器</h1>
+    <h1>卡厄思夢境 存檔事件追蹤器</h1>
     <div class="subtitle">依照 TIER 與事件紀錄追蹤角色與卡牌變化與分數</div>
 
-    <!-- 🔥 合併後的單一大 Panel（含 TIER + 角色狀態） -->
+    <!-- 🔥 角色狀態區 -->
     <div class="role-section merged-panel">
       <div class="section-title-row merged">
-        <div class="section-title">🎭 角色狀態</div>
+        <div class="section-title-with-icon">
+          <!-- 角色狀態 icon -->
+          <svg
+            class="section-icon"
+            viewBox="0 0 64 64"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g fill="white">
+              <circle cx="32" cy="20" r="8" />
+              <circle cx="18" cy="22" r="6" />
+              <circle cx="46" cy="22" r="6" />
+              <path d="M22 44c0-8 4-14 10-14s10 6 10 14v6H22z" />
+              <path
+                d="M8 44c0-7 3-13 9-13 2 0 4 .6 5.5 1.7C21 36 19 40 19 45v5H8z"
+                opacity="0.9"
+              />
+              <path
+                d="M37.5 32.7C39 31.6 41 31 43 31c6 0 9 6 9 13v6H45v-5c0-5-2-9-4.5-10.6z"
+                opacity="0.9"
+              />
+            </g>
+          </svg>
+          <span class="section-title">角色狀態</span>
+        </div>
       </div>
 
-      <!-- TIER + 卡牌統計按鈕（同一行） -->
+      <!-- TIER + 卡牌統計按鈕 -->
       <div class="tier-and-card-row">
         <div class="tier-input-row-wrapper">
           <label for="tierInput">存檔 TIER</label>
@@ -29,7 +52,7 @@
           id="cardStatsToggleAll"
           class="card-stats-toggle-all"
         >
-          ▶ 卡牌數量統計
+          ▼ 卡牌數量統計
         </button>
       </div>
 
@@ -313,22 +336,66 @@
       </div>
     </div>
 
-    <!-- 你的事件輸入、紀錄、按鈕區塊（原樣保留） -->
+    <!-- 🔥 下半：事件輸入 + 事件紀錄 -->
     <div class="app-layout">
       <div class="left-panel">
         <div class="panel-section event-panel">
-          <div class="section-title">📘 事件輸入</div>
-
-          <!-- ① 事件 -->
-          <div class="event-block">
-            <div class="sub-title">① 事件</div>
-            <div class="pill-group" data-group="eventType"></div>
+          <!-- 標題：與上方角色狀態一致 -->
+          <div class="section-title-row merged">
+            <div class="section-title-with-icon">
+              <svg
+                class="section-icon"
+                viewBox="0 0 64 64"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <!-- 事件 icon（卡片） -->
+                <rect
+                  x="10"
+                  y="8"
+                  width="44"
+                  height="48"
+                  rx="6"
+                  ry="6"
+                  stroke="white"
+                  stroke-width="4"
+                  fill="none"
+                />
+                <path
+                  d="M10 32
+                     a16 16 0 0 1 0 -16
+                     a16 16 0 0 1 0 32
+                     a16 16 0 0 1 0 -16"
+                  stroke="white"
+                  stroke-width="4"
+                  fill="none"
+                />
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="10"
+                  stroke="white"
+                  stroke-width="4"
+                  fill="none"
+                />
+                <path d="M32 22 L36 32 L32 42 L28 32 Z" fill="white" />
+              </svg>
+              <span class="section-title">事件輸入</span>
+            </div>
           </div>
 
-          <!-- ② / ③ 卡片區塊 -->
+          <!-- ① 事件：共用 card-block 樣式 -->
+          <div class="card-block event-block">
+            <div class="card-block-title">事件</div>
+            <div class="card-block-row">
+              <div class="pill-group" data-group="eventType"></div>
+            </div>
+          </div>
+
+          <!-- ② / ③ 卡片區塊：原卡在上，新卡在下 -->
           <div class="card-block-wrapper">
-            <div class="card-block transform-block">
-              <div class="card-block-title">② 原卡片（轉化用）</div>
+            <!-- 原卡片 -->
+            <div class="card-block original-block transform-block">
+              <div class="card-block-title">原卡片</div>
 
               <div class="card-block-row">
                 <div class="card-block-label">卡片種類</div>
@@ -341,8 +408,9 @@
               </div>
             </div>
 
-            <div class="card-block target-block">
-              <div class="card-block-title">③ 目標卡片</div>
+            <!-- 新卡片 -->
+            <div class="card-block new-block target-block">
+              <div class="card-block-title">新卡片</div>
 
               <div class="card-block-row">
                 <div class="card-block-label">卡片種類</div>
@@ -364,13 +432,63 @@
         </div>
       </div>
 
+      <!-- 右側：事件紀錄 -->
       <div class="right-panel">
-        <div class="right-header">
-          <div class="right-title">事件紀錄（僅顯示目前選取角色）</div>
+        <!-- 標題使用同一套 section-title 樣式 + icon -->
+        <div class="section-title-row merged">
+          <div class="section-title-with-icon">
+            <svg
+              class="section-icon"
+              viewBox="0 0 64 64"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- 事件紀錄 icon：清單樣式 -->
+              <rect
+                x="10"
+                y="14"
+                width="44"
+                height="36"
+                rx="6"
+                ry="6"
+                stroke="white"
+                stroke-width="4"
+                fill="none"
+              />
+              <line
+                x1="18"
+                y1="24"
+                x2="46"
+                y2="24"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="18"
+                y1="32"
+                x2="46"
+                y2="32"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="18"
+                y1="40"
+                x2="38"
+                y2="40"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="section-title">事件紀錄</span>
+          </div>
+          <div class="right-title-note">（僅顯示目前選取角色）</div>
         </div>
 
         <div id="logList" class="log-list">
-          <div class="log-empty">尚無記錄。</div>
+          <div class="log-empty">此角色尚無紀錄。</div>
         </div>
       </div>
     </div>
