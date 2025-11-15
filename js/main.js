@@ -7,6 +7,7 @@ import {
   CARD_TYPE_LABEL_MAP,
   EVENT_TYPE_LABEL_MAP,
   FOIL_TYPE_LABEL_MAP,
+  ROLE_PRESET_NAMES, // 從 config.js 載入預設角色名稱清單
 } from "./config.js";
 
 // ===== 全域狀態 =====
@@ -33,6 +34,9 @@ const state = {
 
 const CARD_TYPES = ["character", "neutral", "monster", "forbidden"];
 const FOIL_TYPES = ["normal", "foil", "godfoil", "removed"];
+
+// 正在改名的角色 id（給 modal 用）
+let renameTargetRole = null;
 
 // ===== TIER「輸入框」初始化 =====
 function initTierInput() {
@@ -71,23 +75,63 @@ function updateRoleNameUI() {
   });
 }
 
-// ===== 單一角色重新命名（雙擊卡片） =====
-function renameRole(roleId) {
-  const fallback = ROLE_LABEL_MAP[roleId] || "";
-  const current =
-    (state.roleNames && state.roleNames[roleId]) || fallback || "角色";
-
-  const input = prompt("請輸入此角色名稱：", current);
-  if (input === null) return; // 取消
-
-  const name = input.trim();
-  if (!name) return;
+// ===== 單一角色重新命名（由 modal 呼叫） =====
+function renameRole(roleId, name) {
+  const trimmed = (name || "").trim();
+  if (!trimmed) return;
 
   if (!state.roleNames) state.roleNames = {};
-  state.roleNames[roleId] = name;
+  state.roleNames[roleId] = trimmed;
 
   updateRoleNameUI();
   renderLogs(); // 右側紀錄的「角色」欄位也更新
+}
+
+// ===== 角色命名 modal =====
+function openRoleNameModal(roleId) {
+  renameTargetRole = roleId;
+  const modal = document.getElementById("roleNameModal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+}
+
+function closeRoleNameModal() {
+  const modal = document.getElementById("roleNameModal");
+  if (modal) modal.classList.add("hidden");
+  renameTargetRole = null;
+}
+
+function setupRoleNameModal() {
+  const modal = document.getElementById("roleNameModal");
+  const optionsContainer = document.getElementById("roleNameOptions");
+  const cancelBtn = document.getElementById("roleNameCancel");
+  if (!modal || !optionsContainer || !cancelBtn) return;
+
+  // 產生預設名稱按鈕
+  ROLE_PRESET_NAMES.forEach((name) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "role-name-option-btn";
+    btn.textContent = name;
+    btn.addEventListener("click", () => {
+      if (!renameTargetRole) return;
+      renameRole(renameTargetRole, name);
+      closeRoleNameModal();
+    });
+    optionsContainer.appendChild(btn);
+  });
+
+  // 取消按鈕
+  cancelBtn.addEventListener("click", () => {
+    closeRoleNameModal();
+  });
+
+  // 點背景關閉
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeRoleNameModal();
+    }
+  });
 }
 
 // ===== 角色進度條 =====
@@ -132,9 +176,9 @@ function setupRoleSelection() {
       renderLogs();
     });
 
-    // 雙擊：重新命名
+    // 雙擊：打開命名視窗，選擇預設名稱
     item.addEventListener("dblclick", () => {
-      renameRole(roleId);
+      openRoleNameModal(roleId);
     });
   });
 
@@ -236,7 +280,7 @@ function createBaseStatsForRole() {
   CARD_TYPES.forEach((ct) => {
     stats[ct] = { normal: 0, foil: 0, godfoil: 0, removed: 0 };
   });
-  stats.character.normal = 4;
+  stats.character.normal = 4; // 初始 4 張角色卡
   return stats;
 }
 
@@ -388,8 +432,10 @@ function recalcEventStatsAllRoles() {
 function calcCardScoreForRole(s) {
   let score = 0;
 
+  // 角色卡：只有神閃計分
   score += (s.character.godfoil || 0) * 20;
 
+  // 中立 / 禁忌
   ["neutral", "forbidden"].forEach((t) => {
     const v = s[t];
     score += (v.normal || 0) * 20;
@@ -397,6 +443,7 @@ function calcCardScoreForRole(s) {
     score += (v.godfoil || 0) * 50;
   });
 
+  // 怪物卡
   const m = s.monster;
   score += (m.normal || 0) * 80;
   score += (m.foil || 0) * 90;
@@ -824,6 +871,7 @@ function init() {
 
   setupRoleSelection();
   setupCardStatsToggleAll();
+  setupRoleNameModal(); // 初始化命名視窗
 
   reprocessAll();
 }

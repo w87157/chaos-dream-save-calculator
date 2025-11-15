@@ -30,6 +30,15 @@ export const FOIL_TYPE_OPTIONS = [
   { id: "removed", label: "移除" },
 ];
 
+export const ROLE_PRESET_NAMES = [
+  "路克",
+  "卡莉佩",
+  "麥格納",
+  "琳",
+  "奧爾萊亞",
+  "梅鈴",
+];
+
 // ---- 顯示用 label map ----
 export const ROLE_LABEL_MAP = Object.fromEntries(
   ROLE_OPTIONS.map((o) => [o.id, o.label])

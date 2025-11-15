@@ -723,6 +723,86 @@ h1 {
 }
 
 /* ===============================
+   角色命名 modal
+================================= */
+
+/* 共用 hidden */
+.hidden {
+  display: none !important;
+}
+
+/* 角色命名 modal 背景 */
+.role-name-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+/* 角色命名 modal 本體 */
+.role-name-modal {
+  background: #141126;
+  border-radius: 14px;
+  border: 1px solid rgba(160, 150, 255, 0.8);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.8);
+  padding: 14px 16px 12px;
+  min-width: 260px;
+  max-width: 320px;
+}
+
+.role-name-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #efe7ff;
+  margin-bottom: 12px;
+}
+
+.role-name-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* 選項按鈕 */
+.role-name-option-btn {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid rgba(160, 150, 255, 0.7);
+  background: #19162f;
+  color: #f5f3ff;
+  white-space: nowrap;
+}
+
+.role-name-option-btn:hover {
+  border-color: #ffffff;
+}
+
+/* 取消按鈕 */
+.role-name-cancel-btn {
+  margin-top: 2px;
+  margin-left: auto;
+  display: block;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 80, 80, 0.7);
+  background: transparent;
+  color: #ff9c9c;
+}
+
+.role-name-cancel-btn:hover {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+/* ===============================
    RWD 簡單調整
 ================================= */
 @media (max-width: 1024px) {
