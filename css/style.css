@@ -448,7 +448,7 @@ h1 {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  justify-content: flex-end; /* 右對齊 */
+  justify-content: flex-start;
 }
 
 .primary-btn,
