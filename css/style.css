@@ -89,6 +89,21 @@ h1 {
   color: #c7c0ff;
 }
 
+/* 角色命名提示（置於角色卡片下方） */
+.role-rename-hint-container {
+  margin-top: 6px;
+  padding: 0 4px;
+  text-align: left;
+}
+
+.role-rename-hint {
+  display: inline-block;
+  font-size: 12px;
+  color: #c7c0ff;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
 /* ===============================
    上半部「角色狀態」大 Panel
 ================================= */

@@ -23,6 +23,12 @@ const state = {
     char2: { cardScore: 0, eventScore: 0, total: 0 },
     char3: { cardScore: 0, eventScore: 0, total: 0 },
   },
+  // 角色名稱（可被自訂，會跟著存檔）
+  roleNames: {
+    char1: "角色 1",
+    char2: "角色 2",
+    char3: "角色 3",
+  },
 };
 
 const CARD_TYPES = ["character", "neutral", "monster", "forbidden"];
@@ -45,6 +51,43 @@ function getTierCap() {
   const tier = input ? Number(input.value) || 0 : 0;
   if (!tier) return 0;
   return 30 + 10 * (tier - 1);
+}
+
+// ===== 更新畫面上顯示的角色名稱 =====
+function updateRoleNameUI() {
+  const roles = ["char1", "char2", "char3"];
+
+  roles.forEach((roleId, idx) => {
+    const fallback = ROLE_LABEL_MAP[roleId] || `角色 ${idx + 1}`;
+    const name = (state.roleNames && state.roleNames[roleId]) || fallback;
+
+    // 上方卡片標題
+    const titleEl = document.getElementById(roleId + "Name");
+    if (titleEl) titleEl.textContent = name;
+
+    // 卡牌數量標題括號內名稱
+    const statsEl = document.getElementById(roleId + "NameStats");
+    if (statsEl) statsEl.textContent = name;
+  });
+}
+
+// ===== 單一角色重新命名（雙擊卡片） =====
+function renameRole(roleId) {
+  const fallback = ROLE_LABEL_MAP[roleId] || "";
+  const current =
+    (state.roleNames && state.roleNames[roleId]) || fallback || "角色";
+
+  const input = prompt("請輸入此角色名稱：", current);
+  if (input === null) return; // 取消
+
+  const name = input.trim();
+  if (!name) return;
+
+  if (!state.roleNames) state.roleNames = {};
+  state.roleNames[roleId] = name;
+
+  updateRoleNameUI();
+  renderLogs(); // 右側紀錄的「角色」欄位也更新
 }
 
 // ===== 角色進度條 =====
@@ -80,10 +123,18 @@ function updateCharacterProgress(role, pct, isOverCap) {
 // ===== 角色選取 =====
 function setupRoleSelection() {
   document.querySelectorAll(".role-progress-item").forEach((item) => {
+    const roleId = item.dataset.role;
+
+    // 點一下：選取該角色
     item.addEventListener("click", () => {
-      state.currentRole = item.dataset.role;
+      state.currentRole = roleId;
       updateRoleSelectionHighlight();
       renderLogs();
+    });
+
+    // 雙擊：重新命名
+    item.addEventListener("dblclick", () => {
+      renameRole(roleId);
     });
   });
 
@@ -219,13 +270,14 @@ function validateLogs(logs) {
           apply(targetRole, cardType, foilType, +1);
         break;
 
-      case "transform":
+      case "transform": {
         const fromType = log.srcCardType || "character";
         const fromFoil = log.srcFoilType || foilType;
         ok =
           apply(targetRole, fromType, fromFoil, -1) &&
           apply(targetRole, cardType, foilType, +1);
         break;
+      }
 
       case "delete":
         ok = apply(targetRole, cardType, foilType, -1);
@@ -268,12 +320,13 @@ function recalcCardStatsAllRoles() {
         apply(targetRole, cardType, foilType, +1);
         break;
 
-      case "transform":
+      case "transform": {
         const fromType = log.srcCardType || "character";
         const fromFoil = log.srcFoilType || foilType;
         apply(targetRole, fromType, fromFoil, -1);
         apply(targetRole, cardType, foilType, +1);
         break;
+      }
 
       case "delete":
         apply(targetRole, cardType, foilType, -1);
@@ -466,12 +519,13 @@ function applyEventToCardStatsSingle(stats, log) {
       apply(cardType, foilType, +1);
       break;
 
-    case "transform":
+    case "transform": {
       const fromType = log.srcCardType || "character";
       const fromFoil = log.srcFoilType || foilType;
       apply(fromType, fromFoil, -1);
       apply(cardType, foilType, +1);
       break;
+    }
 
     case "delete":
       apply(cardType, foilType, -1);
@@ -649,9 +703,13 @@ function renderLogs() {
     const dClass =
       d > 0 ? "delta-positive" : d < 0 ? "delta-negative" : "delta-zero";
 
+    const roleName =
+      (state.roleNames && state.roleNames[log.targetRole]) ||
+      ROLE_LABEL_MAP[log.targetRole];
+
     row.innerHTML = `
       <div class="log-col-center">${rowNumber}</div>
-      <div class="log-col-center">${ROLE_LABEL_MAP[log.targetRole]}</div>
+      <div class="log-col-center">${roleName}</div>
       <div class="log-col-center">
         <span class="tag tag-${log.eventType}">
           ${EVENT_TYPE_LABEL_MAP[log.eventType]}
@@ -680,6 +738,7 @@ function setupSaveLoad() {
       logs: state.logs,
       currentRole: state.currentRole,
       tier: document.getElementById("tierInput").value,
+      roleNames: state.roleNames, // 把自訂角色名稱一起存起來
     };
     localStorage.setItem("chaosSave_v3", JSON.stringify(data));
     status.textContent = "已儲存";
@@ -698,8 +757,13 @@ function setupSaveLoad() {
     state.logs = data.logs || [];
     state.currentRole = data.currentRole || "char1";
 
+    if (data.roleNames) {
+      state.roleNames = data.roleNames;
+    }
+
     reprocessAll();
     updateRoleSelectionHighlight();
+    updateRoleNameUI();
 
     status.textContent = "已載入";
     setTimeout(() => (status.textContent = ""), 1500);
@@ -740,6 +804,12 @@ function setupCardStatsToggleAll() {
 
 // ===== 初始化 =====
 function init() {
+  // 依照 config 初始化角色名稱（之後若有存檔會覆蓋）
+  state.roleNames = Object.fromEntries(
+    ROLE_OPTIONS.map((o) => [o.id, o.label])
+  );
+  updateRoleNameUI();
+
   initTierInput();
 
   buildPillGroup("eventType", EVENT_TYPE_OPTIONS);

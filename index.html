@@ -61,7 +61,9 @@
       <div class="role-progress-panel">
         <!-- 角色 1 -->
         <div class="role-progress-item" data-role="char1">
-          <div class="role-progress-title">角色 1</div>
+          <div class="role-progress-title">
+            <span id="char1Name">角色 1</span>
+          </div>
 
           <div class="progress-wrapper">
             <div class="progress-label" id="char1Label"></div>
@@ -73,7 +75,9 @@
           <div class="score-label" id="char1Score">分數：0</div>
 
           <div class="card-stats-section collapsed" data-role="char1">
-            <div class="card-stats-title">卡牌數量（角色 1）</div>
+            <div class="card-stats-title">
+              卡牌數量（<span id="char1NameStats">角色 1</span>）
+            </div>
 
             <div class="card-stats-table">
               <div class="card-stats-header">
@@ -153,7 +157,9 @@
 
         <!-- 角色 2 -->
         <div class="role-progress-item" data-role="char2">
-          <div class="role-progress-title">角色 2</div>
+          <div class="role-progress-title">
+            <span id="char2Name">角色 2</span>
+          </div>
 
           <div class="progress-wrapper">
             <div class="progress-label" id="char2Label"></div>
@@ -165,7 +171,9 @@
           <div class="score-label" id="char2Score">分數：0</div>
 
           <div class="card-stats-section collapsed" data-role="char2">
-            <div class="card-stats-title">卡牌數量（角色 2）</div>
+            <div class="card-stats-title">
+              卡牌數量（<span id="char2NameStats">角色 2</span>）
+            </div>
 
             <div class="card-stats-table">
               <div class="card-stats-header">
@@ -245,7 +253,9 @@
 
         <!-- 角色 3 -->
         <div class="role-progress-item" data-role="char3">
-          <div class="role-progress-title">角色 3</div>
+          <div class="role-progress-title">
+            <span id="char3Name">角色 3</span>
+          </div>
 
           <div class="progress-wrapper">
             <div class="progress-label" id="char3Label"></div>
@@ -257,7 +267,9 @@
           <div class="score-label" id="char3Score">分數：0</div>
 
           <div class="card-stats-section collapsed" data-role="char3">
-            <div class="card-stats-title">卡牌數量（角色 3）</div>
+            <div class="card-stats-title">
+              卡牌數量（<span id="char3NameStats">角色 3</span>）
+            </div>
 
             <div class="card-stats-table">
               <div class="card-stats-header">
@@ -334,6 +346,11 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- 🔔 提示移到角色卡下方 -->
+      <div class="role-rename-hint-container">
+        <div class="role-rename-hint">※ 雙擊角色卡片可重新命名</div>
       </div>
     </div>
 
