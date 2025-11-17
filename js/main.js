@@ -82,22 +82,27 @@ function updateRoleCardBackground(roleId) {
   );
   if (!card) return;
 
+  // 確保有 .role-bg
+  let bg = card.querySelector(".role-bg");
+  if (!bg) {
+    bg = document.createElement("div");
+    bg.className = "role-bg";
+    card.prepend(bg);
+  }
+
   const name =
     (state.roleNames && state.roleNames[roleId]) || ROLE_LABEL_MAP[roleId];
 
-  // 若是「角色 1 / 角色 2 / 角色 3」這種預設名，就不要套圖
   if (!name || /^角色\s*\d+$/.test(name)) {
-    card.style.backgroundImage = "";
+    bg.style.backgroundImage = "";
     card.classList.remove("role-has-image");
     return;
   }
 
-  // 圖檔命名規則： image/Role/角色名.jpg
   const fileName = encodeURIComponent(name) + ".jpg";
   const url = `image/Role/${fileName}`;
 
-  // 套立繪背景
-  card.style.backgroundImage = `url("${url}")`;
+  bg.style.backgroundImage = `url("${url}")`;
   card.classList.add("role-has-image");
 }
 
