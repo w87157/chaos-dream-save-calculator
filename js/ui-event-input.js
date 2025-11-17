@@ -61,12 +61,21 @@ function setupPillGroups() {
         .forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
+      // 當「事件」被改變時：
       if (group.dataset.group === "eventType") {
+        // 更新可用的卡牌狀態（會 disable 不合法的狀態）
         updateFoilAvailability();
+
+        // 再幫「新卡片」與「原卡片」選第一個可用選項
+        ensureFirstEnabledSelected("cardType");
+        ensureFirstEnabledSelected("foilType");
+        ensureFirstEnabledSelected("srcCardType");
+        ensureFirstEnabledSelected("srcFoilType");
       }
     });
   });
 
+  // 初始只需要套一次可用狀態，card/foil 不強制預選
   updateFoilAvailability();
 }
 
@@ -76,6 +85,31 @@ function getActiveValue(groupName) {
     `.pill-group[data-group="${groupName}"] .pill-btn.active`
   );
   return btn ? btn.dataset.value : "";
+}
+
+// 確保某個 group 至少有一顆「可用」的按鈕被選中
+// 如果目前 active 是可用的就保持，否則選第一個沒被停用的
+function ensureFirstEnabledSelected(groupName) {
+  const group = document.querySelector(
+    `.pill-group[data-group="${groupName}"]`
+  );
+  if (!group) return;
+
+  const buttons = Array.from(group.querySelectorAll(".pill-btn"));
+  if (!buttons.length) return;
+
+  // 已有合法 active → 不動
+  const active = buttons.find(
+    (b) => b.classList.contains("active") && b.dataset.disabled !== "true"
+  );
+  if (active) return;
+
+  // 否則選第一顆可用的
+  const firstEnabled = buttons.find((b) => b.dataset.disabled !== "true");
+  buttons.forEach((b) => b.classList.remove("active"));
+  if (firstEnabled) {
+    firstEnabled.classList.add("active");
+  }
 }
 
 // =======================================
@@ -99,13 +133,10 @@ function updateFoilAvailability() {
     let disable = false;
 
     if (eventType === "gain") {
-      // 獲得：只能一般 / 移除，不可直接出現閃
       if (val === "foil" || val === "godfoil") disable = true;
     } else if (eventType === "flash") {
-      // 靈閃：只會普通 → 閃，不能選普通 / 移除
       if (val === "normal" || val === "removed") disable = true;
     } else if (eventType === "transform") {
-      // 轉化：結果只能一般 / 移除
       if (val !== "normal" && val !== "removed") disable = true;
     }
 
