@@ -18,6 +18,10 @@
 /* ===============================
    全局背景 / 字體
 ================================= */
+html {
+  font-size: 21px;
+}
+
 body {
   margin: 0;
   padding: 24px 0 80px;
@@ -32,11 +36,12 @@ h1 {
   margin: 0 0 4px;
   font-weight: 700;
   letter-spacing: 0.08em;
+  font-size: 1.6rem; /* 原本 16px → 改用 rem */
 }
 
 .subtitle {
   text-align: center;
-  font-size: 14px;
+  font-size: 0.8rem; /* 原本 14px */
   color: #cbc5ff;
   margin-bottom: 16px;
 }
@@ -63,7 +68,7 @@ h1 {
 }
 
 .section-title {
-  font-size: 16px;
+  font-size: 1rem; /* 原本 16px */
   font-weight: 600;
   color: #f3e9ff;
   letter-spacing: 0.08em;
@@ -84,8 +89,9 @@ h1 {
 
 /* 右側標題備註文字 */
 .right-title-note {
-  font-size: 13px;
+  font-size: 0.7rem; /* 原本 13px */
   color: #c7c0ff;
+  margin-top: 5px;
 }
 
 /* 角色命名提示（置於角色卡片下方，靠左） */
@@ -97,7 +103,7 @@ h1 {
 
 .role-rename-hint {
   display: inline-block;
-  font-size: 12px;
+  font-size: 0.7rem; /* 原本 12px */
   color: #c7c0ff;
   opacity: 0.8;
   white-space: nowrap;
@@ -133,7 +139,7 @@ h1 {
 }
 
 .tier-input-row-wrapper label {
-  font-size: 14px;
+  font-size: 0.95rem; /* 原本 14px */
   color: #eae5ff;
   white-space: nowrap;
 }
@@ -146,7 +152,7 @@ h1 {
   border: 1px solid #6e63ff;
   color: #f1ecff;
   outline: none;
-  font-size: 14px;
+  font-size: 0.95rem; /* 原本 14px */
 }
 
 #tierInput:focus {
@@ -154,7 +160,7 @@ h1 {
 }
 
 .tier-hint {
-  font-size: 12px;
+  font-size: 0.6rem; /* 原本 12px */
   color: #c8c0ff;
   white-space: nowrap;
 }
@@ -166,7 +172,7 @@ h1 {
   border: 1px solid rgba(160, 150, 255, 0.45);
   background: transparent;
   color: #e7e1ff;
-  font-size: 13px;
+  font-size: 0.7rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -223,7 +229,7 @@ h1 {
 }
 
 .role-progress-title {
-  font-size: 14px;
+  font-size: 0.95rem; /* 原本 14px */
   margin-bottom: 8px;
   color: #f0e7ff;
 }
@@ -234,7 +240,7 @@ h1 {
 }
 
 .progress-label {
-  font-size: 12px;
+  font-size: 0.8rem; /* 原本 12px */
   color: #b9b0ff;
   margin-bottom: 4px;
 }
@@ -256,7 +262,7 @@ h1 {
 }
 
 .score-label {
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   color: #d6ceff;
 }
 
@@ -296,7 +302,7 @@ h1 {
 }
 
 .card-stats-title {
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   margin-bottom: 6px;
   color: #e2daff;
 }
@@ -309,7 +315,7 @@ h1 {
 .card-stats-row {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr;
-  font-size: 12px;
+  font-size: 0.8rem; /* 原本 12px */
   padding: 3px 0;
   border-bottom: 1px solid rgba(70, 60, 125, 0.8);
 }
@@ -341,17 +347,20 @@ h1 {
   gap: 16px;
   max-width: 1200px;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 .left-panel {
-  flex: 1.2;
+  flex: 1;
 }
 
 .right-panel {
-  flex: 1;
-  background: rgba(16, 14, 28, 0.96);
-  border-radius: 16px;
+  display: flex;
+  flex: 1.2;
+  flex-direction: column;
   padding: 14px 16px 18px;
+  border-radius: 16px;
+  background: rgba(16, 14, 28, 0.96);
   border: 1px solid rgba(120, 110, 210, 0.6);
   box-shadow: 0 18px 38px rgba(0, 0, 0, 0.75);
 }
@@ -378,7 +387,7 @@ h1 {
 .pill-btn {
   border-radius: 999px;
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   cursor: pointer;
   min-width: 64px;
   text-align: center;
@@ -427,7 +436,7 @@ h1 {
 }
 
 .card-block-title {
-  font-size: 14px;
+  font-size: 0.95rem; /* 原本 14px */
   margin-bottom: 8px;
   color: #efe7ff;
 }
@@ -437,7 +446,7 @@ h1 {
 }
 
 .card-block-label {
-  font-size: 12px;
+  font-size: 0.8rem; /* 原本 12px */
   color: #c2b9ff;
   margin-bottom: 3px;
 }
@@ -457,7 +466,7 @@ h1 {
 .danger-btn {
   border-radius: 999px;
   padding: 8px 18px;
-  font-size: 14px;
+  font-size: 0.95rem; /* 原本 14px */
   font-weight: 600;
   cursor: pointer;
   background: transparent;
@@ -488,11 +497,12 @@ h1 {
    右側事件紀錄
 ================================= */
 .log-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   border-radius: 12px;
   border: 1px solid rgba(120, 110, 210, 0.7);
   background: #141126;
-  height: 280px;
-  overflow-y: auto;
 }
 
 .log-item {
@@ -501,7 +511,7 @@ h1 {
     var(--log-col-width-index)
     var(--log-col-width-role) var(--log-col-width-event)
     var(--log-col-width-type) var(--log-col-width-foil);
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   padding: 6px 14px;
   align-items: center;
   position: relative;
@@ -541,7 +551,7 @@ h1 {
 }
 
 .log-empty {
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   color: #b0a7ff;
   text-align: center;
   font-style: italic;
@@ -558,7 +568,7 @@ h1 {
   border-radius: 999px;
   background: rgba(10, 10, 24, 0.95);
   border: 1px solid rgba(160, 150, 255, 0.8);
-  font-size: 11px;
+  font-size: 0.78rem; /* 原本 11px */
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
@@ -594,7 +604,7 @@ h1 {
 .tag {
   padding: 3px 8px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 0.8rem; /* 原本 12px */
   display: inline-block;
   min-width: 36px;
   text-align: center;
@@ -648,7 +658,7 @@ h1 {
 .type-arrow {
   margin: 0 4px;
   color: #cfcaf8;
-  font-size: 12px;
+  font-size: 0.8rem; /* 原本 12px */
 }
 
 /* ===============================
@@ -692,7 +702,7 @@ h1 {
 }
 
 .save-status {
-  font-size: 12px;
+  font-size: 0.8rem; /* 原本 12px */
   color: #e7ddff;
 }
 
@@ -728,7 +738,7 @@ h1 {
 }
 
 .role-name-modal-title {
-  font-size: 18px;
+  font-size: 1.1rem; /* 原本 18px */
   font-weight: 600;
   color: #efe7ff;
   margin-bottom: 8px;
@@ -756,7 +766,7 @@ h1 {
 
 /* 小標題顏色統一 */
 .role-name-group-title {
-  font-size: 14px;
+  font-size: 0.95rem; /* 原本 14px */
   margin-bottom: 8px;
   opacity: 0.9;
   color: #cfc7ff;
@@ -772,7 +782,7 @@ h1 {
 .role-name-option-btn {
   border-radius: 999px;
   padding: 5px 10px;
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   cursor: pointer;
   border: 1px solid rgba(160, 150, 255, 0.7);
   background: #19162f;
@@ -792,7 +802,7 @@ h1 {
   display: block;
   border-radius: 999px;
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 0.85rem; /* 原本 13px */
   cursor: pointer;
   background: #141126;
   border: 1px solid rgba(160, 150, 255, 0.8);
@@ -808,44 +818,147 @@ h1 {
 /* 成員按鈕依屬性顏色：外框 = 文字 */
 .role-name-option-btn.element-green {
   border-color: #22c55e;
-  color: #22c55e;
+  color: #a9e8c1;
 }
+
 .role-name-option-btn.element-orange {
   border-color: #f97316;
-  color: #f97316;
+  color: #ffc9a1;
 }
+
 .role-name-option-btn.element-blue {
   border-color: #3b82f6;
-  color: #3b82f6;
+  color: #bcd6ff;
 }
+
 .role-name-option-btn.element-purple {
   border-color: #a855f7;
-  color: #a855f7;
+  color: #e2c8ff;
 }
+
 .role-name-option-btn.element-red {
   border-color: #ef4444;
-  color: #ef4444;
+  color: #ffb8b8;
 }
 
 /* ===============================
-   RWD
+   RWD：版面與字體縮放
 ================================= */
-@media (max-width: 1024px) {
+
+/* 中等螢幕：整體縮一點內距 */
+@media (max-width: 1200px) {
+  .top-panel,
+  .role-section,
+  .app-layout {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+}
+
+/* 中型螢幕：下半部改成上下排 */
+@media (max-width: 900px) {
   .app-layout {
     flex-direction: column;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
   }
 
   .right-panel {
     margin-top: 10px;
   }
+
+  .log-list {
+    height: 260px;
+  }
+
+  .tier-and-card-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .card-stats-toggle-all {
+    align-self: flex-start;
+  }
 }
 
-@media (max-width: 720px) {
+/* 平板 / 手機：角色卡與 Panel 改成直排，整體更緊湊 */
+@media (max-width: 600px) {
+  body {
+    padding: 16px 0 72px;
+  }
+
+  .merged-panel,
+  .panel-section.event-panel,
+  .right-panel {
+    padding: 12px 12px 14px;
+    border-radius: 12px;
+  }
+
   .role-progress-panel {
     flex-direction: column;
+    gap: 10px;
+  }
+
+  .role-progress-item {
+    padding: 12px 14px;
+  }
+
+  .log-list {
+    height: 220px;
+  }
+
+  .save-load-bar {
+    right: 12px;
+    left: 12px;
+    justify-content: center;
+  }
+}
+
+/* 非常窄（超小手機或分割視窗） */
+@media (max-width: 420px) {
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.6rem;
+  }
+
+  .section-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .tier-input-row-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .card-block-wrapper {
-    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* 字體整體縮放：跟著螢幕寬度調整 html 字體基準 */
+@media (max-width: 1024px) {
+  html {
+    font-size: 19.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 16.5px;
   }
 }
