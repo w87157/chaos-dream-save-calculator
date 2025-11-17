@@ -1,0 +1,115 @@
+/* ==========================================================
+   File: base.css
+   Purpose: 全站基礎樣式（Reset、背景、字體、標題、共用元素）
+   Notes:
+     - 所有頁面共用的初始設定
+     - 其他 CSS 模組都基於本檔案進行設計
+========================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --log-col-width-index: 8%;
+  --log-col-width-role: 23%;
+  --log-col-width-event: 23%;
+  --log-col-width-type: 23%;
+  --log-col-width-foil: 23%;
+}
+
+/* ===============================
+   全局背景 / 字體
+================================= */
+html {
+  font-size: 21px;
+}
+
+body {
+  margin: 0;
+  padding: 24px 0 80px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans TC", sans-serif;
+  background: radial-gradient(circle at top, #272447 0, #05040b 55%, #020109);
+  color: #f5f3ff;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 4px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #cbc5ff;
+  margin-bottom: 16px;
+}
+
+/* 版心寬度 */
+.top-panel,
+.role-section,
+.app-layout {
+  max-width: 1200px;
+  margin: 0 auto 16px;
+}
+
+/* ===============================
+   標題 + Icon
+================================= */
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title-row.merged {
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f3e9ff;
+  letter-spacing: 0.08em;
+}
+
+.section-title-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0.96;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
+}
+
+/* 右側標題備註文字 */
+.right-title-note {
+  font-size: 0.7rem;
+  color: #c7c0ff;
+  margin-top: 8px;
+}
+
+/* 角色命名提示（置於角色卡片下方，靠左） */
+.role-rename-hint-container {
+  margin-top: 6px;
+  padding: 0 4px;
+  text-align: left;
+}
+
+.role-rename-hint {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: #c7c0ff;
+  opacity: 0.8;
+  white-space: nowrap;
+}

@@ -1,0 +1,87 @@
+/* ==========================================================
+   File: save-bar.css
+   Area: 浮動儲存工具列（右側 💾📂🧹）
+   Contains:
+     - 固定定位 / 背景框
+     - 儲存 / 載入 / 清除按鈕樣式
+     - 儲存成功訊息區
+   RWD:
+     - 小螢幕時移至底部並改成橫向排列
+========================================================== */
+
+.save-load-bar {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px;
+  background: rgba(10, 8, 22, 0.96);
+  border-radius: 24px;
+  border: 1px solid rgba(143, 130, 255, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+  z-index: 20;
+}
+
+.save-btn,
+.load-btn,
+.clear-save-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  background: #19162f;
+  color: #f5f3ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-btn:hover,
+.load-btn:hover,
+.clear-save-btn:hover {
+  box-shadow: 0 0 8px rgba(168, 149, 255, 0.8);
+}
+
+.save-status {
+  font-size: 0.8rem;
+  color: #e7ddff;
+}
+
+/* 手機版（小螢幕）把儲存列移到底部橫向顯示 */
+@media (max-width: 600px) {
+  .save-load-bar {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    top: auto;
+    transform: none;
+
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+  }
+}
+
+@media (max-width: 600px) {
+  .save-load-bar {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    top: auto;
+    transform: none;
+
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+  }
+}

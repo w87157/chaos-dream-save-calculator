@@ -1,0 +1,20 @@
+/* ==========================================================
+   File: footer.css
+   Area: 頁面底部 Footer
+   Contains:
+     - 版權文字、置中、邊界、背景
+   Notes:
+     - 單純裝飾性，無交互
+========================================================== */
+
+.site-footer {
+  text-align: center;
+  padding: 16px 8px;
+  margin-top: 24px;
+  font-size: 0.8rem;
+  color: #b8b2ff;
+  opacity: 0.75;
+  letter-spacing: 0.04em;
+  background: black;
+  border-top: 1px solid rgba(120, 110, 210, 0.4);
+}

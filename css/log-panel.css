@@ -1,0 +1,191 @@
+/* ==========================================================
+   File: log-panel.css
+   Area: 右下「事件紀錄列表」
+   Contains:
+     - 紀錄表格樣式（標題列、內容列）
+     - tag 樣式：卡種 / 狀態 / 事件種類
+     - 轉化箭頭、分數差 tooltip
+   RWD:
+     - 列表高度在中小螢幕自適應
+========================================================== */
+
+.log-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 110, 210, 0.7);
+  background: #141126;
+}
+
+.log-item {
+  display: grid;
+  grid-template-columns:
+    var(--log-col-width-index)
+    var(--log-col-width-role) var(--log-col-width-event)
+    var(--log-col-width-type) var(--log-col-width-foil);
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  align-items: center;
+  position: relative;
+}
+
+.log-item:nth-child(odd):not(.log-item-header) {
+  background: rgba(16, 14, 30, 0.9);
+}
+
+.log-item:nth-child(even):not(.log-item-header) {
+  background: rgba(9, 7, 20, 0.95);
+}
+
+.log-item-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: radial-gradient(circle at top, #3f3878 0, #252043 90%);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+}
+
+.log-item:not(.log-item-header):hover {
+  background: rgba(60, 52, 110, 0.95);
+}
+
+.log-col-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.log-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.log-empty {
+  font-size: 0.85rem;
+  color: #b0a7ff;
+  text-align: center;
+  font-style: italic;
+  padding: 0;
+}
+
+/* 分數差 tooltip */
+.log-tooltip {
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  transform: translateY(115%);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(10, 10, 24, 0.95);
+  border: 1px solid rgba(160, 150, 255, 0.8);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  z-index: 5;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.log-item:hover .log-tooltip {
+  opacity: 1;
+  transform: translateY(105%);
+}
+
+.delta {
+  font-weight: 600;
+}
+
+.delta-positive {
+  color: #8df7aa;
+}
+
+.delta-negative {
+  color: #ff8787;
+}
+
+.delta-zero {
+  color: #cccccc;
+}
+
+/* ===============================
+   彩色 Tag（柔和）
+================================= */
+.tag {
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  display: inline-block;
+  min-width: 36px;
+  text-align: center;
+  white-space: nowrap;
+  background: rgba(10, 9, 25, 0.9);
+  border: 1px solid rgba(160, 150, 255, 0.35);
+  color: #e7e3ff;
+}
+
+/* 事件類型 tag */
+.tag-gain {
+  border-color: #4ac58a;
+  color: #b6f0d3;
+}
+.tag-flash {
+  border-color: #c08dff;
+  color: #e2d1ff;
+}
+.tag-transform {
+  border-color: #f2b46a;
+  color: #ffe0b8;
+}
+.tag-delete {
+  border-color: #ff7c7c;
+  color: #ffcccc;
+}
+.tag-copy {
+  border-color: #71bfff;
+  color: #c8e3ff;
+}
+
+/* 卡牌種類 tag */
+.tag-type-character {
+  border-color: #e3c86a;
+  color: #f7ebbc;
+}
+.tag-type-neutral {
+  border-color: #6caee6;
+  color: #d1e6ff;
+}
+.tag-type-monster {
+  border-color: #e78686;
+  color: #ffd0d0;
+}
+.tag-type-forbidden {
+  border-color: #b28cff;
+  color: #e5d7ff;
+}
+
+/* 轉化箭頭 */
+.type-arrow {
+  margin: 0 4px;
+  color: #cfcaf8;
+  font-size: 0.8rem;
+}
+
+/* ===============================
+   RWD：事件紀錄列表
+================================= */
+
+@media (max-width: 900px) {
+  .log-list {
+    height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  .log-list {
+    height: 220px;
+  }
+}

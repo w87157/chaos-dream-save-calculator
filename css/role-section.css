@@ -1,0 +1,317 @@
+/* ==========================================================
+   File: role-section.css
+   Area: 上半部「角色狀態區」
+   Contains:
+     - TIER 區塊
+     - 三角色卡片
+     - 數值＋進度條
+     - 卡牌統計折疊區
+   RWD:
+     - 手機版角色卡改直排
+     - 緊湊 padding / 間距調整
+========================================================== */
+
+.merged-panel {
+  background: rgba(16, 14, 26, 0.96);
+  border-radius: 16px;
+  padding: 18px 20px 22px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(143, 130, 255, 0.3);
+}
+
+/* TIER 行 */
+.tier-and-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 0 4px;
+  gap: 12px;
+}
+
+.tier-input-row-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  padding-left: 4px;
+}
+
+.tier-input-row-wrapper label {
+  font-size: 0.95rem;
+  color: #eae5ff;
+  white-space: nowrap;
+}
+
+#tierInput {
+  width: 80px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #111021;
+  border: 1px solid #6e63ff;
+  color: #f1ecff;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+#tierInput:focus {
+  box-shadow: 0 0 0 2px rgba(174, 156, 255, 0.6);
+}
+
+.tier-hint {
+  font-size: 0.6rem;
+  color: #c8c0ff;
+  white-space: nowrap;
+}
+
+/* 卡牌統計總開關 */
+.card-stats-toggle-all {
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: 1px solid rgba(160, 150, 255, 0.45);
+  background: transparent;
+  color: #e7e1ff;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.card-stats-toggle-all:hover {
+  border-color: rgba(190, 180, 255, 0.85);
+  color: #ffffff;
+}
+
+.card-stats-toggle-all-icon {
+  display: inline-block;
+  transition: transform 0.35s ease;
+}
+
+.card-stats-toggle-all-icon.rotated {
+  transform: rotate(90deg);
+}
+
+/* ===============================
+   三個角色卡片
+================================= */
+.role-progress-panel {
+  display: flex;
+  gap: 16px;
+}
+
+.role-progress-item {
+  flex: 1 1 0;
+  background: radial-gradient(
+    circle at top left,
+    #1a1833 0,
+    #12101f 60%,
+    #0d0b18 100%
+  );
+  border-radius: 12px;
+  padding: 16px 18px;
+  border: 1px solid rgba(100, 90, 180, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    background 0.15s ease;
+  position: relative;
+  overflow: hidden; /* 讓立繪與遮罩跟著卡片圓角 */
+}
+
+.role-progress-item:hover {
+  border-color: rgba(150, 130, 220, 0.9);
+}
+
+.role-progress-item.role-selected {
+  border-color: rgba(171, 143, 255, 1);
+  box-shadow: 0 0 10px rgba(186, 162, 255, 0.9);
+}
+
+/* 背景立繪層 */
+.role-progress-item .role-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* 收合狀態 */
+.role-progress-item.role-has-image .role-bg {
+  background-size: 150%;
+  background-position: 0% 20%;
+  transition: background-size 0.25s ease-out, background-position 0.25s ease-out;
+}
+
+/* 展開狀態 */
+.role-progress-item.role-has-image.role-expanded .role-bg {
+  background-size: 130%;
+  background-position: -50% 30%;
+}
+
+/* 立繪上的漸層遮罩 */
+.role-progress-item.role-has-image .role-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.9)
+  );
+  pointer-events: none;
+}
+
+/* 內容浮在立繪上層 */
+.role-progress-item > *:not(.role-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.role-progress-title {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #f0e7ff;
+}
+
+/* 進度條 */
+.progress-wrapper {
+  margin-bottom: 6px;
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  color: #b9b0ff;
+  margin-bottom: 4px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #25213f;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #ffcf7f, #ff8f5a);
+  border-radius: 999px;
+  transition: width 0.25s ease-out;
+}
+
+.score-label {
+  font-size: 0.85rem;
+  color: #d6ceff;
+}
+
+.progress-over {
+  background: linear-gradient(to right, #ff8080, #ff3c5a) !important;
+}
+
+.score-over {
+  color: #ff8e9c;
+  font-weight: 600;
+}
+
+/* ===============================
+   卡牌統計折疊區
+================================= */
+.card-stats-section {
+  margin-top: 10px;
+  padding: 10px 10px 8px;
+  border-radius: 10px;
+  background: rgba(9, 9, 25, 0.9);
+  border: 1px dashed rgba(140, 128, 220, 0.6);
+
+  overflow: hidden;
+  max-height: 800px;
+  opacity: 1;
+  transition: max-height 0.35s ease, opacity 0.35s ease, margin-top 0.35s ease,
+    padding-top 0.35s ease, padding-bottom 0.35s ease, border-width 0.35s ease;
+}
+
+.card-stats-section.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+}
+
+.card-stats-title {
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  color: #e2daff;
+}
+
+.card-stats-table {
+  width: 100%;
+}
+
+.card-stats-header,
+.card-stats-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr;
+  font-size: 0.8rem;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(70, 60, 125, 0.8);
+}
+
+.card-stats-header {
+  color: #b3a8ff;
+}
+
+.card-stats-row:last-child {
+  border-bottom: none;
+}
+
+.card-stats-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-stats-cell.type {
+  justify-content: flex-start;
+  color: #ffd48a;
+}
+
+/* ===============================
+   RWD：角色區（上半部）
+================================= */
+
+@media (max-width: 900px) {
+  .tier-and-card-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .card-stats-toggle-all {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .merged-panel {
+    padding: 12px 12px 14px;
+    border-radius: 12px;
+  }
+
+  .role-progress-panel {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .role-progress-item {
+    padding: 12px 14px;
+  }
+}

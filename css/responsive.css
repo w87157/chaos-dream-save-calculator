@@ -1,0 +1,89 @@
+/* ==========================================================
+   File: responsive.css
+   Purpose: 全站性 RWD（共用響應式樣式）
+   Contains:
+     - html 字體縮放（1024 / 768 / 480）
+     - 版心寬度調整（1200px 以下）
+     - APP 主結構左右改上下（900px 以下）
+     - 小螢幕標題縮小、間距縮小
+   Notes:
+     - 僅放「全域」RWD，不放元件專屬 RWD
+========================================================== */
+
+/* 中等螢幕：容器改滿版＋左右邊距 */
+@media (max-width: 1200px) {
+  .top-panel,
+  .role-section,
+  .app-layout {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+}
+
+/* 中型螢幕：下半部改成上下排 */
+@media (max-width: 900px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+  }
+
+  .right-panel {
+    margin-top: 10px;
+  }
+}
+
+/* 小螢幕：整體上下 padding 縮小 */
+@media (max-width: 600px) {
+  body {
+    padding: 16px 0 72px;
+  }
+}
+
+/* 非常窄（超小手機或分割視窗）時的標題排版 */
+@media (max-width: 420px) {
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.6rem;
+  }
+
+  .section-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .tier-input-row-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-block-wrapper {
+    gap: 10px;
+  }
+}
+
+/* 字體整體縮放：跟著螢幕寬度調整 html 字體基準 */
+@media (max-width: 1024px) {
+  html {
+    font-size: 19.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 16.5px;
+  }
+}

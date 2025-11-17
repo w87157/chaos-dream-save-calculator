@@ -1,0 +1,173 @@
+/* ==========================================================
+   File: event-panel.css
+   Area: 左下「事件輸入區」
+   Contains:
+     - 事件種類 pill 群組
+     - 卡牌種類／狀態 pill
+     - 轉化原卡區塊
+     - 確認 / 還原 / 清空三顆按鈕
+   RWD:
+     - 小螢幕 padding / panel 圓角縮小
+========================================================== */
+
+.app-layout {
+  display: flex;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.left-panel {
+  flex: 1;
+}
+
+.right-panel {
+  display: flex;
+  flex: 1.2;
+  flex-direction: column;
+  padding: 14px 16px 18px;
+  border-radius: 16px;
+  background: rgba(16, 14, 28, 0.96);
+  border: 1px solid rgba(120, 110, 210, 0.6);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.75);
+}
+
+/* ===============================
+   事件輸入 Panel
+================================= */
+.panel-section.event-panel {
+  background: rgba(16, 14, 28, 0.96);
+  border-radius: 16px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(120, 110, 210, 0.6);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.75);
+}
+
+/* pill 群組 */
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* 透明 pill 按鈕 */
+.pill-btn {
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 64px;
+  text-align: center;
+
+  background: transparent;
+  border: 1px solid rgba(160, 150, 255, 0.45);
+  color: #e7e1ff;
+
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.pill-btn:hover {
+  border-color: rgba(190, 180, 255, 0.85);
+  color: #ffffff;
+}
+
+.pill-btn.active {
+  color: #ffe8d2;
+  border-color: rgba(255, 164, 94, 0.95);
+}
+
+.pill-btn.pill-disabled,
+.pill-btn[data-disabled="true"] {
+  opacity: 0.35;
+  cursor: default;
+  border-color: rgba(140, 130, 210, 0.2);
+}
+
+/* 卡片區塊 */
+.card-block-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.card-block {
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: #141126;
+  border: 1px solid rgba(116, 104, 210, 0.7);
+}
+
+.event-block {
+  margin-bottom: 16px;
+}
+
+.card-block-title {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #efe7ff;
+}
+
+.card-block-row {
+  margin-bottom: 8px;
+}
+
+.card-block-label {
+  font-size: 0.8rem;
+  color: #c2b9ff;
+  margin-bottom: 3px;
+}
+
+/* ===============================
+   下方三個動作按鈕
+================================= */
+.action-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: #e7e1ff;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.primary-btn {
+  border: 1px solid rgba(255, 164, 94, 0.95);
+}
+
+.secondary-btn {
+  border: 1px solid rgba(160, 150, 255, 0.8);
+}
+
+.danger-btn {
+  border: 1px solid rgba(255, 107, 122, 0.95);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.danger-btn:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* ===============================
+   RWD：事件輸入區（左下 panel）
+================================= */
+
+@media (max-width: 600px) {
+  .panel-section.event-panel {
+    padding: 12px 12px 14px;
+    border-radius: 12px;
+  }
+}

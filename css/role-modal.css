@@ -1,0 +1,163 @@
+/* ==========================================================
+   File: role-modal.css
+   Area: 角色命名彈窗（Modal）
+   Contains:
+     - 背景遮罩動畫
+     - Modal 卡片外觀與淡入效果
+     - 屬性顏色分組（紅 / 紫 / 橘 / 綠 / 藍）
+     - 名稱按鈕與 hover 效果
+========================================================== */
+
+
+/* 共用 hidden 工具 class */
+.hidden {
+  display: none !important;
+}
+
+/* 背景 */
+.role-name-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+
+/* 開啟狀態 */
+.role-name-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 本體 */
+.role-name-modal {
+  background: #141126;
+  border-radius: 14px;
+  border: 1px solid rgba(160, 150, 255, 0.8);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.8);
+  padding: 14px 16px 12px;
+  min-width: 260px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* 開啟時，modal 跟著一起淡入＋往下位移回來 */
+.role-name-modal-backdrop.active .role-name-modal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.role-name-modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #efe7ff;
+  margin-bottom: 8px;
+}
+
+.role-name-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.role-name-group {
+  padding: 6px 0;
+}
+
+.role-name-group + .role-name-group {
+  border-top: 1px dashed rgba(160, 150, 255, 0.4);
+  margin-top: 8px;
+  padding-top: 10px;
+}
+
+.role-name-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #cfc7ff;
+}
+
+.role-attr-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
+}
+
+.role-name-group-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.role-name-option-btn {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid rgba(160, 150, 255, 0.7);
+  background: #19162f;
+  color: #f5f3ff;
+  white-space: nowrap;
+}
+
+.role-name-option-btn:hover {
+  background: #221f3a;
+}
+
+.role-name-cancel-btn {
+  margin-top: 2px;
+  margin-left: auto;
+  display: block;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background: #141126;
+  border: 1px solid rgba(160, 150, 255, 0.8);
+  color: rgba(200, 190, 255, 0.9);
+}
+
+.role-name-cancel-btn:hover {
+  background: #1a1531;
+  border-color: rgba(185, 175, 255, 1);
+  color: #ffffff;
+}
+
+/* 成員按鈕依屬性顏色：外框 = 文字（淡色文字） */
+.role-name-option-btn.element-green {
+  border-color: #22c55e;
+  color: #a9e8c1;
+}
+
+.role-name-option-btn.element-orange {
+  border-color: #f97316;
+  color: #ffc9a1;
+}
+
+.role-name-option-btn.element-blue {
+  border-color: #3b82f6;
+  color: #bcd6ff;
+}
+
+.role-name-option-btn.element-purple {
+  border-color: #a855f7;
+  color: #e2c8ff;
+}
+
+.role-name-option-btn.element-red {
+  border-color: #ef4444;
+  color: #ffb8b8;
+}
