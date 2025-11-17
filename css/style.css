@@ -177,7 +177,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: border-color 0.15s ease, color 0.15s.ease;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .card-stats-toggle-all:hover {
