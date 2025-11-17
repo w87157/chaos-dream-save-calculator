@@ -8,7 +8,6 @@
      - 名稱按鈕與 hover 效果
 ========================================================== */
 
-
 /* 共用 hidden 工具 class */
 .hidden {
   display: none !important;
@@ -111,6 +110,8 @@
   background: #19162f;
   color: #f5f3ff;
   white-space: nowrap;
+  min-width: 78px;
+  text-align: center;
 }
 
 .role-name-option-btn:hover {
