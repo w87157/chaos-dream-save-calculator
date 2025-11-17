@@ -29,6 +29,7 @@ export function setupEventInputUI() {
 
   // 初始一次 foil 可選狀態 & transform 區塊 visibility
   updateFoilAvailability();
+  updateCardTypeAvailability();
 }
 
 // =======================================
@@ -65,6 +66,7 @@ function setupPillGroups() {
       if (group.dataset.group === "eventType") {
         // 更新可用的卡牌狀態（會 disable 不合法的狀態）
         updateFoilAvailability();
+        updateCardTypeAvailability();
 
         // 再幫「新卡片」與「原卡片」選第一個可用選項
         ensureFirstEnabledSelected("cardType");
@@ -77,6 +79,7 @@ function setupPillGroups() {
 
   // 初始只需要套一次可用狀態，card/foil 不強制預選
   updateFoilAvailability();
+  updateCardTypeAvailability();
 }
 
 // 取得某個 group 目前 active 的 value
@@ -120,6 +123,32 @@ function updateTransformVisibility() {
   const block = document.querySelector(".transform-block");
   if (!block) return;
   block.style.display = eventType === "transform" ? "block" : "none";
+}
+
+function updateCardTypeAvailability() {
+  const eventType = getActiveValue("eventType");
+  const destTypes = document.querySelectorAll(
+    '.pill-group[data-group="cardType"] .pill-btn'
+  );
+
+  destTypes.forEach((btn) => {
+    const val = btn.dataset.value;
+    let disable = false;
+
+    // 事件為「轉化」時，新卡片不允許是「角色」
+    if (eventType === "transform" && val === "character") {
+      disable = true;
+    }
+
+    if (disable) {
+      btn.classList.add("pill-disabled");
+      btn.dataset.disabled = "true";
+      btn.classList.remove("active");
+    } else {
+      btn.classList.remove("pill-disabled");
+      btn.removeAttribute("data-disabled");
+    }
+  });
 }
 
 function updateFoilAvailability() {
