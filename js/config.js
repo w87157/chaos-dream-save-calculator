@@ -61,9 +61,9 @@ export const ROLE_PRESET_GROUPS = {
 
 // 每個顏色在 modal 裡顯示的組名
 export const ROLE_ELEMENT_LABEL_MAP = {
-  red: "熱情(火)",
-  purple: "虛無(暗)",
-  orange: "本能(光)",
-  green: "秩序(風)",
-  blue: "正義(水)",
+  red: "熱情",
+  purple: "虛無",
+  orange: "本能",
+  green: "秩序",
+  blue: "正義",
 };

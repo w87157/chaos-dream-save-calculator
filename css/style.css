@@ -662,18 +662,21 @@ h1 {
 }
 
 /* ===============================
-   浮動儲存區
+   浮動儲存區：桌機版放在畫面右側正中（垂直排列）
 ================================= */
 .save-load-bar {
   position: fixed;
   right: 24px;
-  bottom: 18px;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
   display: flex;
+  flex-direction: column; /* 垂直排列 */
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: 12px;
+  padding: 14px 12px;
   background: rgba(10, 8, 22, 0.96);
-  border-radius: 999px;
+  border-radius: 24px;
   border: 1px solid rgba(143, 130, 255, 0.4);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
   z-index: 20;
@@ -722,6 +725,17 @@ h1 {
   align-items: center;
   justify-content: center;
   z-index: 50;
+
+  /* ✨ 動畫用 */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+
+/* 開啟狀態 */
+.role-name-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* 本體 */
@@ -735,6 +749,17 @@ h1 {
   max-width: 320px;
   display: flex;
   flex-direction: column;
+
+  /* ✨ 內層也做一點位移 + 淡入 */
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+/* 開啟時，modal 跟著一起淡入＋往下位移回來 */
+.role-name-modal-backdrop.active .role-name-modal {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .role-name-modal-title {
@@ -766,10 +791,19 @@ h1 {
 
 /* 小標題顏色統一 */
 .role-name-group-title {
-  font-size: 0.95rem; /* 原本 14px */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
   margin-bottom: 8px;
-  opacity: 0.9;
   color: #cfc7ff;
+}
+
+.role-attr-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
 }
 
 .role-name-group-body {
@@ -815,7 +849,7 @@ h1 {
   color: #ffffff;
 }
 
-/* 成員按鈕依屬性顏色：外框 = 文字 */
+/* 成員按鈕依屬性顏色：外框 = 文字（淡色文字） */
 .role-name-option-btn.element-green {
   border-color: #22c55e;
   color: #a9e8c1;
@@ -839,6 +873,25 @@ h1 {
 .role-name-option-btn.element-red {
   border-color: #ef4444;
   color: #ffb8b8;
+}
+
+/* ===============================
+   footer
+================================= */
+
+.site-footer {
+  text-align: center;
+  padding: 16px 8px;
+  margin-top: 24px;
+
+  font-size: 0.8rem;
+  color: #b8b2ff;
+
+  opacity: 0.75;
+  letter-spacing: 0.04em;
+
+  background: black;
+  border-top: 1px solid rgba(120, 110, 210, 0.4);
 }
 
 /* ===============================
@@ -911,10 +964,19 @@ h1 {
     height: 220px;
   }
 
+  /* 手機版儲存區：底部水平排列 */
   .save-load-bar {
-    right: 12px;
     left: 12px;
+    right: 12px;
+    bottom: 16px;
+    top: auto;
+    transform: none;
+
+    flex-direction: row; /* 水平排列 */
     justify-content: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
   }
 }
 

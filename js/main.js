@@ -37,6 +37,7 @@ const FOIL_TYPES = ["normal", "foil", "godfoil", "removed"];
 
 // 正在改名的角色 id
 let renameTargetRole = null;
+const roleNameModal = document.getElementById("roleNameModal");
 
 // ===== TIER 輸入 =====
 function initTierInput() {
@@ -83,17 +84,36 @@ function renameRole(roleId, name) {
 }
 
 // ===== 角色命名 Modal =====
-function openRoleNameModal(roleId) {
-  renameTargetRole = roleId;
-  const modal = document.getElementById("roleNameModal");
-  if (!modal) return;
-  modal.classList.remove("hidden");
+function openRoleNameModal(roleKey) {
+  if (!roleNameModal) return;
+  renameTargetRole = roleKey;
+
+  // 先顯示元素，再加 active 讓 CSS 跑動畫
+  roleNameModal.classList.remove("hidden");
+
+  // 強制 reflow，避免某些瀏覽器沒觸發動畫
+  void roleNameModal.offsetWidth;
+
+  roleNameModal.classList.add("active");
 }
 
 function closeRoleNameModal() {
-  const modal = document.getElementById("roleNameModal");
-  if (modal) modal.classList.add("hidden");
-  renameTargetRole = null;
+  if (!roleNameModal) return;
+
+  // 先拿掉 active，讓 CSS 做淡出
+  roleNameModal.classList.remove("active");
+
+  // 等動畫結束後再真正 hidden
+  const handle = (e) => {
+    // 只在 backdrop 自己的 transition 結束時處理一次
+    if (e.target !== roleNameModal) return;
+
+    roleNameModal.classList.add("hidden");
+    renameTargetRole = null;
+    roleNameModal.removeEventListener("transitionend", handle);
+  };
+
+  roleNameModal.addEventListener("transitionend", handle);
 }
 
 function setupRoleNameModal() {
@@ -111,8 +131,15 @@ function setupRoleNameModal() {
 
     const title = document.createElement("div");
     title.className = "role-name-group-title";
-    title.textContent =
-      ROLE_ELEMENT_LABEL_MAP[elementKey] || elementKey.toUpperCase();
+
+    // 加入 ICON + 文字
+    title.innerHTML = `
+      <img class="role-attr-icon" src="image/Attr/${elementKey}.png" alt="${elementKey}">
+      <span>${
+        ROLE_ELEMENT_LABEL_MAP[elementKey] || elementKey.toUpperCase()
+      }</span>
+    `;
+
     group.appendChild(title);
 
     const body = document.createElement("div");
