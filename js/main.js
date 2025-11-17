@@ -70,6 +70,41 @@ function updateRoleNameUI() {
     const statsEl = document.getElementById(roleId + "NameStats");
     if (statsEl) statsEl.textContent = name;
   });
+
+  // 角色名稱更新後，同步更新背景立繪
+  updateRoleCardBackgroundAll();
+}
+
+// ===== 角色立繪背景 =====
+function updateRoleCardBackground(roleId) {
+  const card = document.querySelector(
+    `.role-progress-item[data-role="${roleId}"]`
+  );
+  if (!card) return;
+
+  const name =
+    (state.roleNames && state.roleNames[roleId]) || ROLE_LABEL_MAP[roleId];
+
+  // 若是「角色 1 / 角色 2 / 角色 3」這種預設名，就不要套圖
+  if (!name || /^角色\s*\d+$/.test(name)) {
+    card.style.backgroundImage = "";
+    card.classList.remove("role-has-image");
+    return;
+  }
+
+  // 圖檔命名規則： image/Role/角色名.jpg
+  const fileName = encodeURIComponent(name) + ".jpg";
+  const url = `image/Role/${fileName}`;
+
+  // 套立繪背景
+  card.style.backgroundImage = `url("${url}")`;
+  card.classList.add("role-has-image");
+}
+
+function updateRoleCardBackgroundAll() {
+  ["char1", "char2", "char3"].forEach((roleId) =>
+    updateRoleCardBackground(roleId)
+  );
 }
 
 function renameRole(roleId, name) {
@@ -832,12 +867,24 @@ function setupSaveLoad() {
 function setupCardStatsToggleAll() {
   const btn = document.getElementById("cardStatsToggleAll");
   const arrow = document.getElementById("statsArrow");
-  let collapsed = true;
+  let collapsed = true; // true = 收合
 
   const apply = () => {
     document.querySelectorAll(".card-stats-section").forEach((sec) => {
-      if (collapsed) sec.classList.add("collapsed");
-      else sec.classList.remove("collapsed");
+      const roleId = sec.dataset.role;
+      const card = document.querySelector(
+        `.role-progress-item[data-role="${roleId}"]`
+      );
+
+      if (collapsed) {
+        // 收合
+        sec.classList.add("collapsed");
+        if (card) card.classList.remove("role-expanded");
+      } else {
+        // 展開
+        sec.classList.remove("collapsed");
+        if (card) card.classList.add("role-expanded");
+      }
     });
 
     if (!arrow) return;
@@ -845,7 +892,7 @@ function setupCardStatsToggleAll() {
     else arrow.classList.add("rotated");
   };
 
-  apply();
+  apply(); // 初始化一次（預設收合）
 
   btn.addEventListener("click", () => {
     collapsed = !collapsed;

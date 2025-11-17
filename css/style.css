@@ -228,6 +228,45 @@ h1 {
   box-shadow: 0 0 10px rgba(186, 162, 255, 0.9);
 }
 
+/* 角色卡片立繪背景（收合 / 展開） */
+.role-progress-item.role-has-image {
+  position: relative;
+  overflow: hidden;
+  background-repeat: no-repeat;
+
+  /* 收合時預設 */
+  background-size: 150%;
+  background-position: 0% 20%;
+
+  /* 平滑動畫 */
+  transition: background-size 0.25s ease-out, background-position 0.25s ease-out;
+}
+
+/* 展開卡牌統計時的立繪位置與縮放 */
+.role-progress-item.role-has-image.role-expanded {
+  background-size: 130%;
+  background-position: -50% 30%;
+}
+
+/* 蓋一層漸層讓文字更清楚 */
+.role-progress-item.role-has-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.85)
+  );
+  pointer-events: none;
+}
+
+/* 內容浮在立繪上面 */
+.role-progress-item.role-has-image > * {
+  position: relative;
+  z-index: 1;
+}
+
 .role-progress-title {
   font-size: 0.95rem; /* 原本 14px */
   margin-bottom: 8px;
