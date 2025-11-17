@@ -11,7 +11,7 @@
       event-panel.css      事件輸入區
       log-panel.css        事件紀錄列表
       save-bar.css         浮動存檔列
-      role-modal.css  角色命名 modal
+      role-modal.css       角色命名 modal
       footer.css           頁面底部
       responsive.css       全站 RWD 設定
     -->
@@ -27,358 +27,456 @@
   </head>
 
   <body>
-    <h1>卡厄思夢境 存檔事件追蹤器</h1>
-    <div class="subtitle">依照 TIER 與事件紀錄追蹤角色與卡牌變化與分數</div>
+    <!-- 主要內容區 -->
+    <div class="page-container">
+      <!-- 區塊 1：標題區 -->
+      <div class="top-panel">
+        <h1>卡厄思夢境 存檔事件追蹤器</h1>
+        <div class="subtitle">依照 TIER 與事件紀錄追蹤角色與卡牌變化與分數</div>
+      </div>
 
-    <!-- 🔥 角色狀態區 -->
-    <div class="role-section merged-panel">
-      <div class="section-title-row merged">
-        <div class="section-title-with-icon">
-          <!-- 角色狀態 icon -->
-          <svg
-            class="section-icon"
-            viewBox="0 0 64 64"
-            xmlns="http://www.w3.org/2000/svg"
+      <!-- 區塊 2：角色狀態區 -->
+      <div class="role-section merged-panel">
+        <div class="section-title-row merged">
+          <div class="section-title-with-icon">
+            <!-- 角色狀態 icon -->
+            <svg
+              class="section-icon"
+              viewBox="0 0 64 64"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g fill="white">
+                <circle cx="32" cy="20" r="8" />
+                <circle cx="18" cy="22" r="6" />
+                <circle cx="46" cy="22" r="6" />
+                <path d="M22 44c0-8 4-14 10-14s10 6 10 14v6H22z" />
+                <path
+                  d="M8 44c0-7 3-13 9-13 2 0 4 .6 5.5 1.7C21 36 19 40 19 45v5H8z"
+                  opacity="0.9"
+                />
+                <path
+                  d="M37.5 32.7C39 31.6 41 31 43 31c6 0 9 6 9 13v6H45v-5c0-5-2-9-4.5-10.6z"
+                  opacity="0.9"
+                />
+              </g>
+            </svg>
+            <span class="section-title">角色狀態</span>
+          </div>
+        </div>
+
+        <!-- TIER + 卡牌統計按鈕 -->
+        <div class="tier-and-card-row">
+          <div class="tier-input-row-wrapper">
+            <label for="tierInput">存檔 TIER：</label>
+            <input id="tierInput" type="number" min="1" max="15" />
+            <span class="tier-hint">影響總分上限：30 + 10 × (TIER - 1)</span>
+          </div>
+
+          <button
+            type="button"
+            id="cardStatsToggleAll"
+            class="card-stats-toggle-all"
           >
-            <g fill="white">
-              <circle cx="32" cy="20" r="8" />
-              <circle cx="18" cy="22" r="6" />
-              <circle cx="46" cy="22" r="6" />
-              <path d="M22 44c0-8 4-14 10-14s10 6 10 14v6H22z" />
-              <path
-                d="M8 44c0-7 3-13 9-13 2 0 4 .6 5.5 1.7C21 36 19 40 19 45v5H8z"
-                opacity="0.9"
-              />
-              <path
-                d="M37.5 32.7C39 31.6 41 31 43 31c6 0 9 6 9 13v6H45v-5c0-5-2-9-4.5-10.6z"
-                opacity="0.9"
-              />
-            </g>
-          </svg>
-          <span class="section-title">角色狀態</span>
+            <span id="statsArrow" class="card-stats-toggle-all-icon">▶</span>
+            卡牌數量統計
+          </button>
+        </div>
+
+        <!-- 三角色橫排 -->
+        <div class="role-progress-panel">
+          <!-- 角色 1 -->
+          <div class="role-progress-item" data-role="char1">
+            <div class="role-progress-title">
+              <span id="char1Name">角色 1</span>
+            </div>
+
+            <div class="progress-wrapper">
+              <div class="progress-label" id="char1Label"></div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="char1Fill"></div>
+              </div>
+            </div>
+
+            <div class="score-label" id="char1Score">分數：0</div>
+
+            <div class="card-stats-section collapsed" data-role="char1">
+              <div class="card-stats-title">
+                卡牌數量（<span id="char1NameStats">角色 1</span>）
+              </div>
+
+              <div class="card-stats-table">
+                <div class="card-stats-header">
+                  <div class="card-stats-cell type">卡片種類</div>
+                  <div class="card-stats-cell">一般</div>
+                  <div class="card-stats-cell">普閃</div>
+                  <div class="card-stats-cell">神閃</div>
+                  <div class="card-stats-cell">移除</div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">角色卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_character_normal">4</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_character_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_character_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_character_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">中立卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_neutral_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_neutral_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_neutral_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_neutral_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">怪物卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_monster_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_monster_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_monster_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_monster_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">禁忌卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_forbidden_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_forbidden_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_forbidden_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char1_cardCount_forbidden_removed">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 角色 2 -->
+          <div class="role-progress-item" data-role="char2">
+            <div class="role-progress-title">
+              <span id="char2Name">角色 2</span>
+            </div>
+
+            <div class="progress-wrapper">
+              <div class="progress-label" id="char2Label"></div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="char2Fill"></div>
+              </div>
+            </div>
+
+            <div class="score-label" id="char2Score">分數：0</div>
+
+            <div class="card-stats-section collapsed" data-role="char2">
+              <div class="card-stats-title">
+                卡牌數量（<span id="char2NameStats">角色 2</span>）
+              </div>
+
+              <div class="card-stats-table">
+                <div class="card-stats-header">
+                  <div class="card-stats-cell type">卡片種類</div>
+                  <div class="card-stats-cell">一般</div>
+                  <div class="card-stats-cell">普閃</div>
+                  <div class="card-stats-cell">神閃</div>
+                  <div class="card-stats-cell">移除</div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">角色卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_character_normal">4</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_character_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_character_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_character_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">中立卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_neutral_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_neutral_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_neutral_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_neutral_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">怪物卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_monster_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_monster_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_monster_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_monster_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">禁忌卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_forbidden_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_forbidden_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_forbidden_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char2_cardCount_forbidden_removed">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 角色 3 -->
+          <div class="role-progress-item" data-role="char3">
+            <div class="role-progress-title">
+              <span id="char3Name">角色 3</span>
+            </div>
+
+            <div class="progress-wrapper">
+              <div class="progress-label" id="char3Label"></div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="char3Fill"></div>
+              </div>
+            </div>
+
+            <div class="score-label" id="char3Score">分數：0</div>
+
+            <div class="card-stats-section collapsed" data-role="char3">
+              <div class="card-stats-title">
+                卡牌數量（<span id="char3NameStats">角色 3</span>）
+              </div>
+
+              <div class="card-stats-table">
+                <div class="card-stats-header">
+                  <div class="card-stats-cell type">卡片種類</div>
+                  <div class="card-stats-cell">一般</div>
+                  <div class="card-stats-cell">普閃</div>
+                  <div class="card-stats-cell">神閃</div>
+                  <div class="card-stats-cell">移除</div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">角色卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_character_normal">4</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_character_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_character_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_character_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">中立卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_neutral_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_neutral_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_neutral_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_neutral_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">怪物卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_monster_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_monster_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_monster_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_monster_removed">0</span>
+                  </div>
+                </div>
+
+                <div class="card-stats-row">
+                  <div class="card-stats-cell type">禁忌卡</div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_forbidden_normal">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_forbidden_foil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_forbidden_godfoil">0</span>
+                  </div>
+                  <div class="card-stats-cell">
+                    <span id="char3_cardCount_forbidden_removed">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 雙擊提示 -->
+        <div class="role-rename-hint-container">
+          <div class="role-rename-hint">※ 雙擊角色卡片可選擇角色</div>
         </div>
       </div>
 
-      <!-- TIER + 卡牌統計按鈕 -->
-      <div class="tier-and-card-row">
-        <div class="tier-input-row-wrapper">
-          <label for="tierInput">存檔 TIER：</label>
-          <input id="tierInput" type="number" min="1" max="15" />
-          <span class="tier-hint">影響總分上限：30 + 10 × (TIER - 1)</span>
-        </div>
-
-        <button
-          type="button"
-          id="cardStatsToggleAll"
-          class="card-stats-toggle-all"
-        >
-          <span id="statsArrow" class="card-stats-toggle-all-icon">▶</span>
-          卡牌數量統計
-        </button>
-      </div>
-
-      <!-- 三角色橫排 -->
-      <div class="role-progress-panel">
-        <!-- 角色 1 -->
-        <div class="role-progress-item" data-role="char1">
-          <div class="role-progress-title">
-            <span id="char1Name">角色 1</span>
-          </div>
-
-          <div class="progress-wrapper">
-            <div class="progress-label" id="char1Label"></div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="char1Fill"></div>
+      <!-- 區塊 3：事件輸入 + 事件紀錄 -->
+      <div class="app-layout">
+        <div class="left-panel">
+          <div class="panel-section event-panel">
+            <!-- 標題 -->
+            <div class="section-title-row merged">
+              <div class="section-title-with-icon">
+                <svg
+                  class="section-icon"
+                  viewBox="0 0 64 64"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!-- 事件 icon（卡片） -->
+                  <rect
+                    x="10"
+                    y="8"
+                    width="44"
+                    height="48"
+                    rx="6"
+                    ry="6"
+                    stroke="white"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M10 32
+                       a16 16 0 0 1 0 -16
+                       a16 16 0 0 1 0 32
+                       a16 16 0 0 1 0 -16"
+                    stroke="white"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="10"
+                    stroke="white"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <path d="M32 22 L36 32 L32 42 L28 32 Z" fill="white" />
+                </svg>
+                <span class="section-title">事件輸入</span>
+              </div>
             </div>
-          </div>
 
-          <div class="score-label" id="char1Score">分數：0</div>
-
-          <div class="card-stats-section collapsed" data-role="char1">
-            <div class="card-stats-title">
-              卡牌數量（<span id="char1NameStats">角色 1</span>）
+            <!-- 事件 -->
+            <div class="card-block event-block">
+              <div class="card-block-title">事件</div>
+              <div class="card-block-row">
+                <div class="pill-group" data-group="eventType"></div>
+              </div>
             </div>
 
-            <div class="card-stats-table">
-              <div class="card-stats-header">
-                <div class="card-stats-cell type">卡片種類</div>
-                <div class="card-stats-cell">一般</div>
-                <div class="card-stats-cell">普閃</div>
-                <div class="card-stats-cell">神閃</div>
-                <div class="card-stats-cell">移除</div>
-              </div>
+            <!-- 卡片區塊：原卡在上，新卡在下 -->
+            <div class="card-block-wrapper">
+              <!-- 原卡片 -->
+              <div class="card-block original-block transform-block">
+                <div class="card-block-title">原卡片</div>
 
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">角色卡</div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_character_normal">4</span>
+                <div class="card-block-row">
+                  <div class="card-block-label">卡片種類</div>
+                  <div class="pill-group" data-group="srcCardType"></div>
                 </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_character_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_character_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_character_removed">0</span>
+
+                <div class="card-block-row">
+                  <div class="card-block-label">卡牌狀態</div>
+                  <div class="pill-group" data-group="srcFoilType"></div>
                 </div>
               </div>
 
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">中立卡</div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_neutral_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_neutral_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_neutral_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_neutral_removed">0</span>
-                </div>
-              </div>
+              <!-- 新卡片 -->
+              <div class="card-block new-block target-block">
+                <div class="card-block-title">新卡片</div>
 
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">怪物卡</div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_monster_normal">0</span>
+                <div class="card-block-row">
+                  <div class="card-block-label">卡片種類</div>
+                  <div class="pill-group" data-group="cardType"></div>
                 </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_monster_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_monster_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_monster_removed">0</span>
-                </div>
-              </div>
 
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">禁忌卡</div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_forbidden_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_forbidden_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_forbidden_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char1_cardCount_forbidden_removed">0</span>
+                <div class="card-block-row">
+                  <div class="card-block-label">卡牌狀態</div>
+                  <div class="pill-group" data-group="foilType"></div>
                 </div>
               </div>
+            </div>
+
+            <div class="action-row">
+              <button id="confirmBtn" class="primary-btn">確定</button>
+              <button id="undoBtn" class="secondary-btn">還原</button>
+              <button id="clearBtn" class="danger-btn">清空</button>
             </div>
           </div>
         </div>
 
-        <!-- 角色 2 -->
-        <div class="role-progress-item" data-role="char2">
-          <div class="role-progress-title">
-            <span id="char2Name">角色 2</span>
-          </div>
-
-          <div class="progress-wrapper">
-            <div class="progress-label" id="char2Label"></div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="char2Fill"></div>
-            </div>
-          </div>
-
-          <div class="score-label" id="char2Score">分數：0</div>
-
-          <div class="card-stats-section collapsed" data-role="char2">
-            <div class="card-stats-title">
-              卡牌數量（<span id="char2NameStats">角色 2</span>）
-            </div>
-
-            <div class="card-stats-table">
-              <div class="card-stats-header">
-                <div class="card-stats-cell type">卡片種類</div>
-                <div class="card-stats-cell">一般</div>
-                <div class="card-stats-cell">普閃</div>
-                <div class="card-stats-cell">神閃</div>
-                <div class="card-stats-cell">移除</div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">角色卡</div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_character_normal">4</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_character_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_character_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_character_removed">0</span>
-                </div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">中立卡</div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_neutral_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_neutral_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_neutral_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_neutral_removed">0</span>
-                </div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">怪物卡</div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_monster_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_monster_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_monster_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_monster_removed">0</span>
-                </div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">禁忌卡</div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_forbidden_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_forbidden_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_forbidden_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char2_cardCount_forbidden_removed">0</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 角色 3 -->
-        <div class="role-progress-item" data-role="char3">
-          <div class="role-progress-title">
-            <span id="char3Name">角色 3</span>
-          </div>
-
-          <div class="progress-wrapper">
-            <div class="progress-label" id="char3Label"></div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="char3Fill"></div>
-            </div>
-          </div>
-
-          <div class="score-label" id="char3Score">分數：0</div>
-
-          <div class="card-stats-section collapsed" data-role="char3">
-            <div class="card-stats-title">
-              卡牌數量（<span id="char3NameStats">角色 3</span>）
-            </div>
-
-            <div class="card-stats-table">
-              <div class="card-stats-header">
-                <div class="card-stats-cell type">卡片種類</div>
-                <div class="card-stats-cell">一般</div>
-                <div class="card-stats-cell">普閃</div>
-                <div class="card-stats-cell">神閃</div>
-                <div class="card-stats-cell">移除</div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">角色卡</div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_character_normal">4</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_character_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_character_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_character_removed">0</span>
-                </div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">中立卡</div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_neutral_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_neutral_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_neutral_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_neutral_removed">0</span>
-                </div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">怪物卡</div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_monster_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_monster_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_monster_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_monster_removed">0</span>
-                </div>
-              </div>
-
-              <div class="card-stats-row">
-                <div class="card-stats-cell type">禁忌卡</div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_forbidden_normal">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_forbidden_foil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_forbidden_godfoil">0</span>
-                </div>
-                <div class="card-stats-cell">
-                  <span id="char3_cardCount_forbidden_removed">0</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 雙擊提示 -->
-      <div class="role-rename-hint-container">
-        <div class="role-rename-hint">※ 雙擊角色卡片可選擇角色</div>
-      </div>
-    </div>
-
-    <!-- 🔥 下半：事件輸入 + 事件紀錄 -->
-    <div class="app-layout">
-      <div class="left-panel">
-        <div class="panel-section event-panel">
-          <!-- 標題 -->
+        <!-- 右側：事件紀錄 -->
+        <div class="right-panel">
           <div class="section-title-row merged">
             <div class="section-title-with-icon">
               <svg
@@ -386,151 +484,59 @@
                 viewBox="0 0 64 64"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <!-- 事件 icon（卡片） -->
+                <!-- 事件紀錄 icon：清單樣式 -->
                 <rect
                   x="10"
-                  y="8"
+                  y="14"
                   width="44"
-                  height="48"
+                  height="36"
                   rx="6"
                   ry="6"
                   stroke="white"
                   stroke-width="4"
                   fill="none"
                 />
-                <path
-                  d="M10 32
-                     a16 16 0 0 1 0 -16
-                     a16 16 0 0 1 0 32
-                     a16 16 0 0 1 0 -16"
+                <line
+                  x1="18"
+                  y1="24"
+                  x2="46"
+                  y2="24"
                   stroke="white"
-                  stroke-width="4"
-                  fill="none"
+                  stroke-width="3"
+                  stroke-linecap="round"
                 />
-                <circle
-                  cx="32"
-                  cy="32"
-                  r="10"
+                <line
+                  x1="18"
+                  y1="32"
+                  x2="46"
+                  y2="32"
                   stroke="white"
-                  stroke-width="4"
-                  fill="none"
+                  stroke-width="3"
+                  stroke-linecap="round"
                 />
-                <path d="M32 22 L36 32 L32 42 L28 32 Z" fill="white" />
+                <line
+                  x1="18"
+                  y1="40"
+                  x2="38"
+                  y2="40"
+                  stroke="white"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                />
               </svg>
-              <span class="section-title">事件輸入</span>
+              <span class="section-title">事件紀錄</span>
             </div>
+            <div class="right-title-note">（僅顯示目前選取角色）</div>
           </div>
 
-          <!-- 事件 -->
-          <div class="card-block event-block">
-            <div class="card-block-title">事件</div>
-            <div class="card-block-row">
-              <div class="pill-group" data-group="eventType"></div>
-            </div>
+          <div id="logList" class="log-list empty">
+            <div class="log-empty">此角色尚無記錄。</div>
           </div>
-
-          <!-- 卡片區塊：原卡在上，新卡在下 -->
-          <div class="card-block-wrapper">
-            <!-- 原卡片 -->
-            <div class="card-block original-block transform-block">
-              <div class="card-block-title">原卡片</div>
-
-              <div class="card-block-row">
-                <div class="card-block-label">卡片種類</div>
-                <div class="pill-group" data-group="srcCardType"></div>
-              </div>
-
-              <div class="card-block-row">
-                <div class="card-block-label">卡牌狀態</div>
-                <div class="pill-group" data-group="srcFoilType"></div>
-              </div>
-            </div>
-
-            <!-- 新卡片 -->
-            <div class="card-block new-block target-block">
-              <div class="card-block-title">新卡片</div>
-
-              <div class="card-block-row">
-                <div class="card-block-label">卡片種類</div>
-                <div class="pill-group" data-group="cardType"></div>
-              </div>
-
-              <div class="card-block-row">
-                <div class="card-block-label">卡牌狀態</div>
-                <div class="pill-group" data-group="foilType"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="action-row">
-            <button id="confirmBtn" class="primary-btn">確定</button>
-            <button id="undoBtn" class="secondary-btn">還原</button>
-            <button id="clearBtn" class="danger-btn">清空</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 右側：事件紀錄 -->
-      <div class="right-panel">
-        <div class="section-title-row merged">
-          <div class="section-title-with-icon">
-            <svg
-              class="section-icon"
-              viewBox="0 0 64 64"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <!-- 事件紀錄 icon：清單樣式 -->
-              <rect
-                x="10"
-                y="14"
-                width="44"
-                height="36"
-                rx="6"
-                ry="6"
-                stroke="white"
-                stroke-width="4"
-                fill="none"
-              />
-              <line
-                x1="18"
-                y1="24"
-                x2="46"
-                y2="24"
-                stroke="white"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-              <line
-                x1="18"
-                y1="32"
-                x2="46"
-                y2="32"
-                stroke="white"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-              <line
-                x1="18"
-                y1="40"
-                x2="38"
-                y2="40"
-                stroke="white"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-            </svg>
-            <span class="section-title">事件紀錄</span>
-          </div>
-          <div class="right-title-note">（僅顯示目前選取角色）</div>
-        </div>
-
-        <div id="logList" class="log-list empty">
-          <div class="log-empty">此角色尚無記錄。</div>
         </div>
       </div>
     </div>
 
-    <!-- 浮動儲存區 -->
+    <!-- 浮動儲存區（固定位置，不影響版面高度） -->
     <div class="save-load-bar">
       <button type="button" id="saveBtn" class="save-btn">💾</button>
       <button type="button" id="loadBtn" class="load-btn">📂</button>
@@ -549,6 +555,7 @@
       </div>
     </div>
 
+    <!-- 區塊 4：頁面底部 footer -->
     <footer class="site-footer">
       本網站僅供個人研究與使用，所有圖像、內容之版權屬於原著作權人所有，本頁面不具任何營利用途。
     </footer>

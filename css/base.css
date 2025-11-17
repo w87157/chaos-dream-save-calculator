@@ -6,12 +6,38 @@
      - 其他 CSS 模組都基於本檔案進行設計
 ========================================================== */
 
+/* Reset */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+/* 讓 footer 黏在頁面底部 */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 24px 0 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans TC", sans-serif;
+  background: #0d0b18;
+  color: #f5f3ff;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container {
+  flex: 1 0 auto;
+  padding-bottom: auto;
+}
+
+/* ===============================
+   CSS 變數（提供 log panel 寬度）
+================================= */
 :root {
   --log-col-width-index: 8%;
   --log-col-width-role: 23%;
@@ -25,15 +51,6 @@
 ================================= */
 html {
   font-size: 21px;
-}
-
-body {
-  margin: 0;
-  padding: 24px 0 80px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Noto Sans TC", sans-serif;
-  background: radial-gradient(circle at top, #272447 0, #05040b 55%, #020109);
-  color: #f5f3ff;
 }
 
 h1 {
@@ -92,14 +109,14 @@ h1 {
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
 }
 
-/* 右側標題備註文字 */
+/* 右側標題備註 */
 .right-title-note {
   font-size: 0.7rem;
   color: #c7c0ff;
   margin-top: 8px;
 }
 
-/* 角色命名提示（置於角色卡片下方，靠左） */
+/* 角色命名提示 */
 .role-rename-hint-container {
   margin-top: 6px;
   padding: 0 4px;

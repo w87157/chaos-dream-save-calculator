@@ -69,19 +69,3 @@
     border-radius: 999px;
   }
 }
-
-@media (max-width: 600px) {
-  .save-load-bar {
-    left: 12px;
-    right: 12px;
-    bottom: 16px;
-    top: auto;
-    transform: none;
-
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 999px;
-  }
-}
