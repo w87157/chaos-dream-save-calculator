@@ -189,7 +189,7 @@ function calcCardScoreForRole(s) {
   const m = s.monster;
   score += (m.normal || 0) * 80;
   score += (m.foil || 0) * 80;
-  score += (m.godfoil || 0) * 110;
+  score += (m.godfoil || 0) * 100;
 
   return score;
 }
