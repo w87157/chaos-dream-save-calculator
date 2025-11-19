@@ -1,15 +1,6 @@
 // js/logic-core.js
-import {
-  CARD_TYPE_OPTIONS,
-  FOIL_TYPE_OPTIONS,
-} from "./config.js";
-import {
-  state,
-  ROLES,
-  CARD_TYPES,
-  FOIL_TYPES,
-  getTierCap,
-} from "./state.js";
+import { CARD_TYPE_OPTIONS, FOIL_TYPE_OPTIONS } from "./config.js";
+import { state, ROLES, CARD_TYPES, FOIL_TYPES, getTierCap } from "./state.js";
 
 // =======================================
 // 基礎結構：卡牌 / 事件
@@ -136,10 +127,7 @@ export function updateCardStatsUI(stats) {
   ROLES.forEach((role) => {
     CARD_TYPES.forEach((type) => {
       FOIL_TYPES.forEach((foil) => {
-        set(
-          `${role}_cardCount_${type}_${foil}`,
-          stats[role][type][foil]
-        );
+        set(`${role}_cardCount_${type}_${foil}`, stats[role][type][foil]);
       });
     });
   });
@@ -194,7 +182,7 @@ function calcCardScoreForRole(s) {
   return score;
 }
 
-// combo 加成（刪除/複製用）
+// 事件次數額外分數（刪除/複製用）
 function calcComboScore(n) {
   if (n <= 1) return 0;
   if (n === 2) return 10;
@@ -203,17 +191,30 @@ function calcComboScore(n) {
   return 70;
 }
 
+function countValidTransforms(roleId) {
+  return state.logs.filter(
+    (log) =>
+      log.targetRole === roleId &&
+      log.eventType === "transform" &&
+      log.foilType !== "removed"
+  ).length;
+}
+
 // 事件分
-function calcEventScoreForRole(ev) {
+function calcEventScoreForRole(ev, roleId) {
   let t = 0;
 
-  t += (ev.transform || 0) * 10;
+  // transform（若新卡片為 removed → 不給分）
+  const validTransforms = countValidTransforms(roleId);
+  t += validTransforms * 10;
 
+  // 複製 combo 分
   let copyScore = 0;
   for (let i = 1; i <= (ev.copy || 0); i++) {
     copyScore += calcComboScore(i);
   }
 
+  // 刪除 combo 分
   let deleteScore = 0;
   for (let i = 1; i <= (ev.delete || 0); i++) {
     deleteScore += calcComboScore(i);
@@ -231,7 +232,9 @@ export function recalcScores(statsByRole) {
 
   ROLES.forEach((role) => {
     const c = calcCardScoreForRole(statsByRole[role]);
-    const e = calcEventScoreForRole(state.eventStats[role] || createBaseEventStats());
+    const e = calcEventScoreForRole(
+      state.eventStats[role] || createBaseEventStats()
+    );
     results[role] = { cardScore: c, eventScore: e, total: c + e };
   });
 
