@@ -26,6 +26,8 @@ function createBaseEventStats() {
     delete: 0,
     copy: 0,
     deleteCharacter: 0,
+    // 有效 transform 次數（新卡片 foilType !== "removed"）
+    validTransform: 0,
   };
 }
 
@@ -95,7 +97,7 @@ export function validateLogs(logs) {
 }
 
 // =======================================
-/* 卡牌統計（所有角色） */
+// 卡牌統計（所有角色）
 // =======================================
 
 export function recalcCardStatsAllRoles() {
@@ -146,7 +148,16 @@ export function recalcEventStatsAllRoles() {
   state.logs.forEach((log) => {
     const r = result[log.targetRole];
     if (!r) return;
-    r[log.eventType]++;
+
+    // 基本事件次數
+    r[log.eventType] = (r[log.eventType] || 0) + 1;
+
+    // 有效 transform：新卡片不是 removed 才算
+    if (log.eventType === "transform" && log.foilType !== "removed") {
+      r.validTransform++;
+    }
+
+    // 刪除角色卡
     if (log.eventType === "delete" && log.cardType === "character") {
       r.deleteCharacter++;
     }
@@ -168,13 +179,14 @@ function calcCardScoreForRole(s) {
   // 中立 / 禁忌
   ["neutral", "forbidden"].forEach((t) => {
     const v = s[t];
+    if (!v) return;
     score += (v.normal || 0) * 20;
     score += (v.foil || 0) * 30;
     score += (v.godfoil || 0) * 50;
   });
 
   // 怪物
-  const m = s.monster;
+  const m = s.monster || {};
   score += (m.normal || 0) * 80;
   score += (m.foil || 0) * 80;
   score += (m.godfoil || 0) * 100;
@@ -191,21 +203,13 @@ function calcComboScore(n) {
   return 70;
 }
 
-function countValidTransforms(roleId) {
-  return state.logs.filter(
-    (log) =>
-      log.targetRole === roleId &&
-      log.eventType === "transform" &&
-      log.foilType !== "removed"
-  ).length;
-}
-
 // 事件分
-function calcEventScoreForRole(ev, roleId) {
+// 🔸 這裡只根據「某角色自己的事件統計 ev」計算，不再掃 state.logs
+function calcEventScoreForRole(ev) {
   let t = 0;
 
   // transform（若新卡片為 removed → 不給分）
-  const validTransforms = countValidTransforms(roleId);
+  const validTransforms = ev.validTransform || 0;
   t += validTransforms * 10;
 
   // 複製 combo 分
@@ -293,16 +297,21 @@ export function computeRoleScoreDeltas(role) {
 // 單一事件對「某角色卡牌統計」的影響
 export function applyEventToCardStatsSingle(stats, log) {
   forEachEventEffect(log, (_role, ct, ft, d) => {
-    // 這裡的 stats 是「單一角色」用的，不需要 role
     stats[ct][ft] = (stats[ct][ft] || 0) + d;
   });
 }
 
 // 單一事件對「某角色事件統計」的影響
 export function applyEventToEventStatsSingle(ev, log) {
-  ev[log.eventType]++;
+  ev[log.eventType] = (ev[log.eventType] || 0) + 1;
+
+  // 有效 transform：新卡片不是 removed
+  if (log.eventType === "transform" && log.foilType !== "removed") {
+    ev.validTransform = (ev.validTransform || 0) + 1;
+  }
+
   if (log.eventType === "delete" && log.cardType === "character") {
-    ev.deleteCharacter++;
+    ev.deleteCharacter = (ev.deleteCharacter || 0) + 1;
   }
 }
 
